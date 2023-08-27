@@ -5,11 +5,13 @@ import { CatalogoService } from '../../services/catalogo.service';
 import { take } from 'rxjs';
 import { MenuGenericoComponent } from '../menu-generico/menu-generico.component';
 import { scaleAnimation } from 'src/app/animations';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { Usuario } from '../../models/usuario.model';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MenuGenericoComponent],
+  imports: [CommonModule, MenuGenericoComponent, ReactiveFormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   animations: [scaleAnimation],
@@ -19,6 +21,7 @@ export class HeaderComponent implements OnInit {
   temaNombre: 'Modo oscuro' | 'Modo claro' = 'Modo oscuro';
   tema: string | null = '';
   buscar: boolean = false;
+  dataUsuario: Usuario|null=null;
 
   menusm: MenuItem[] = [
     {
@@ -116,10 +119,15 @@ export class HeaderComponent implements OnInit {
       subitem: [
         { nombre: 'acceder', icono: 'bi bi-person-circle' },
         { nombre: 'registrarse', icono: 'bi bi-person-add' },
+        { nombre: 'perfil', icono: 'bi bi-person-vcard', ocultar: ()=>this.dataUsuario!=null },
+        { nombre: 'administrar', icono: 'bi bi-kanban', ocultar: ()=>this.dataUsuario!=null },
+        { nombre: 'cerrar sesión', icono: 'bi bi-box-arrow-right', ocultar: ()=>this.dataUsuario!=null },
       ],
     },
     { icono: this.iconoTema, accion: () => this.cambiarTema() },
+    {icono: 'bi bi-cart',  },
   ];
+  form: FormGroup = new  FormGroup({});
 
   constructor(private catalogoService: CatalogoService) {}
 
@@ -138,7 +146,6 @@ export class HeaderComponent implements OnInit {
     this.menu2[1].icono = this.iconoTema;
     this.menusm[1].subitem![6].nombre = this.temaNombre;
     this.menusm[1].subitem![6].icono = this.iconoTema;
-
   }
 
   cambiarTema() {

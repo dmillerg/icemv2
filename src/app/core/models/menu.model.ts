@@ -4,5 +4,7 @@ export interface MenuItem {
   codigo?: number;
   icono?: string;
   subitem?: MenuItem[];
-  accion?:()=>void
+  accion?:()=>void;
+  ocultar?:()=>boolean;
+  disaled?:()=>boolean;
 }
