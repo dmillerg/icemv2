@@ -1,5 +1,5 @@
-<footer class="text-white w-full p-2 bg-gradient-to-r from-icem-500 to-black  py-16">
-    <div class="flex flex-wrap w-full text-center lg:text-start justify-center px-48 py-6 gap-20 text-sm">
+<footer class="text-white w-full p-2 bg-gradient-to-r from-icem-500 to-black px-48 py-16">
+    <div class="flex flex-wrap w-full text-center lg:text-start justify-center  py-6 gap-20 text-sm">
         <!-- <div class="flex-1">
             <img src="assets/logos/icon-icem-gray.png" alt="">
         </div> -->
@@ -46,9 +46,18 @@
         </div>
 
     </div>
-    <div class="w-8/12 mx-48 h-px bg-gray-500"></div>
-    <div class="flex flex-wrap w-full text-center lg:text-start justify-between px-48 py-6 gap-20 text-sm">
-        
+    <div class="w-full h-px bg-gray-500"></div>
+
+    <!-- Section: Social media -->
+    <div class="flex flex-wrap w-full text-center lg:text-start justify-between items-center gap-20 text-xs">
+        <div>
+            © 2022 Copyright:
+            <a class="text-white" href="https://dveloxweb.cu/">dveloXweb</a>.Todos los derechos reservados
+            <p>Ultima actualización del contenido: {{fechaActual | date: 'EEEE, MMMM, dd, YYYY - hh:mm a'}}</p>
+        </div>
+        <div>
+            <app-boton-generico [botones]="botones"></app-boton-generico>
+        </div>
     </div>
 
 </footer>
