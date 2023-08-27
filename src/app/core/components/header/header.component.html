@@ -1,51 +1,35 @@
-<div class="flex justify-between py-4 px-4 bg-gray-900 dark:bg-icem-500 items-center">
+<div
+  class="flex justify-between py-4 px-4 bg-gray-900 dark:bg-icem-500 items-center relative"
+>
   <h1 class="h1 font-bold text-white">ICEM</h1>
   <div class="lg:flex items-center gap-4 hidden">
-    <div class="flex items-center gap-4">
-      <div
-        class="relative flex items-center gap-2 text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
-        *ngFor="let item of menu" (click)="emit(item.accion)"
-      >
-        <i [class]="item.icono" class="drop-shadow-lg"></i>
-        {{ item.nombre }}
-        <ng-container *ngIf="item.subitem">
-          <div
-            class="submenu overflow-hidden text-icem-500 absolute bg-white dark:bg-gray-800 dark:text-white rounded right-0 shadow-md animate-flip-down animate-once animate-ease-in-out flex-col flex"
-            style="top: 130%"
-          >
-            <div
-              class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-2 py-2"
-              *ngFor="let subitem of item.subitem"
-              (click)="emit(subitem.accion)"
-            >
-              <i [class]="subitem.icono"></i>
-              {{ subitem.nombre }}
-            </div>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-    <div class="flex items-center gap-2 ml-4">
-      <div
-      class="relative flex items-center gap-2 text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
-      *ngFor="let item of menu2" (click)="emit(item.accion)"
+    <app-menu-generico [menu]="menu"  *ngIf="!buscar"></app-menu-generico>
+    <app-menu-generico [menu]="menu2"></app-menu-generico>
+  </div>
+
+  <div class="lg:hidden items-center gap-4 flex">
+    <app-menu-generico [menu]="menusm"></app-menu-generico>
+  </div>
+
+  <div
+    class="flex absolute lg:left-48 lg:right-48 md:left-20 md:right-20 left-16 right-16 top-2 bottom-2 rounded bg-white -left-96 mx-auto"
+    *ngIf="buscar"
+  >
+    <input
+      type="text"
+      class="bg-transparent w-full h-full border-none outline-none px-12"
+      placeholder="Buscar por ..."
+    />
+    <button
+      class="absolute top-1 bottom-1 right-1 text-icem-500 p-3 flex justify-center items-center rounded"
     >
-      <i [class]="item.icono" class="drop-shadow-lg"></i>
-      {{ item.nombre }}
-      <ng-container *ngIf="item.subitem">
-        <div
-          class="submenu overflow-hidden text-icem-500 absolute bg-white dark:bg-gray-800 dark:text-white rounded right-0 shadow-md animate-flip-down animate-once animate-ease-in-out flex-col flex"
-          style="top: 130%"
-        >
-          <div
-            class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-2 py-2"
-            *ngFor="let subitem of item.subitem" (click)="emit(subitem.accion)"
-          >
-            <i [class]="subitem.icono"></i>
-            {{ subitem.nombre }}
-          </div>
-        </div>
-      </ng-container>
-    </div>
+      <i class="bi bi-search"></i>
+    </button>
+    <button
+      class="absolute top-1 bottom-1 left-1 text-icem-500 p-3 flex justify-center items-center rounded"
+      (click)="buscar = false"
+    >
+      <i class="bi bi-x"></i>
+    </button>
   </div>
 </div>
