@@ -3,6 +3,8 @@ import { Card } from 'src/app/core/models/card.model';
 import { ProductoService } from '../../productos/services/producto.service';
 import { Producto } from '../../productos/model/producto';
 import { environment } from 'src/environments/environment';
+import { Boton } from '../../../core/models/boton.model';
+
 
 @Component({
   selector: 'app-section-productos',
@@ -53,8 +55,6 @@ export class SectionProductosComponent implements OnInit {
   }
 
   cargarDatos() {
-    console.log(this.productos_recientes);
-
     this.cards = this.productos_recientes.map((e: Producto) => {
       return {
         titulo: e.titulo,
@@ -62,8 +62,11 @@ export class SectionProductosComponent implements OnInit {
         fecha: new Date(e.fecha),
         precio: `${e.precio}`,
         imagen: environment.url_backend+`pictures/${e.id}?tipo=productos`,
-        classTitulo: 'line-clamp-1',
+        classTitulo: 'line-clamp-2 text-icem-500 dark:text-white',
         classDescripcion: 'line-clamp-3',
+        botones: [
+          {icono: 'bi bi-check', label: 'Ver mas', class: 'w-full'}
+        ]
       };
     });
   }
