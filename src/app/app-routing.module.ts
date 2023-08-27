@@ -5,13 +5,20 @@ const routes: Routes = [
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   {
     path: 'inicio',
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./modules/home/home.module').then((m) => m.HomeModule),
-      },
-    ],
+    loadChildren: () =>
+      import('./modules/home/home.module').then((m) => m.HomeModule),
+  },
+  {
+    path: 'productos',
+    loadChildren: () =>
+      import('./modules/productos/productos.module').then(
+        (m) => m.ProductosModule
+      ),
+  },
+  {
+    path: 'quienes',
+    loadChildren: () =>
+      import('./modules/quienes/quienes.module').then((m) => m.QuienesModule),
   },
 ];
 
