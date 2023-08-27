@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Boton } from 'src/app/core/models/boton.model';
 
 @Component({
   selector: 'app-section-desarrollo',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class SectionDesarrolloComponent {
 
+  botones: Boton[] =[
+    {
+      icono: 'bi bi-check',
+      label: 'Ver mas'
+    }
+  ]
 }
