@@ -3,7 +3,7 @@
 >
   <h1 class="h1 font-bold text-white">ICEM</h1>
   <div class="lg:flex items-center gap-4 hidden">
-    <app-menu-generico [menu]="menu"  *ngIf="!buscar"></app-menu-generico>
+    <app-menu-generico [menu]="menu" *ngIf="!buscar"></app-menu-generico>
     <app-menu-generico [menu]="menu2"></app-menu-generico>
   </div>
 
@@ -14,6 +14,7 @@
   <div
     class="flex absolute lg:left-48 lg:right-48 md:left-20 md:right-20 left-16 right-16 top-2 bottom-2 rounded bg-white -left-96 mx-auto"
     *ngIf="buscar"
+    [@scaleAnimation]="'enter'"
   >
     <input
       type="text"

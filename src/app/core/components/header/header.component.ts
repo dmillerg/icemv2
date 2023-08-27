@@ -4,6 +4,7 @@ import { MenuItem } from '../../models/menu.model';
 import { CatalogoService } from '../../services/catalogo.service';
 import { take } from 'rxjs';
 import { MenuGenericoComponent } from '../menu-generico/menu-generico.component';
+import { scaleAnimation } from 'src/app/animations';
 
 @Component({
   selector: 'app-header',
@@ -11,9 +12,11 @@ import { MenuGenericoComponent } from '../menu-generico/menu-generico.component'
   imports: [CommonModule, MenuGenericoComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  animations: [scaleAnimation],
 })
 export class HeaderComponent implements OnInit {
   iconoTema: 'bi bi-moon-stars' | 'bi bi-sun' = 'bi bi-moon-stars';
+  temaNombre: 'Modo oscuro' | 'Modo claro' = 'Modo oscuro';
   tema: string | null = '';
   buscar: boolean = false;
 
@@ -62,7 +65,7 @@ export class HeaderComponent implements OnInit {
           accion: () => (this.buscar = !this.buscar),
         },
         {
-          nombre: 'tema',
+          nombre: 'Modo oscuro',
           icono: this.iconoTema,
           accion: () => this.cambiarTema(),
         },
@@ -131,7 +134,11 @@ export class HeaderComponent implements OnInit {
       this.tema = 'dark';
     }
     this.iconoTema = this.tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
+    this.temaNombre = this.tema === 'dark' ? 'Modo oscuro' : 'Modo claro';
     this.menu2[1].icono = this.iconoTema;
+    this.menusm[1].subitem![6].nombre = this.temaNombre;
+    this.menusm[1].subitem![6].icono = this.iconoTema;
+
   }
 
   cambiarTema() {
@@ -142,8 +149,12 @@ export class HeaderComponent implements OnInit {
       document.documentElement.classList.remove('dark');
       this.tema = 'dark';
     }
+    this.temaNombre = this.tema === 'dark' ? 'Modo oscuro' : 'Modo claro';
     this.iconoTema = this.tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
     this.menu2[1].icono = this.iconoTema;
+    this.menusm[1].subitem![6].nombre = this.temaNombre;
+    this.menusm[1].subitem![6].icono = this.iconoTema;
+
     localStorage.setItem('tema', this.tema === 'dark' ? 'light' : 'dark');
   }
 
