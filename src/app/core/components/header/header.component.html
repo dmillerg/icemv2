@@ -28,7 +28,7 @@
     <div class="flex items-center gap-2 ml-4">
       <div
       class="relative flex items-center gap-2 text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
-      *ngFor="let item of menu2"
+      *ngFor="let item of menu2" (click)="emit(item.accion)"
     >
       <i [class]="item.icono" class="drop-shadow-lg"></i>
       {{ item.nombre }}
@@ -39,7 +39,7 @@
         >
           <div
             class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-2 py-2"
-            *ngFor="let subitem of item.subitem"
+            *ngFor="let subitem of item.subitem" (click)="emit(subitem.accion)"
           >
             <i [class]="subitem.icono"></i>
             {{ subitem.nombre }}
