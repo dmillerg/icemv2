@@ -12,4 +12,17 @@ import { BotonGenericoComponent } from '../boton-generico/boton-generico.compone
 })
 export class CardComponent {
   @Input() card: Card[] = [];
+
+  esHoy(date?: Date): boolean {
+    if (date) {
+      const hoy = new Date();
+      return (
+        hoy.getFullYear() === date.getFullYear() &&
+        hoy.getMonth() === date.getMonth() &&
+        hoy.getDate() === date.getDate()
+      );
+    } else {
+      return false;
+    }
+  }
 }

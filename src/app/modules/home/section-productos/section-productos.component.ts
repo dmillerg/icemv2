@@ -65,7 +65,7 @@ export class SectionProductosComponent implements OnInit {
         classTitulo: 'line-clamp-2 text-icem-500 dark:text-white',
         classDescripcion: 'line-clamp-3',
         botones: [
-          {icono: 'bi bi-check', label: 'Ver mas', class: 'w-full'}
+          {icono: 'bi bi-check', label: 'Ver mas', class: 'w-full bg-icem-500 hover:bg-indigo-500 text-white duration-300 py-2 mt-2 rounded'}
         ]
       };
     });

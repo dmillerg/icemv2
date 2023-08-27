@@ -7,6 +7,7 @@ import { SectionServiciosComponent } from './section-servicios/section-servicios
 import { SectionProductosComponent } from './section-productos/section-productos.component';
 import { SectionDesarrolloComponent } from './section-desarrollo/section-desarrollo.component';
 import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/boton-generico.component';
+import { SectionCatalogoComponent } from './section-catalogo/section-catalogo.component';
 
 
 
@@ -15,7 +16,8 @@ import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/b
     HomeComponent,
     SectionServiciosComponent,
     SectionProductosComponent,
-    SectionDesarrolloComponent
+    SectionDesarrolloComponent,
+    SectionCatalogoComponent
   ],
   imports: [
     CommonModule,
