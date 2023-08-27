@@ -6,6 +6,7 @@ import { CardComponent } from 'src/app/core/components/card/card.component';
 import { SectionServiciosComponent } from './section-servicios/section-servicios.component';
 import { SectionProductosComponent } from './section-productos/section-productos.component';
 import { SectionDesarrolloComponent } from './section-desarrollo/section-desarrollo.component';
+import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/boton-generico.component';
 
 
 
@@ -19,7 +20,8 @@ import { SectionDesarrolloComponent } from './section-desarrollo/section-desarro
   imports: [
     CommonModule,
     HomeRoutingModule,
-    CardComponent
+    CardComponent,
+    BotonGenericoComponent,
   ]
 })
 export class HomeModule { }
