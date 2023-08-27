@@ -21,7 +21,8 @@ export class FooterComponent implements OnInit{
     ) { }
 
   ngOnInit(){
-    this.generateBotonSocialMedia()
+    this.generateBotonSocialMedia(),
+    this.fechaActualizacion()
   }
 
   fechaActualizacion() {
@@ -31,10 +32,16 @@ export class FooterComponent implements OnInit{
   }
 
   generateBotonSocialMedia(){
-    this.botones = [{
+    this.botones = [
+      {
       icono: 'bi bi-facebook',
-      class: 'text-blue-500 bg-transparent text-xl'
-    }]
+      class: 'text-blue-500 bg-transparent text-xl mx-2'
+    },
+    {
+      icono: 'bi bi-google',
+      class: 'text-green-700 bg-transparent text-xl'
+    }
+  ]
 
   }
 
