@@ -4,8 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { HeaderComponent } from './core/header/header.component';
-import { FooterComponent } from './core/footer/footer.component';
+import { FooterComponent } from './core/components/footer/footer.component';
+import { HeaderComponent } from './core/components/header/header.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { FooterComponent } from './core/footer/footer.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     HeaderComponent,
     FooterComponent,
     StoreModule.forRoot({}, {})

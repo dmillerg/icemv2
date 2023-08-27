@@ -1,0 +1,36 @@
+<div class="flex justify-between py-2 px-4 bg-icem h-16 items-center">
+  <h1 class="h1 font-bold text-white">ICEM</h1>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div
+        class="relative flex items-center gap-2 text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
+        *ngFor="let item of menu"
+      >
+        <i [class]="item.icono"></i>
+        {{ item.nombre }}
+        <ng-container *ngIf="item.subitem">
+          <div
+            class="submenu overflow-hidden absolute bg-white dark:bg-slate-700 dark:text-white rounded right-0 shadow-md animate-flip-down animate-once animate-ease-in-out flex-col flex"
+            style="top: 130%"
+          >
+            <div
+              class="flex gap-2 text-icem whitespace-nowrap hover:bg-icem hover:text-white px-2 py-2"
+              *ngFor="let subitem of item.subitem"
+            >
+              <i [class]="item.icono"></i>
+              {{ subitem.nombre }}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="flex items-center">
+      <div
+        class="tema text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
+        (click)="cambiarTema()"
+      >
+        <i [class]="tema !== 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun'"></i>
+      </div>
+    </div>
+  </div>
+</div>
