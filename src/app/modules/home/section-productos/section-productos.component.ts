@@ -5,7 +5,6 @@ import { Producto } from '../../productos/model/producto';
 import { environment } from 'src/environments/environment';
 import { Boton } from '../../../core/components/boton-generico/model/boton.model';
 
-
 @Component({
   selector: 'app-section-productos',
   templateUrl: './section-productos.component.html',
@@ -23,8 +22,6 @@ export class SectionProductosComponent implements OnInit {
 
   obtenerProducto() {
     this.productoService.getProducto(4, -1, -1, true).subscribe((result) => {
-      console.log(result);
-
       if (result.length > 0) {
         var direccion = false;
         var cont = 1;
@@ -61,13 +58,28 @@ export class SectionProductosComponent implements OnInit {
         descripcion: e.descripcion,
         fecha: new Date(e.fecha),
         precio: `${e.precio}`,
-        imagen: environment.url_backend+`pictures/${e.id}?tipo=productos`,
+        imagen: environment.url_backend + `pictures/${e.id}?tipo=productos`,
         classTitulo: 'line-clamp-2 text-icem-500 dark:text-white',
         classDescripcion: 'line-clamp-3',
         botones: [
-          {icono: 'bi bi-check', label: 'Ver mas', class: 'w-full bg-icem-500 hover:bg-indigo-500 text-white duration-300 py-2 mt-2 rounded'}
-        ]
+          {
+            icono: 'bi bi-check',
+            label: 'Ver mas',
+            class:
+              'w-full bg-icem-500 hover:bg-indigo-500 text-white duration-300 py-2 mt-2 rounded',
+          },
+        ],
+        alerta: this.esHoy(new Date(e.fecha)) ? 'Nuevo' : '',
       };
     });
+  }
+
+  esHoy(date: Date): boolean {
+    const hoy = new Date();
+    return (
+      hoy.getFullYear() === date.getFullYear() &&
+      hoy.getMonth() === date.getMonth() &&
+      hoy.getDate() === date.getDate()
+    );
   }
 }

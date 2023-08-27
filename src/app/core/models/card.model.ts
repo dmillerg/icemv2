@@ -11,4 +11,5 @@ export interface Card{
     classTitulo?: string;
     classDescripcion?: string;
     botones?: Boton[];
+    alerta?: string;
 }
