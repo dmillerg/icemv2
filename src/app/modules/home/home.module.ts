@@ -8,6 +8,8 @@ import { SectionProductosComponent } from './section-productos/section-productos
 import { SectionDesarrolloComponent } from './section-desarrollo/section-desarrollo.component';
 import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/boton-generico.component';
 import { SectionCatalogoComponent } from './section-catalogo/section-catalogo.component';
+import { SectionContactenosComponent } from './section-contactenos/section-contactenos.component';
+import { FormGenericoComponent } from 'src/app/core/components/form-generico/form-generico.component';
 
 
 
@@ -17,13 +19,15 @@ import { SectionCatalogoComponent } from './section-catalogo/section-catalogo.co
     SectionServiciosComponent,
     SectionProductosComponent,
     SectionDesarrolloComponent,
-    SectionCatalogoComponent
+    SectionCatalogoComponent,
+    SectionContactenosComponent
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     CardComponent,
     BotonGenericoComponent,
+    FormGenericoComponent,
   ]
 })
 export class HomeModule { }
