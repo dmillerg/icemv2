@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfiguracionService } from '../../services/configuracion.service';
-import { Boton } from '../boton-generico/boton.model';
+import { Boton } from '../boton-generico/model/boton.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
 
 @Component({

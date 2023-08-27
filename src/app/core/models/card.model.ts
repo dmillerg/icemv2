@@ -1,4 +1,4 @@
-import { Boton } from "../components/boton-generico/boton.model";
+import { Boton } from "../components/boton-generico/model/boton.model";
 
 export interface Card{
     titulo?: string;
