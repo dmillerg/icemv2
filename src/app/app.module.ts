@@ -8,11 +8,13 @@ import { FooterComponent } from './core/components/footer/footer.component';
 import { HeaderComponent } from './core/components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    NoticiaFuentePipe,
   ],
   imports: [
     BrowserModule,
