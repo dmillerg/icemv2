@@ -29,7 +29,7 @@
         class="tema text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
         (click)="cambiarTema()"
       >
-        <i [class]="tema !== 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun'"></i>
+        <i [class]="tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun'"></i>
       </div>
     </div>
   </div>

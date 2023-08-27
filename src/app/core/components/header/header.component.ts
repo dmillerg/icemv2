@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Nuevos desarrollos', link: '', icono: 'bi bi-building-gear' },
   ];
 
-  tema: string|null = '';
+  tema: string | null = '';
 
   constructor(private catalogoService: CatalogoService) {}
 
@@ -47,20 +47,23 @@ export class HeaderComponent implements OnInit {
     this.obtenerCategorias();
     this.tema = localStorage.getItem('tema');
     if (this.tema === 'dark') {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
+      this.tema = 'light';
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
+      this.tema = 'dark';
     }
   }
 
-  cambiarTema(){
-  this.tema = localStorage.getItem('tema');
+  cambiarTema() {
     if (this.tema === 'dark') {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
+      this.tema = 'light';
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
+      this.tema = 'dark';
     }
-    localStorage.setItem('tema',this.tema==='dark'?'light':'dark')
+    localStorage.setItem('tema', this.tema === 'dark' ? 'light' : 'dark');
   }
 
   obtenerCategorias() {
