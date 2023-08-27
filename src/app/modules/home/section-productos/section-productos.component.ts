@@ -3,7 +3,7 @@ import { Card } from 'src/app/core/models/card.model';
 import { ProductoService } from '../../productos/services/producto.service';
 import { Producto } from '../../productos/model/producto';
 import { environment } from 'src/environments/environment';
-import { Boton } from '../../../core/models/boton.model';
+import { Boton } from '../../../core/components/boton-generico/model/boton.model';
 
 
 @Component({

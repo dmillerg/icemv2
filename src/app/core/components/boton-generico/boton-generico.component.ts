@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Boton } from '../../models/boton.model';
+import { Boton } from './model/boton.model';
 
 @Component({
   selector: 'app-boton-generico',
