@@ -28,7 +28,11 @@ export class HeaderComponent implements OnInit {
       link: '',
       icono: 'bi bi-people',
       subitem: [
-        { nombre: 'Misión', icono: 'bi bi-people', link: '' },
+        {
+          nombre: 'Misión',
+          icono: 'bi bi-people',
+          link: '',
+        },
         { nombre: 'Visión', icono: 'bi bi-people', link: '' },
         { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
         { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
@@ -37,6 +41,16 @@ export class HeaderComponent implements OnInit {
     },
     { nombre: 'Noticias', link: '', icono: 'bi bi-newspaper' },
     { nombre: 'Nuevos desarrollos', link: '', icono: 'bi bi-building-gear' },
+  ];
+
+  iconoTema: 'bi bi-moon-stars'| 'bi bi-sun' = 'bi bi-moon-stars';
+
+  menu2: MenuItem[] = [
+    {nombre: 'acceder/registrarse', icono: 'bi bi-person', subitem: [
+      {nombre: 'acceder', icono: 'bi bi-person-circle'},
+      {nombre: 'registrarse', icono: 'bi bi-person-add'},
+    ]},
+    {icono: this.iconoTema}
   ];
 
   tema: string | null = '';
@@ -53,6 +67,8 @@ export class HeaderComponent implements OnInit {
       document.documentElement.classList.remove('dark');
       this.tema = 'dark';
     }
+    this.iconoTema = this.tema === 'dark'?'bi bi-sun':'bi bi-moon-stars';
+    this.menu2[1].icono = this.iconoTema;
   }
 
   cambiarTema() {
@@ -63,7 +79,13 @@ export class HeaderComponent implements OnInit {
       document.documentElement.classList.remove('dark');
       this.tema = 'dark';
     }
+    this.iconoTema = this.tema === 'dark'?'bi bi-sun':'bi bi-moon-stars';
+    this.menu2[1].icono = this.iconoTema;
     localStorage.setItem('tema', this.tema === 'dark' ? 'light' : 'dark');
+  }
+
+  emit(fun?: Function) {
+    if (fun) fun();
   }
 
   obtenerCategorias() {
