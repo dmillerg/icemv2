@@ -13,7 +13,7 @@ export class BotonGenericoComponent {
   @Input() botones: Boton[] = [];
   @Input() value: any;
 
-  emit(fun: Function) {
-    fun(this.value);
+  emit(fun?: Function) {
+    if (fun) fun(this.value);
   }
 }

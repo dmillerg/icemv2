@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Boton } from 'src/app/core/models/boton.model';
+import { Boton } from 'src/app/core/components/boton-generico/model/boton.model';
 
 @Component({
   selector: 'app-section-desarrollo',

@@ -1,6 +1,15 @@
 <div class="flex">
   <ng-container *ngFor="let item of botones">
-    <button class="border-none px-4 py-2 my-1 bg-icem-500 hover:bg-indigo-500 duration-300 text-white rounded" [class]="item.class?item.class:'border-none px-4 py-2 my-1 bg-icem-500 hover:bg-indigo-500 duration-300 text-white rounded'">
+    <button
+      *ngIf="!item.ocultar"
+      [disabled]="item.disabled"
+      (click)="emit(item.funcion)"
+      [class]="
+        item.class
+          ? item.class
+          : 'border-none px-4 py-2 my-1 bg-icem-500 hover:bg-indigo-500 duration-300 text-white rounded'
+      "
+    >
       <i [class]="item.icono"></i>
       {{ item.label }}
     </button>
