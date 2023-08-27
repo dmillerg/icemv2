@@ -28,7 +28,11 @@ export class HeaderComponent implements OnInit {
       link: '',
       icono: 'bi bi-people',
       subitem: [
-        { nombre: 'Misión', icono: 'bi bi-people', link: '' },
+        {
+          nombre: 'Misión',
+          icono: 'bi bi-people',
+          link: '',
+        },
         { nombre: 'Visión', icono: 'bi bi-people', link: '' },
         { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
         { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
@@ -39,7 +43,21 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Nuevos desarrollos', link: '', icono: 'bi bi-building-gear' },
   ];
 
-  tema: string|null = '';
+  iconoTema: 'bi bi-moon-stars' | 'bi bi-sun' = 'bi bi-moon-stars';
+
+  menu2: MenuItem[] = [
+    {
+      nombre: 'acceder/registrarse',
+      icono: 'bi bi-person',
+      subitem: [
+        { nombre: 'acceder', icono: 'bi bi-person-circle' },
+        { nombre: 'registrarse', icono: 'bi bi-person-add' },
+      ],
+    },
+    { icono: this.iconoTema, accion: () => this.cambiarTema() },
+  ];
+
+  tema: string | null = '';
 
   constructor(private catalogoService: CatalogoService) {}
 
@@ -47,20 +65,31 @@ export class HeaderComponent implements OnInit {
     this.obtenerCategorias();
     this.tema = localStorage.getItem('tema');
     if (this.tema === 'dark') {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
+      this.tema = 'light';
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
+      this.tema = 'dark';
     }
+    this.iconoTema = this.tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
+    this.menu2[1].icono = this.iconoTema;
   }
 
-  cambiarTema(){
-  this.tema = localStorage.getItem('tema');
+  cambiarTema() {
     if (this.tema === 'dark') {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
+      this.tema = 'light';
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
+      this.tema = 'dark';
     }
-    localStorage.setItem('tema',this.tema==='dark'?'light':'dark')
+    this.iconoTema = this.tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
+    this.menu2[1].icono = this.iconoTema;
+    localStorage.setItem('tema', this.tema === 'dark' ? 'light' : 'dark');
+  }
+
+  emit(fun?: Function) {
+    if (fun) fun();
   }
 
   obtenerCategorias() {
