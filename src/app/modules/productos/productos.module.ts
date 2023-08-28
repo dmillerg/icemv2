@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { ProductosComponent } from './productos/productos.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductosRoutingModule } from './productos-routing.module';
+import { ProductoEspecificacionComponent } from 'src/app/core/components/producto-especificacion/producto-especificacion.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ProductosComponent],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    ReactiveFormsModule,
+    ProductosRoutingModule,
+    ProductoEspecificacionComponent,
+  ],
 })
-export class ProductosModule { }
+export class ProductosModule {}
