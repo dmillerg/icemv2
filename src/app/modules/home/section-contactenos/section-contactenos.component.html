@@ -1,0 +1,38 @@
+<div class="flex gap-4 items-center lg:px-48 md:px-20 px-8 my-16 flex-wrap">
+  <div class="xl:flex flex-1 hidden svg-shadow">
+    <img src="assets/imagenes/contactus.png" alt="" class="object-cover" />
+  </div>
+  <div class="flex flex-col flex-1">
+    <h1 class="text-lg text-icem-500 dark:text-icem-300 font-bold">Escríbenos</h1>
+    <app-form-generico
+      class="flex-1"
+      [formulario]="formulario"
+    ></app-form-generico>
+  </div>
+  <div class="flex flex-1 flex-col gap-10 text-gray-600 dark:text-gray-200">
+    <div class="flex flex-col">
+      <h1 class="text-lg font-bold text-icem-500 dark:text-icem-300">Mantén el contacto</h1>
+      <p class="text-md">
+        Recuerda que puedes escribirnos en cualquier momento y nos aseguraremos
+        de responderte lo más rápido posible.
+      </p>
+    </div>
+    <div class="flex flex-col">
+      <ul class="list-none">
+        <li><i class="bi bi-phone-fill"></i>: (+53)7 260-04 21 al 29</li>
+        <li>
+          <i class="bi bi-envelope-fill"></i>: empresaicem@gmail.com,
+          comercial@icem.cu
+        </li>
+        <li><i class="bi bi-clock-fill"></i>: 7:00 am - 7:00 pm</li>
+      </ul>
+    </div>
+    <div class="flex flex-col">
+      <h1 class="text-lg font-bold text-icem-500 dark:text-icem-300">¿ Necesitas ayuda ?</h1>
+      <p class="text-md">
+        Contacta con nuestro equipo y estaremos encantados de responderte lo más
+        pronto posible.
+      </p>
+    </div>
+  </div>
+</div>

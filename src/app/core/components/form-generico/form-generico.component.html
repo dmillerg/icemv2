@@ -1,1 +1,46 @@
-<p>form-generico works!</p>
+<form action="" [formGroup]="form" class="flex gap-2 flex-wrap text-sm" style="min-width: 250px;">
+  <ng-content select=".header"> </ng-content>
+  <div
+    class="flex w-full md:flex-row flex-column gap-2"
+    *ngFor="let fila of column"
+  >
+    <ng-container *ngFor="let item of fila">
+      <div
+        class="relative"
+        [class]="formulario.autofixed ? 'flex-1' : 'flex-none'"
+        [style.width]="obtenerTamanno(item)"
+        *ngIf="visibilidad(item.control, item.visible)"
+      >
+        <label
+          *ngIf="
+            !['checkbox', 'boton'].includes(item.tipo) && !formulario.skeleton
+          "
+          for=""
+          class="block my-1"
+        >
+          <i [class]="item.icono"></i>
+          {{ esRequerido(item.control, item.nombre) }}</label
+        >
+        <input
+          type="text"
+          *ngIf="item.tipo === 'text'"
+          class="py-1 px-2 w-full border border-1 dark:border-none dark:shadow-md rounded outline-none bg-white dark:bg-gray-700"
+          [formControlName]="item.control"
+          [placeholder]="item.placeholder ?? item.nombre"
+        />
+        <textarea
+          *ngIf="item.tipo === 'textarea'"
+          class="py-1 px-2 w-full border border-1 rounded outline-none dark:border-none dark:shadow-md dark:bg-gray-700"
+          [name]="item.control"
+          [formControlName]="item.control"
+          [placeholder]="item.placeholder ?? item.nombre"
+          rows="3"
+        ></textarea>
+        <app-boton-generico *ngIf="item.tipo==='boton'" [botones]="item.botones"></app-boton-generico>
+
+      </div>
+      <!-- <div class=" w-full" *ngIf="item.tipo==='boton'"> -->
+      <!-- </div> -->
+    </ng-container>
+  </div>
+</form>
