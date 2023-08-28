@@ -16,7 +16,7 @@ interface Estrellas {
   templateUrl: './producto-especificacion.component.html',
   styleUrls: ['./producto-especificacion.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class ProductoEspecificacionComponent implements OnInit {
   @Input() producto?: Producto;
@@ -121,6 +121,14 @@ export class ProductoEspecificacionComponent implements OnInit {
                 ? 100
                 : (e.cantidad / this.allEstrellas) * 100;
             });
+          } else {
+            this.estrellas = [
+              { numero: 5, cantidad: 0 },
+              { numero: 4, cantidad: 0 },
+              { numero: 3, cantidad: 0 },
+              { numero: 2, cantidad: 0 },
+              { numero: 1, cantidad: 0 },
+            ];
           }
         },
       });
