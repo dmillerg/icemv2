@@ -66,7 +66,7 @@ export class SectionProductosComponent implements OnInit {
             icono: 'bi bi-check',
             label: 'Ver mas',
             class:
-              'w-full bg-icem-500 hover:bg-indigo-500 text-white duration-300 py-2 mt-2 rounded',
+              'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded',
           },
         ],
         alerta: this.esHoy(new Date(e.fecha)) ? 'Nuevo' : '',

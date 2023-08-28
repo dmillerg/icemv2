@@ -1,4 +1,5 @@
 import { FormGroup } from '@angular/forms';
+import { Boton } from '../../boton-generico/model/boton.model';
 export interface Formulario {
   controles: Control[];
   columnas: number[];
@@ -21,6 +22,13 @@ export interface Control {
   width?: string;
   validator?: any[];
   icono?: string;
+  botones?: Boton[];
 }
 
-export type Tipos = 'text' | 'number' | 'select' | 'date' | 'textarea';
+export type Tipos =
+  | 'text'
+  | 'number'
+  | 'select'
+  | 'date'
+  | 'textarea'
+  | 'boton';

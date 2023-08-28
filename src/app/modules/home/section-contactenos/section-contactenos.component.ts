@@ -40,8 +40,22 @@ export class SectionContactenosComponent implements OnInit {
           control: 'mensaje',
           icono: 'bi bi-chat-dots',
         },
+        {
+          tipo: 'boton',
+          nombre: '',
+          control: 'mensaje',
+          icono: 'bi bi-chat-dots',
+          botones: [
+            {
+              icono: 'bi bi-check',
+              label: 'Ver mas',
+              class:
+                'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded',
+            },
+          ],
+        },
       ],
-      columnas: [1, 1, 1, 1],
+      columnas: [1, 1, 1, 1, 1],
     };
   }
 }

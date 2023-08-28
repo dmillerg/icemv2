@@ -2,11 +2,12 @@ import { Component, Input, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { Control, Formulario } from './model/formulario.model';
+import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
 
 @Component({
   selector: 'app-form-generico',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, BotonGenericoComponent],
   templateUrl: './form-generico.component.html',
   styleUrls: ['./form-generico.component.scss'],
 })

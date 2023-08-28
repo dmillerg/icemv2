@@ -42,7 +42,7 @@ export class NoticiasComponent implements OnInit{
   generateNoticiaCard(){
     this.noticiaCard = [
       {
-
+        
       }
     ]
   }
