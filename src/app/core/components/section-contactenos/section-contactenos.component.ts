@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
+import { FormGenericoComponent } from '../form-generico/form-generico.component';
 
 @Component({
   selector: 'app-section-contactenos',
   templateUrl: './section-contactenos.component.html',
+  imports: [FormGenericoComponent],
   styleUrls: ['./section-contactenos.component.scss'],
+  standalone: true
 })
 export class SectionContactenosComponent implements OnInit {
   formulario!: Formulario;
