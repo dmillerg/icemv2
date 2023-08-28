@@ -16,7 +16,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'quienes',
+    path: 'quienes-somos',
     loadChildren: () =>
       import('./modules/quienes/quienes.module').then((m) => m.QuienesModule),
   },  
@@ -24,6 +24,11 @@ const routes: Routes = [
     path: 'noticias',
     loadChildren: () =>
       import('./modules/noticias/noticias.module').then((m) => m.NoticiasModule),
+  },  
+  {
+    path: 'nuevos-desarrollos',
+    loadChildren: () =>
+      import('./modules/desarrollo/desarrollo.module').then((m) => m.DesarrolloModule),
   },
 ];
 

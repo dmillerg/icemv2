@@ -46,8 +46,6 @@ export class NoticiasComponent implements OnInit {
   }
 
   filtrarNoticias() {
-    console.log(this.noticias_no_icem, this.noticia_filtro);
-
     this.noticia_no_icem_copy = this.noticias_no_icem.filter((e) => e.fuente.toLocaleLowerCase().indexOf(this.noticia_filtro) > -1 || e.titulo.toLocaleLowerCase().indexOf(this.noticia_filtro) > -1)
     this.generateNoticiaCard(this.noticia_no_icem_copy)
   }

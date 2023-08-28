@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
         { nombre: 'Productos', link: 'productos', icono: 'bi bi-box-seam' },
         {
           nombre: 'Quienes somos',
-          link: 'quienes',
+          link: 'quienes-somos',
           icono: 'bi bi-people',
           subitem: [
             {
@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit {
         { nombre: 'Noticias', link: 'noticias', icono: 'bi bi-newspaper' },
         {
           nombre: 'Nuevos desarrollos',
-          link: 'nuevos',
+          link: 'nuevos-desarrollos',
           icono: 'bi bi-building-gear',
         },
         {
@@ -85,7 +85,7 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Productos', link: 'productos', icono: 'bi bi-box-seam' },
     {
       nombre: 'Quienes somos',
-      link: 'quienes',
+      link: 'quienes-somos',
       icono: 'bi bi-people',
       subitem: [
         {
@@ -102,7 +102,7 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Noticias', link: 'noticias', icono: 'bi bi-newspaper' },
     {
       nombre: 'Nuevos desarrollos',
-      link: 'nuevos',
+      link: 'nuevos-desarrollos',
       icono: 'bi bi-building-gear',
     },
     {

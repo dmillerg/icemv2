@@ -1,0 +1,23 @@
+<div class="container px-48">
+    <div class="producto-section">
+        <h1 class="text-3xl font-bold text-icem-500 dark:text-icem-300"><strong>Nuevos desarrollos...</strong></h1>
+        <p class="text-lg dark:text-slate-400 text-slate-600">Algunos de los productos aun no han sido completamente
+            desarrollados pero le mostramos un avance de lo que son y queremos que sean. Nuestro equipo de desarrollo
+            nos ha proporcionado un poco de información acerca de estas innovaciones futuras, por esto le pedimos que si
+            alguno le interesa sea solo un poco paciente pues posiblemente en breve este a su alcance.</p>
+        <div class="row p-4"></div>
+    </div>
+    <div class="w-full flex justify-start">
+        <app-card [card]="desarrolloCard"></app-card>
+
+    </div>
+
+    <div class="p-2" *ngIf="desarrollos.length==0">
+        <div class="flex justify-center items-center flex-col">
+            <img class="w-48" *ngIf="desarrollos.length==0" src="assets/clip-actions/empty.png" alt="">
+            <h3 class="text-base dark:text-slate-400 text-slate-600" *ngIf="desarrollos.length==0">No hay nada en
+                desarrollo aun</h3>
+        </div>
+    </div>
+    <div class="row p-4"></div>
+</div>
