@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'noticias'
+  name: 'noticia_fuente_pipe'
 })
-export class NoticiasPipe implements PipeTransform {
-
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+export class NoticiaFuentePipe implements PipeTransform {
+  transform(rows: any[], query: any): any {
+    return query.length>0 ? rows.filter(item => item.titulo.toLowerCase().indexOf(query.toLowerCase())>-1) : rows;
   }
 
 }
+
