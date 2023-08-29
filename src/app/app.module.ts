@@ -9,12 +9,14 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
+import { BusquedaComponent } from './core/components/busqueda/busqueda.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NoticiaFuentePipe,
+    BusquedaComponent,
   ],
   imports: [
     BrowserModule,
