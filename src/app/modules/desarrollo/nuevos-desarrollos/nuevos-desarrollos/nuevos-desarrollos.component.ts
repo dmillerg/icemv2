@@ -17,6 +17,8 @@ export class NuevosDesarrollosComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    console.log('hoooo');
+    
   }
 
   loadData() {
@@ -33,7 +35,9 @@ export class NuevosDesarrollosComponent implements OnInit {
       return{
         titulo: e.titulo,
         descripcion: e.descripcion,
-        imagen: environment.url_backend + `pictures/${e.id}?tipo=desarrollos`
+        imagen: environment.url_backend + `pictures/${e.id}?tipo=desarrollos`,
+        classDescripcion: 'line-clamp-3',
+        classTitulo: 'line-clamp-3'
       }
     })
   }
