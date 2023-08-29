@@ -21,17 +21,19 @@ export class HeaderComponent implements OnInit {
   temaNombre: 'Modo oscuro' | 'Modo claro' = 'Modo oscuro';
   tema: string | null = '';
   buscar: boolean = false;
-  dataUsuario: Usuario|null=null;
+  dataUsuario: Usuario | null = null;
 
   menusm: MenuItem[] = [
     {
       icono: 'bi bi-person',
+      sm: true,
       subitem: [
         { nombre: 'acceder', icono: 'bi bi-person-circle' },
         { nombre: 'registrarse', icono: 'bi bi-person-add' },
       ],
     },
     {
+      sm: true,
       icono: 'bi bi-three-dots-vertical',
       subitem: [
         {
@@ -39,11 +41,17 @@ export class HeaderComponent implements OnInit {
           link: 'inicio',
           icono: 'bi bi-house',
         },
-        { nombre: 'Productos', link: 'productos', icono: 'bi bi-box-seam' },
+        {
+          nombre: 'Productos',
+          link: 'productos',
+          icono: 'bi bi-box-seam',
+          sm: true,
+        },
         {
           nombre: 'Quienes somos',
-          link: 'quienes',
+          link: 'quienes-somos',
           icono: 'bi bi-people',
+          sm: true,
           subitem: [
             {
               nombre: 'Misión',
@@ -56,20 +64,28 @@ export class HeaderComponent implements OnInit {
             { nombre: 'Actividades', icono: 'bi bi-people', link: '' },
           ],
         },
-        { nombre: 'Noticias', link: 'noticias', icono: 'bi bi-newspaper' },
+        {
+          nombre: 'Noticias',
+          link: 'noticias',
+          icono: 'bi bi-newspaper',
+          sm: true,
+        },
         {
           nombre: 'Nuevos desarrollos',
-          link: 'nuevos',
+          link: 'nuevos-desarrollos',
           icono: 'bi bi-building-gear',
+          sm: true,
         },
         {
           nombre: 'Buscar',
           icono: 'bi bi-search',
+          sm: true,
           accion: () => (this.buscar = !this.buscar),
         },
         {
           nombre: 'Modo oscuro',
           icono: this.iconoTema,
+          sm: true,
           accion: () => this.cambiarTema(),
         },
       ],
@@ -85,7 +101,7 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Productos', link: 'productos', icono: 'bi bi-box-seam' },
     {
       nombre: 'Quienes somos',
-      link: 'quienes',
+      link: 'quienes-somos',
       icono: 'bi bi-people',
       subitem: [
         {
@@ -102,7 +118,7 @@ export class HeaderComponent implements OnInit {
     { nombre: 'Noticias', link: 'noticias', icono: 'bi bi-newspaper' },
     {
       nombre: 'Nuevos desarrollos',
-      link: 'nuevos',
+      link: 'nuevos-desarrollos',
       icono: 'bi bi-building-gear',
     },
     {
@@ -119,15 +135,27 @@ export class HeaderComponent implements OnInit {
       subitem: [
         { nombre: 'acceder', icono: 'bi bi-person-circle' },
         { nombre: 'registrarse', icono: 'bi bi-person-add' },
-        { nombre: 'perfil', icono: 'bi bi-person-vcard', ocultar: ()=>this.dataUsuario!=null },
-        { nombre: 'administrar', icono: 'bi bi-kanban', ocultar: ()=>this.dataUsuario!=null },
-        { nombre: 'cerrar sesión', icono: 'bi bi-box-arrow-right', ocultar: ()=>this.dataUsuario!=null },
+        {
+          nombre: 'perfil',
+          icono: 'bi bi-person-vcard',
+          ocultar: () => this.dataUsuario != null,
+        },
+        {
+          nombre: 'administrar',
+          icono: 'bi bi-kanban',
+          ocultar: () => this.dataUsuario != null,
+        },
+        {
+          nombre: 'cerrar sesión',
+          icono: 'bi bi-box-arrow-right',
+          ocultar: () => this.dataUsuario != null,
+        },
       ],
     },
     { icono: this.iconoTema, accion: () => this.cambiarTema() },
-    {icono: 'bi bi-cart',  },
+    { icono: 'bi bi-cart' },
   ];
-  form: FormGroup = new  FormGroup({});
+  form: FormGroup = new FormGroup({});
 
   constructor(private catalogoService: CatalogoService) {}
 

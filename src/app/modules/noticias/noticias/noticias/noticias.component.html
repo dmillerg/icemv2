@@ -4,6 +4,13 @@
             <h1 class="text-4xl font-bold text-icem-500 dark:text-icem-300">Noticias de nuestra empresa</h1>
 
             <!-- Noticias ICEM -->
+            <div class="w-full flex flex-col justify-center items-center"
+                *ngIf="noticias_no_icem.length==0">
+                <img class="w-80 svg-shadow" *ngIf="noticias_no_icem.length==0" src="assets/clip-actions/empty.png"
+                     alt="">
+                <h3 class="text-section text-center" *ngIf="noticias_no_icem.length==0">No hay ninguna noticia de icem aun</h3>
+            </div>
+
             <div class="flex flex-col py-6" *ngFor="let item of noticias_icem">
                 <img [src]="item.imagen" alt="" class="object-cover w-full h-96">
                 <h4 class="font-bold text-icem-500 dark:text-icem-300 mt-2">{{ item.titulo }}</h4>
@@ -19,10 +26,15 @@
                 <input type="text" placeholder="Buscar noticia por título o fuente..." name="noticia"
                     [(ngModel)]="noticia_filtro" (ngModelChange)="filtrarNoticias()"
                     class="w-full bg-transparent outline-none p-1 border border-t-0  border-r-0  border-l-0 border-icem-500 dark:border-icem-300 focus:border-icem-100">
-                <i
-                    class="bi bi-search absolute top-1 bottom-1 right-1 text-icem-500 p-3 flex items-center"></i>
-
+                <i class="bi bi-search absolute top-1 bottom-1 right-1 text-icem-500 p-3 flex items-center"></i>
             </div>
+
+            <div class="w-full flex flex-col justify-center items-center"
+            *ngIf="noticias_no_icem.length==0">
+            <img class="w-40 svg-shadow" *ngIf="noticias_no_icem.length==0" src="assets/clip-actions/empty.png"
+                 alt="">
+            <h3 class="text-section text-center" *ngIf="noticias_no_icem.length==0">No hay ninguna noticia aun</h3>
+        </div>
             <app-card [card]="noticiaCard"></app-card>
 
         </div>

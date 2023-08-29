@@ -43,28 +43,7 @@ export class SectionContactenosComponent implements OnInit {
           control: 'mensaje',
           icono: 'bi bi-chat-dots',
         },
-        {
-          tipo: 'select',
-          nombre: 'Mensaje',
-          control: 'mensaje',
-          icono: 'bi bi-chat-dots',
-          opciones: [
-            { codigo: 1, nombre: 'Opcion 1' },
-            { codigo: 1, nombre: 'Opcion 1' },
-            { codigo: 1, nombre: 'Opcion 1' },
-          ],
-        },
-        {
-          tipo: 'select',
-          nombre: 'Mensaje',
-          control: 'mensaje',
-          icono: 'bi bi-chat-dots',
-          opciones: [
-            { codigo: 1, nombre: 'Opcion 1' },
-            { codigo: 1, nombre: 'Opcion 1' },
-            { codigo: 1, nombre: 'Opcion 1' },
-          ],
-        },
+
         {
           tipo: 'boton',
           nombre: '',
@@ -80,7 +59,7 @@ export class SectionContactenosComponent implements OnInit {
           ],
         },
       ],
-      columnas: [1, 1, 1, 1, 1,1],
+      columnas: [1, 1, 1, 1, 1],
     };
   }
 }

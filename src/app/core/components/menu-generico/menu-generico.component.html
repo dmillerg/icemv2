@@ -6,7 +6,7 @@
       (click)="emit(item.accion)"
       [routerLink]="item.link"
     >
-      <i [class]="item.icono" class="drop-shadow-lg"></i>
+      <i [class]="!item.sm &&item.subitem?'bi bi-chevron-down':item.icono" class="drop-shadow-lg"></i>
       {{ item.nombre }}
       <ng-container *ngIf="item.subitem">
         <div
