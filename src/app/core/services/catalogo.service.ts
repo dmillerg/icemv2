@@ -14,6 +14,11 @@ export class CatalogoService {
     private http: HttpClient,
   ) {}
 
+  
+  /**
+   * Obtener las categorias de un producto
+   * @returns
+   */
   obtenerCategorias(): Observable<Categoria[]> {
     let direccion = this.url + 'categorias/';
     return this.http.get<Categoria[]>(direccion);

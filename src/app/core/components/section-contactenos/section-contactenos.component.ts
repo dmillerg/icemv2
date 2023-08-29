@@ -7,7 +7,7 @@ import { FormGenericoComponent } from '../form-generico/form-generico.component'
   templateUrl: './section-contactenos.component.html',
   imports: [FormGenericoComponent],
   styleUrls: ['./section-contactenos.component.scss'],
-  standalone: true
+  standalone: true,
 })
 export class SectionContactenosComponent implements OnInit {
   formulario!: Formulario;
@@ -44,9 +44,31 @@ export class SectionContactenosComponent implements OnInit {
           icono: 'bi bi-chat-dots',
         },
         {
+          tipo: 'select',
+          nombre: 'Mensaje',
+          control: 'mensaje',
+          icono: 'bi bi-chat-dots',
+          opciones: [
+            { codigo: 1, nombre: 'Opcion 1' },
+            { codigo: 1, nombre: 'Opcion 1' },
+            { codigo: 1, nombre: 'Opcion 1' },
+          ],
+        },
+        {
+          tipo: 'select',
+          nombre: 'Mensaje',
+          control: 'mensaje',
+          icono: 'bi bi-chat-dots',
+          opciones: [
+            { codigo: 1, nombre: 'Opcion 1' },
+            { codigo: 1, nombre: 'Opcion 1' },
+            { codigo: 1, nombre: 'Opcion 1' },
+          ],
+        },
+        {
           tipo: 'boton',
           nombre: '',
-          control: 'mensaje',
+          control: 'mensaje1',
           icono: 'bi bi-chat-dots',
           botones: [
             {
@@ -58,7 +80,7 @@ export class SectionContactenosComponent implements OnInit {
           ],
         },
       ],
-      columnas: [1, 1, 1, 1, 1],
+      columnas: [1, 1, 1, 1, 1,1],
     };
   }
 }

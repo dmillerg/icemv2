@@ -1,7 +1,7 @@
-<div class="flex gap-4 my-40">
-  <div class="flex flex-col gap-2 px-8" *ngIf="producto">
+<div class="flex gap-4 my-20">
+  <div class="flex flex-col gap-2" *ngIf="producto">
     <div class="flex items-start gap-10 flex-wrap">
-      <div class=" flex flex-col gap-1">
+      <div class="flex flex-col gap-1">
         <div
           class="flex w-96 h-96 bg-icem-500 dark:bg-icem-300 relative rounded"
         >
@@ -10,6 +10,12 @@
             [alt]="producto.titulo"
             class="absolute w-full h-full object-cover -top-6 -right-6 shadow-md rounded bg-white dark:bg-gray-700 border-none"
           />
+          <h1 class="text-white absolute bottom-1 right-1 text-sm">
+            disponibles: {{ producto.disponibilidad }}
+          </h1>
+          <h1 class="text-white text-md -rotate-90 pl-8 font-bold w-96">
+            Categoria: {{ categoria }}
+          </h1>
         </div>
         <div class="flex gap-1">
           <ng-container *ngIf="producto.imagenes">
@@ -42,10 +48,15 @@
             <h3 class="text-md font-bold text-icem-500 dark:text-icem-300">
               Calificación promedio
             </h3>
-           <h1 class="text-icem-500 dark:text-icem-300 text-3xl font-bold"> {{promedio}}</h1>
+            <h1 class="text-icem-500 dark:text-icem-300 text-3xl font-bold">
+              {{ promedio }}
+            </h1>
           </div>
         </div>
-        <h3 class="text-sm w-96">Calificación promedio acerca de la calidad de este producto, {{allEstrellas}} personas han opinado acerca de el</h3>
+        <h3 class="text-sm w-96">
+          Calificación promedio acerca de la calidad de este producto,
+          {{ allEstrellas }} personas han opinado acerca de el
+        </h3>
       </div>
       <div class="flex flex-col flex-1">
         <h1 class="text-4xl text-icem-500 dark:text-icem-300">
@@ -60,10 +71,29 @@
         <p class="text-gray-700 dark:text-gray-300">
           {{ producto!.descripcion }}
         </p>
+        <form class="flex items-center gap-1 mt-4" [formGroup]="form">
+          <button
+            (click)="agregarQuitar(false)"
+            class="border-none rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white"
+          >
+            <i class="bi bi-dash"></i>
+          </button>
+          <input
+            [formControlName]="'cantidad'"
+            type="text"
+            class="outline-none p-1 rounded w-8 dark:bg-gray-700"
+          />
+          <button
+            (click)="agregarQuitar(true)"
+            class="border-none rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white"
+          >
+            <i class="bi bi-plus"></i>
+          </button>
+        </form>
         <button
           type="button"
           id="especificaciones"
-          class="collapsible mt-4 bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
+          class="collapsible mb-1 mt-4 bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
           (click)="collapse('especificaciones')"
         >
           Especificaciones <i class="bi bi-chevron-down"></i>
@@ -84,7 +114,7 @@
         <button
           type="button"
           id="usos"
-          class="collapsible bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
+          class="collapsible mb-1 bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
           (click)="collapse('usos')"
         >
           Usos <i class="bi bi-chevron-down"></i>
@@ -99,7 +129,7 @@
         <button
           type="button"
           id="garantia"
-          class="collapsible bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
+          class="collapsible mb-1 bg-icem-500 dark:bg-icem-300 dark:hover:bg-icem-200 hover:bg-icem-400 rounded duration-300"
           (click)="collapse('garantia')"
         >
           Garantía<i class="bi bi-chevron-down"></i>

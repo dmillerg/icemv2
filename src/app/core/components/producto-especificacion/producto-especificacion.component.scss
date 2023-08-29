@@ -43,3 +43,13 @@
     max-height: 400px;
     transition: all .3s ease-in-out;
 }
+
+.categoria{
+    position: absolute;
+    left: 0;
+    bottom: 15px;
+    white-space: nowrap;
+    color: var(--theme-color);
+    padding: 0;
+    transform: rotate(-90deg);
+}

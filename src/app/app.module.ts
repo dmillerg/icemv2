@@ -9,6 +9,7 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
+import { ROOT_REDUCERS } from './shared/state/app.state';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
     HttpClientModule,
     HeaderComponent,
     FooterComponent,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot(ROOT_REDUCERS)
   ],
   providers: [],
   bootstrap: [AppComponent]

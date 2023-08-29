@@ -1,1 +1,15 @@
-<app-producto-especificacion></app-producto-especificacion>
+<div class="lg:px-40 md:px-20 px-8">
+  <app-producto-especificacion
+    *ngIf="producto"
+    [producto]="producto"
+    [categoria]="categoria!.nombre!"
+  ></app-producto-especificacion>
+</div>
+<h1
+  class="lg:ml-48 md:ml-20 ml-8 mt-8 text-2xl text-icem-500 dark:text-white font-bold opacity-50"
+>
+  Quizas también pueda interesarte
+</h1>
+<div class="flex w-full gap-4 my-8">
+  <app-card [card]="productosCard"></app-card>
+</div>

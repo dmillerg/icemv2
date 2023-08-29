@@ -4,6 +4,7 @@ import { ProductosComponent } from './productos/productos.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductosRoutingModule } from './productos-routing.module';
 import { ProductoEspecificacionComponent } from 'src/app/core/components/producto-especificacion/producto-especificacion.component';
+import { CardComponent } from 'src/app/core/components/card/card.component';
 
 @NgModule({
   declarations: [ProductosComponent],
@@ -12,6 +13,7 @@ import { ProductoEspecificacionComponent } from 'src/app/core/components/product
     ReactiveFormsModule,
     ProductosRoutingModule,
     ProductoEspecificacionComponent,
+    CardComponent,
   ],
 })
 export class ProductosModule {}

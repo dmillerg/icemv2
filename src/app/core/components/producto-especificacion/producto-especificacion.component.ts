@@ -2,8 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Producto } from '../../../modules/productos/model/producto';
 import { ProductoService } from '../../../modules/productos/services/producto.service';
 import { take } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { CommonModule } from '@angular/common';
+import {
+  FormGroup,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 interface Estrellas {
   cantidad: number;
@@ -16,46 +21,33 @@ interface Estrellas {
   templateUrl: './producto-especificacion.component.html',
   styleUrls: ['./producto-especificacion.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class ProductoEspecificacionComponent implements OnInit {
   @Input() producto?: Producto;
+  @Input() categoria?: string;
   allEstrellas = 0;
   promedio = 0;
-
+  form!: FormGroup;
   estrellas: Estrellas[] = [];
 
-  constructor(private productoService: ProductoService) {}
-  ngOnInit(): void {
-    this.obtenerProducto();
-  }
+  constructor(
+    private productoService: ProductoService,
+    private fb: FormBuilder
+  ) {}
 
-  obtenerProducto() {
-    this.productoService
-      .getProducto()
-      .pipe(take(1))
-      .subscribe({
-        next: (response) => {
-          const prod = response[0];
-          let imagen: string = '';
-          let imagenes: string[] = [];
-          prod.imagen.split(',').forEach((e, i) => {
-            if (i === 0) {
-              imagen =
-                environment.url_backend + `pictures/${prod!.id}?tipo=productos`;
-            } else {
-              imagenes!.push(
-                environment.url_backend +
-                  `pictures/${prod!.id}?tipo=productos&name=${e}`
-              );
-            }
-          });
-          this.producto = prod;
-          this.loadPost();
-          this.producto.imagen = imagen;
-          this.producto.imagenes = imagenes;
-        },
-      });
+  ngOnInit(): void {
+    this.loadPost();
+    this.form = this.fb.group({
+      cantidad: [
+        { value: 0, disabled: true },
+        [
+          Validators.required,
+          Validators.min(0),
+          Validators.max(this.producto!.disponibilidad),
+        ],
+      ],
+    });
   }
 
   collapse(id: string) {
@@ -132,5 +124,15 @@ export class ProductoEspecificacionComponent implements OnInit {
           }
         },
       });
+  }
+
+  agregarQuitar(accion: boolean) {
+    const cantidad = this.form.getRawValue().cantidad;
+
+    if (
+      (accion && this.producto!.disponibilidad > cantidad) ||
+      (!accion && cantidad > 0)
+    )
+      this.form.get('cantidad')?.setValue(accion ? cantidad + 1 : cantidad - 1);
   }
 }
