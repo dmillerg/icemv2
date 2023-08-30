@@ -16,7 +16,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'quienes-somos',
+    path: 'quienes-somos/:section',
     loadChildren: () =>
       import('./modules/quienes/quienes.module').then((m) => m.QuienesModule),
   },  

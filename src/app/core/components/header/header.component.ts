@@ -7,6 +7,7 @@ import { MenuGenericoComponent } from '../menu-generico/menu-generico.component'
 import { scaleAnimation } from 'src/app/animations';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Usuario } from '../../models/usuario.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -28,8 +29,20 @@ export class HeaderComponent implements OnInit {
       icono: 'bi bi-person',
       sm: true,
       subitem: [
-        { nombre: 'acceder', icono: 'bi bi-person-circle' },
-        { nombre: 'registrarse', icono: 'bi bi-person-add' },
+        {
+          nombre: 'acceder',
+          icono: 'bi bi-person-circle',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
+        },
+        {
+          nombre: 'registrarse',
+          icono: 'bi bi-person-add',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
+        },
       ],
     },
     {
@@ -38,43 +51,54 @@ export class HeaderComponent implements OnInit {
       subitem: [
         {
           nombre: 'Inicio',
-          link: 'inicio',
           icono: 'bi bi-house',
+          accion: () => {
+            this.router.navigate([`inicio`]);
+          },
         },
         {
           nombre: 'Productos',
-          link: 'productos',
           icono: 'bi bi-box-seam',
           sm: true,
+          accion: () => {
+            this.router.navigate([`productos/undefined`]);
+          },
         },
         {
           nombre: 'Quienes somos',
-          link: 'quienes-somos',
           icono: 'bi bi-people',
           sm: true,
-          subitem: [
-            {
-              nombre: 'Misión',
-              icono: 'bi bi-people',
-              link: '',
-            },
-            { nombre: 'Visión', icono: 'bi bi-people', link: '' },
-            { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
-            { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
-            { nombre: 'Actividades', icono: 'bi bi-people', link: '' },
-          ],
+          accion: () => {
+            this.router.navigate([`quienes-somos/undefined`]);
+          },
+          // subitem: [
+          //   {
+          //     nombre: 'Misión',
+          //     icono: 'bi bi-people',
+          //     link: '',
+          //   },
+          //   { nombre: 'Visión', icono: 'bi bi-people', link: '' },
+          //   { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
+          //   { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
+          //   { nombre: 'Actividades', icono: 'bi bi-people', link: '' },
+          // ],
         },
         {
           nombre: 'Noticias',
-          link: 'noticias',
           icono: 'bi bi-newspaper',
           sm: true,
+
+          accion: () => {
+            this.router.navigate([`noticias`]);
+          },
         },
         {
           nombre: 'Nuevos desarrollos',
-          link: 'nuevos-desarrollos',
           icono: 'bi bi-building-gear',
           sm: true,
+          accion: () => {
+            this.router.navigate([`nuevos-desarrollos`]);
+          },
         },
         {
           nombre: 'Buscar',
@@ -95,31 +119,75 @@ export class HeaderComponent implements OnInit {
   menu: MenuItem[] = [
     {
       nombre: 'Inicio',
-      link: 'inicio',
       icono: 'bi bi-house',
+      accion: () => {
+        this.router.navigate([`inicio`]);
+      },
     },
-    { nombre: 'Productos', link: 'productos', icono: 'bi bi-box-seam' },
+    {
+      nombre: 'Productos',
+      icono: 'bi bi-box-seam',
+      accion: () => {
+        this.router.navigate([`productos/-1`]);
+      },
+    },
     {
       nombre: 'Quienes somos',
-      link: 'quienes-somos',
       icono: 'bi bi-people',
+      accion: () => {
+        this.router.navigate([`quienes-somos/undefined`]);
+      },
       subitem: [
         {
           nombre: 'Misión',
           icono: 'bi bi-people',
-          link: '',
+          accion: () => {
+            this.router.navigate([`quienes-somos/mision`]);
+          },
         },
-        { nombre: 'Visión', icono: 'bi bi-people', link: '' },
-        { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
-        { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
-        { nombre: 'Actividades', icono: 'bi bi-people', link: '' },
+        {
+          nombre: 'Visión',
+          icono: 'bi bi-people',
+          accion: () => {
+            this.router.navigate([`quienes-somos/vision`]);
+          },
+        },
+        {
+          nombre: 'Objetivo',
+          icono: 'bi bi-people',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
+        },
+        {
+          nombre: 'Miembros del equipo',
+          icono: 'bi bi-people',
+          accion: () => {
+            this.router.navigate([`quienes-somos/miembros`]);
+          },
+        },
+        {
+          nombre: 'Actividades',
+          icono: 'bi bi-people',
+          accion: () => {
+            this.router.navigate([`quienes-somos/actividades`]);
+          },
+        },
       ],
     },
-    { nombre: 'Noticias', link: 'noticias', icono: 'bi bi-newspaper' },
+    {
+      nombre: 'Noticias',
+      icono: 'bi bi-newspaper',
+      accion: () => {
+        this.router.navigate([`noticias`]);
+      },
+    },
     {
       nombre: 'Nuevos desarrollos',
-      link: 'nuevos-desarrollos',
       icono: 'bi bi-building-gear',
+      accion: () => {
+        this.router.navigate([`nuevos-desarrollos`]);
+      },
     },
     {
       nombre: 'Buscar',
@@ -138,16 +206,25 @@ export class HeaderComponent implements OnInit {
         {
           nombre: 'perfil',
           icono: 'bi bi-person-vcard',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
           ocultar: () => this.dataUsuario != null,
         },
         {
           nombre: 'administrar',
           icono: 'bi bi-kanban',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
           ocultar: () => this.dataUsuario != null,
         },
         {
           nombre: 'cerrar sesión',
           icono: 'bi bi-box-arrow-right',
+          accion: () => {
+            this.router.navigate([`quienes-somos/objetivo`]);
+          },
           ocultar: () => this.dataUsuario != null,
         },
       ],
@@ -157,7 +234,10 @@ export class HeaderComponent implements OnInit {
   ];
   form: FormGroup = new FormGroup({});
 
-  constructor(private catalogoService: CatalogoService) {}
+  constructor(
+    private catalogoService: CatalogoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.obtenerCategorias();

@@ -1,30 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Noticia } from '../../model/noticias';
 import { Card } from 'src/app/core/models/card.model';
 import { NoticiaService } from '../../services/noticia.service';
 import { environment } from 'src/environments/environment';
-import { NoticiaFuentePipe } from 'src/app/core/pipes/noticias/noticias.pipe.spec';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-noticias',
   templateUrl: './noticias.component.html',
   styleUrls: ['./noticias.component.scss']
 })
-export class NoticiasComponent implements OnInit {
+export class NoticiasComponent implements OnInit, OnDestroy {
   noticias_icem: Noticia[] = [];
   noticias_no_icem: Noticia[] = [];
   noticia!: Noticia[];
   noticia_filtro: string = '';
   noticiaCard: Card[] = [];
-  noticia_no_icem_copy: Noticia[] = []
+  noticia_no_icem_copy: Noticia[] = [];
+  sub$: Subscription = new Subscription();
 
   constructor(
     private noticiaService: NoticiaService,
-    private noticiaPipe: NoticiaFuentePipe,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.loadNoticias()
+    this.obtenerRuta();
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 
   rellenarColumns() {
@@ -76,5 +83,16 @@ export class NoticiasComponent implements OnInit {
         // imagen: environment.url_backend + `pictures/${e.id}?tipo=noticias`
       }
     })
+  }
+
+  obtenerRuta() {
+    this.sub$ = this.route.params.subscribe((params) => {
+      const section = +params['section'];
+      console.log(params);
+      
+      console.log(section);
+      
+      // document.getElementById(section)
+    });
   }
 }

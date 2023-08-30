@@ -12,4 +12,5 @@ import { BotonGenericoComponent } from '../boton-generico/boton-generico.compone
 })
 export class CardComponent {
   @Input() card: Card[] = [];
+  @Input() direccion?: string;
 }

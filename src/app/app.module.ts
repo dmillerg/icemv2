@@ -1,4 +1,7 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import localEs from '@angular/common/locales/es';
+import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+registerLocaleData(localEs, 'es');
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,7 +31,10 @@ import { BusquedaComponent } from './core/components/busqueda/busqueda.component
     FooterComponent,
     StoreModule.forRoot(ROOT_REDUCERS)
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es' },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
