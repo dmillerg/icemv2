@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from '../../models/menu.model';
 import { CatalogoService } from '../../services/catalogo.service';
@@ -8,11 +8,13 @@ import { scaleAnimation } from 'src/app/animations';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Usuario } from '../../models/usuario.model';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { RegisterLoginModalComponent } from 'src/app/modules/auth/modal/register-login-modal/register-login-modal.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MenuGenericoComponent, ReactiveFormsModule],
+  imports: [CommonModule, MenuGenericoComponent, ReactiveFormsModule, MatDialogModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   animations: [scaleAnimation],
@@ -23,6 +25,7 @@ export class HeaderComponent implements OnInit {
   tema: string | null = '';
   buscar: boolean = false;
   dataUsuario: Usuario | null = null;
+  entry!: ViewContainerRef;
 
   menusm: MenuItem[] = [
     {
@@ -201,8 +204,26 @@ export class HeaderComponent implements OnInit {
       nombre: 'acceder/registrarse',
       icono: 'bi bi-person',
       subitem: [
-        { nombre: 'acceder', icono: 'bi bi-person-circle' },
-        { nombre: 'registrarse', icono: 'bi bi-person-add' },
+        {
+          nombre: 'acceder',
+          icono: 'bi bi-person-circle',
+          accion: () => {
+            this.loginOrRegister(
+              'Inicio de sesión',
+              'Introdusca su usuario y contraseña'
+            );
+          },
+        },
+        {
+          nombre: 'registrarse',
+          icono: 'bi bi-person-add',
+          accion: () => {
+            this.loginOrRegister(
+              'Registrarse',
+              'Registrese en nuestra pagina para poder acceder a las opciones de compra'
+            );
+          },
+        },
         {
           nombre: 'perfil',
           icono: 'bi bi-person-vcard',
@@ -236,7 +257,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private catalogoService: CatalogoService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -292,5 +314,16 @@ export class HeaderComponent implements OnInit {
           this.menu[1].subitem = menu;
         },
       });
+  }
+
+  loginOrRegister(titulo: string, subtitulo: string) {
+    const dialogRef = this.dialog.open(RegisterLoginModalComponent, {
+      data: { titulo: titulo, subtitulo: subtitulo },
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.animal = result;
+    // });
   }
 }

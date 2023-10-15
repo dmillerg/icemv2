@@ -15,7 +15,6 @@ import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
 import { ROOT_REDUCERS } from './shared/state/app.state';
 import { BusquedaComponent } from './core/components/busqueda/busqueda.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +28,7 @@ import { BusquedaComponent } from './core/components/busqueda/busqueda.component
     HttpClientModule,
     HeaderComponent,
     FooterComponent,
-    StoreModule.forRoot(ROOT_REDUCERS)
+    StoreModule.forRoot(ROOT_REDUCERS),
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es' },
