@@ -29,6 +29,11 @@ const routes: Routes = [
     path: 'nuevos-desarrollos',
     loadChildren: () =>
       import('./modules/desarrollo/desarrollo.module').then((m) => m.DesarrolloModule),
+  },  
+  {
+    path: 'busqueda',
+    loadChildren: () =>
+      import('./modules/busqueda/busqueda.module').then((m) => m.BusquedaModule),
   },
 ];
 

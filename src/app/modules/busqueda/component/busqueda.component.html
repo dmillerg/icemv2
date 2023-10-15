@@ -1,0 +1,18 @@
+<div class="container" [@scaleAnimation]="'enter'">
+    <div class="row p-4"></div>
+    <div class="row">
+        <div class="col-sm-12">
+            <p style="padding-left: 1%;"><span class="text-firstcolor">Cantidad de coincidencias: </span>{{busqueda.length}}</p>
+            <div class="contenedor-busq">
+            <div *ngFor="let item of busqueda" class="card card-mine shadow-sm text-start">
+                <img [src]="item.imagen" alt="">
+                <h3 class="h3 text-descripcion">{{item.titulo}}</h3>
+                <p style="font-size: small;">{{item.fecha | date: 'short'}}</p>
+                <p class="text-descripcion">{{item.descripcion}}</p>
+                <p>localizacion: {{item.tipo}}</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row p-4"></div>
+</div>

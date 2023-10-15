@@ -10,14 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
 import { ROOT_REDUCERS } from './shared/state/app.state';
-import { BusquedaComponent } from './core/components/busqueda/busqueda.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NoticiaFuentePipe,
-    BusquedaComponent,
   ],
   imports: [
     BrowserModule,
