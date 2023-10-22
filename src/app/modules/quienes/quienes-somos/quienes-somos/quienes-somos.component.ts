@@ -38,6 +38,8 @@ export class QuienesSomosComponent implements OnInit, OnDestroy {
   obtenerRuta() {
     this.sub$ = this.route.params.subscribe((params) => {
       const section = params['section'];
+      console.log(document.getElementById(section));
+      
       document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
     });
   }

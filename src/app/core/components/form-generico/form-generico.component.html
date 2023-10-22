@@ -22,6 +22,9 @@
           "
           for=""
           class="block mb-1"
+          [ngClass]="{
+            'text-red-500': error(form, item.control).length > 0
+          }"
         >
           <i [class]="item.icono"></i>
           {{ esRequerido(item.control, item.nombre) }}</label
@@ -29,14 +32,24 @@
         <input
           type="text"
           *ngIf="item.tipo === 'text'"
-          class="py-3 px-3 w-full border border-1 dark:border-none dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+          [class]="
+          error(form, item.control).length > 0
+              ? 'border border-red-500'
+              : 'border border-1 dark:border-gray-500'
+          "
+          class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
         />
         <div class="relative" *ngIf="item.tipo === 'password'">
           <input
+            [class]="
+            error(form, item.control).length > 0
+                ? 'border border-red-500'
+                : 'border border-1 dark:border-gray-500'
+            "
             [type]="item.tiposPassword ?? 'password'"
-            class="py-3 px-3 w-full border border-1 dark:border-none dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+            class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
             [formControlName]="item.control"
             [placeholder]="item.placeholder ?? item.nombre"
           />
@@ -67,8 +80,13 @@
           </select>
         </div>
         <textarea
+          [class]="
+          error(form, item.control).length > 0
+              ? 'border border-red-500'
+              : 'border border-1 dark:border-gray-500'
+          "
           *ngIf="item.tipo === 'textarea'"
-          class="py-3 px-3 w-full border border-1 rounded outline-none dark:border-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
+          class="py-3 px-3 w-full rounded outline-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
           [name]="item.control"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
@@ -79,9 +97,13 @@
           *ngIf="item.tipo === 'boton'"
           [botones]="item.botones"
         ></app-boton-generico>
+        <span
+          *ngIf="error(form, item.control).length > 0"
+          class="text-red-500 text-xs font-thin"
+        >
+          {{ error(form, item.control) }}
+        </span>
       </div>
-      <!-- <div class=" w-full" *ngIf="item.tipo==='boton'"> -->
-      <!-- </div> -->
     </ng-container>
   </div>
 </form>

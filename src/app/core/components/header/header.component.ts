@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit, ViewContainerRef } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { MenuItem } from '../../models/menu.model';
 import { CatalogoService } from '../../services/catalogo.service';
 import { take } from 'rxjs';
@@ -10,11 +10,18 @@ import { Usuario } from '../../models/usuario.model';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RegisterLoginModalComponent } from 'src/app/modules/auth/modal/register-login-modal/register-login-modal.component';
+import { Modal } from '../modal-generico/model/modal.model';
+import { ModalGenericoComponent } from '../modal-generico/modal-generico.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MenuGenericoComponent, ReactiveFormsModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    MenuGenericoComponent,
+    ReactiveFormsModule,
+    MatDialogModule,
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   animations: [scaleAnimation],
@@ -27,98 +34,7 @@ export class HeaderComponent implements OnInit {
   dataUsuario: Usuario | null = null;
   entry!: ViewContainerRef;
 
-  menusm: MenuItem[] = [
-    {
-      icono: 'bi bi-person',
-      sm: true,
-      subitem: [
-        {
-          nombre: 'acceder',
-          icono: 'bi bi-person-circle',
-          accion: () => {
-            this.router.navigate([`quienes-somos/objetivo`]);
-          },
-        },
-        {
-          nombre: 'registrarse',
-          icono: 'bi bi-person-add',
-          accion: () => {
-            this.router.navigate([`quienes-somos/objetivo`]);
-          },
-        },
-      ],
-    },
-    {
-      sm: true,
-      icono: 'bi bi-three-dots-vertical',
-      subitem: [
-        {
-          nombre: 'Inicio',
-          icono: 'bi bi-house',
-          accion: () => {
-            this.router.navigate([`inicio`]);
-          },
-        },
-        {
-          nombre: 'Productos',
-          icono: 'bi bi-box-seam',
-          sm: true,
-          accion: () => {
-            this.router.navigate([`productos/undefined`]);
-          },
-        },
-        {
-          nombre: 'Quienes somos',
-          icono: 'bi bi-people',
-          sm: true,
-          accion: () => {
-            this.router.navigate([`quienes-somos/undefined`]);
-          },
-          // subitem: [
-          //   {
-          //     nombre: 'Misión',
-          //     icono: 'bi bi-people',
-          //     link: '',
-          //   },
-          //   { nombre: 'Visión', icono: 'bi bi-people', link: '' },
-          //   { nombre: 'Objetivo', icono: 'bi bi-people', link: '' },
-          //   { nombre: 'Miembros del equipo', icono: 'bi bi-people', link: '' },
-          //   { nombre: 'Actividades', icono: 'bi bi-people', link: '' },
-          // ],
-        },
-        {
-          nombre: 'Noticias',
-          icono: 'bi bi-newspaper',
-          sm: true,
-
-          accion: () => {
-            this.router.navigate([`noticias`]);
-          },
-        },
-        {
-          nombre: 'Nuevos desarrollos',
-          icono: 'bi bi-building-gear',
-          sm: true,
-          accion: () => {
-            this.router.navigate([`nuevos-desarrollos`]);
-          },
-        },
-        {
-          nombre: 'Buscar',
-          icono: 'bi bi-search',
-          sm: true,
-          accion: () => (this.buscar = !this.buscar),
-        },
-        {
-          nombre: 'Modo oscuro',
-          icono: this.iconoTema,
-          sm: true,
-          accion: () => this.cambiarTema(),
-        },
-      ],
-    },
-  ];
-
+  menusm: MenuItem[] = [];
   menu: MenuItem[] = [
     {
       nombre: 'Inicio',
@@ -199,76 +115,29 @@ export class HeaderComponent implements OnInit {
     },
   ];
 
-  menu2: MenuItem[] = [
-    {
-      nombre: 'acceder/registrarse',
-      icono: 'bi bi-person',
-      subitem: [
-        {
-          nombre: 'acceder',
-          icono: 'bi bi-person-circle',
-          accion: () => {
-            this.loginOrRegister(
-              'Inicio de sesión',
-              'Introdusca su usuario y contraseña'
-            );
-          },
-        },
-        {
-          nombre: 'registrarse',
-          icono: 'bi bi-person-add',
-          accion: () => {
-            this.loginOrRegister(
-              'Registrarse',
-              'Registrese en nuestra pagina para poder acceder a las opciones de compra'
-            );
-          },
-        },
-        {
-          nombre: 'perfil',
-          icono: 'bi bi-person-vcard',
-          accion: () => {
-            this.router.navigate([`quienes-somos/objetivo`]);
-          },
-          ocultar: () => this.dataUsuario != null,
-        },
-        {
-          nombre: 'administrar',
-          icono: 'bi bi-kanban',
-          accion: () => {
-            this.router.navigate([`quienes-somos/objetivo`]);
-          },
-          ocultar: () => this.dataUsuario != null,
-        },
-        {
-          nombre: 'cerrar sesión',
-          icono: 'bi bi-box-arrow-right',
-          accion: () => {
-            this.router.navigate([`quienes-somos/objetivo`]);
-          },
-          ocultar: () => this.dataUsuario != null,
-        },
-      ],
-    },
-    { icono: this.iconoTema, accion: () => this.cambiarTema() },
-    { icono: 'bi bi-cart' },
-  ];
+  menu2: MenuItem[] = [];
   form: FormGroup = new FormGroup({});
 
   constructor(
     private catalogoService: CatalogoService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
+    this.generarMenu();
     this.obtenerCategorias();
     this.tema = localStorage.getItem('tema');
     if (this.tema === 'dark') {
       document.documentElement.classList.add('dark');
+      this.document.body.classList.add('dark-theme');
+      this.document.body.classList.remove('light-theme');
       this.tema = 'light';
     } else {
       document.documentElement.classList.remove('dark');
+      this.document.body.classList.remove('dark-theme');
+      this.document.body.classList.add('light-theme');
       this.tema = 'dark';
     }
     this.iconoTema = this.tema === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
@@ -281,9 +150,13 @@ export class HeaderComponent implements OnInit {
   cambiarTema() {
     if (this.tema === 'dark') {
       document.documentElement.classList.add('dark');
+      this.document.body.classList.add('dark-theme');
+      this.document.body.classList.remove('light-theme');
       this.tema = 'light';
     } else {
       document.documentElement.classList.remove('dark');
+      this.document.body.classList.remove('dark-theme');
+      this.document.body.classList.add('light-theme');
       this.tema = 'dark';
     }
     this.temaNombre = this.tema === 'dark' ? 'Modo oscuro' : 'Modo claro';
@@ -321,9 +194,152 @@ export class HeaderComponent implements OnInit {
       data: { titulo: titulo, subtitulo: subtitulo },
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
+    dialogRef.afterClosed().subscribe(() => {
+      this.generarMenu();
+    });
+  }
+
+  generarMenu() {
+    const usuario = localStorage.getItem('usuario')
+      ? JSON.parse(localStorage.getItem('usuario')!)
+      : undefined;
+    this.dataUsuario = usuario;
+    const menuUsuario: MenuItem[] = [
+      {
+        nombre: 'acceder',
+        icono: 'bi bi-person-circle',
+        ocultar: this.dataUsuario !== undefined,
+        accion: () => {
+          this.loginOrRegister(
+            'Inicio de sesión',
+            'Introdusca su usuario y contraseña'
+          );
+        },
+      },
+      {
+        nombre: 'registrarse',
+        icono: 'bi bi-person-add',
+        ocultar: this.dataUsuario !== undefined,
+        accion: () => {
+          this.loginOrRegister(
+            'Registrarse',
+            'Registrese en nuestra pagina para poder acceder a las opciones de compra'
+          );
+        },
+      },
+      {
+        nombre: 'perfil',
+        icono: 'bi bi-person-vcard',
+        accion: () => {
+          this.router.navigate([`quienes-somos/objetivo`]);
+        },
+        ocultar: this.dataUsuario === undefined,
+      },
+      {
+        nombre: 'administrar',
+        icono: 'bi bi-kanban',
+        accion: () => {
+          this.router.navigate([`quienes-somos/objetivo`]);
+        },
+        ocultar: this.dataUsuario === undefined,
+      },
+      {
+        nombre: 'cerrar sesión',
+        icono: 'bi bi-box-arrow-right',
+        accion: () => {
+          localStorage.removeItem('usuario');
+          this.generarMenu();
+        },
+        ocultar: this.dataUsuario === undefined,
+      },
+    ];
+    this.menu2 = [
+      {
+        nombre: usuario ? usuario.usuario : 'acceder/registrarse',
+        icono: 'bi bi-person',
+        subitem: [...menuUsuario],
+      },
+      { icono: this.iconoTema, accion: () => this.cambiarTema() },
+      { icono: 'bi bi-cart', ocultar: this.dataUsuario !== undefined },
+    ];
+
+    this.menusm = [
+      {
+        icono: 'bi bi-person',
+        sm: true,
+        subitem: [...menuUsuario],
+      },
+      {
+        sm: true,
+        icono: 'bi bi-three-dots-vertical',
+        subitem: [
+          {
+            nombre: 'Inicio',
+            icono: 'bi bi-house',
+            accion: () => {
+              this.router.navigate([`inicio`]);
+            },
+          },
+          {
+            nombre: 'Productos',
+            icono: 'bi bi-box-seam',
+            sm: true,
+            accion: () => {
+              this.router.navigate([`productos/undefined`]);
+            },
+          },
+          {
+            nombre: 'Quienes somos',
+            icono: 'bi bi-people',
+            sm: true,
+            accion: () => {
+              this.router.navigate([`quienes-somos/undefined`]);
+            },
+          },
+          {
+            nombre: 'Noticias',
+            icono: 'bi bi-newspaper',
+            sm: true,
+
+            accion: () => {
+              this.router.navigate([`noticias`]);
+            },
+          },
+          {
+            nombre: 'Nuevos desarrollos',
+            icono: 'bi bi-building-gear',
+            sm: true,
+            accion: () => {
+              this.router.navigate([`nuevos-desarrollos`]);
+            },
+          },
+          {
+            nombre: 'Buscar',
+            icono: 'bi bi-search',
+            sm: true,
+            accion: () => (this.buscar = !this.buscar),
+          },
+          {
+            nombre: 'Modo oscuro',
+            icono: this.iconoTema,
+            sm: true,
+            accion: () => this.cambiarTema(),
+          },
+        ],
+      },
+    ];
+  }
+
+  test() {
+    const modal: Modal = {
+      botones: [{ icono: 'bi bi-x', label: 'Cerrar' }],
+      titulo: 'Titulo',
+      // subtitulo: 'Subtitulo',
+      texto:
+        'Esto es un modal de confirmacion del modal generico sdas asd asjd asd asnd asnd asd asda sd asd asd ',
+    };
+    this.dialog.open(ModalGenericoComponent, {
+      data: modal,
+    });
   }
 }

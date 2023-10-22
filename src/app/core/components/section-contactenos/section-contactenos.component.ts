@@ -54,12 +54,16 @@ export class SectionContactenosComponent implements OnInit {
               icono: 'bi bi-check',
               label: 'Ver mas',
               class:
-                'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded',
+                'border-none w-full px-4 py-3 my-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white rounded',
             },
           ],
         },
       ],
       columnas: [1, 1, 1, 1, 1],
     };
+    setTimeout(() => {
+    }, 1000);
   }
+
+
 }

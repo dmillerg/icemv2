@@ -2,7 +2,7 @@
   <div class="menu relative" *ngFor="let item of menu">
     <button
       class="relative flex items-center gap-2 text-white cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
-      *ngIf="!item.ocultar"
+      *ngIf="item.ocultar?? true"
       (click)="emit(item.accion)"
     >
       {{ item.nombre }}

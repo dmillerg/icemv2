@@ -1,11 +1,23 @@
-<div mat-dialog-title class="dark:bg-gray-900 dark:text-white">
-  <h1>{{ titulo }}</h1>
-  <h3>{{ subtitulo }}</h3>
+<div mat-dialog-title class="dark:bg-gray-800 dark:text-white">
+  <h1 class="dark:bg-gray-800 dark:text-white">{{ titulo }}</h1>
+  <span
+    class="dark:bg-gray-800 dark:text-gray-300 text-gray-600 font-light text-sm"
+    >{{ subtitulo }}</span
+  >
 </div>
-<div mat-dialog-content class="dark:bg-gray-900 dark:text-white">
-  <app-login *ngIf="login"></app-login>
-  <app-register *ngIf="!login"></app-register>
+<mat-divider></mat-divider>
+<div mat-dialog-content class="dark:bg-gray-800 dark:text-white">
+  <div class="max-w-lg">
+    <app-login *ngIf="login" (form)="formLogin = $event"></app-login>
+    <app-register
+      *ngIf="!login"
+      (formObligatorioEmit)="formObligatorio = $event"
+      (formOpcionalEmit)="formOpcional = $event"
+    ></app-register>
+  </div>
 </div>
-<div mat-dialog-actions class="dark:bg-gray-900 dark:text-white">
+<div mat-dialog-actions class="dark:bg-gray-700 bg-gray-100 dark:text-white">
+  <div class="w-full flex justify-end pr-4">
     <app-boton-generico [botones]="botones"></app-boton-generico>
+  </div>
 </div>

@@ -1,17 +1,22 @@
-<div class="flex">
+<div class="flex gap-2">
   <ng-container *ngFor="let item of botones">
     <button
       *ngIf="!item.ocultar"
-      [disabled]="item.disabled"
+      [disabled]="item.disabled || (item.cargando?item.cargando():false)"
       (click)="emit(item.funcion)"
+      class="flex items-center justify-center gap-2"
       [class]="
         item.class
           ? item.class
-          : 'border-none px-4 py-2 my-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 duration-300 text-white rounded'
+          : (!['Cerrar', 'Cancelar'].includes(item.label ?? '')
+              ? 'bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200'
+              : 'bg-gray-500 dark:bg-gray-600') +
+            'border-none px-4 py-2 my-1 duration-300 text-white rounded-lg '
       "
     >
-      <i [class]="item.icono"></i>
-      {{ item.label }}
+      <i style="font-size: 25px" *ngIf="item.cargando?!item.cargando():true" [class]="item.icono"></i>
+      <mat-icon *ngIf="item.cargando?item.cargando():false" class="animate-spin">refresh</mat-icon>
+      <span>{{ item.label }}</span>
     </button>
   </ng-container>
 </div>

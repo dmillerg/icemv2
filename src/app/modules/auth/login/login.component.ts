@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 
 @Component({
@@ -9,6 +9,7 @@ import { Formulario } from 'src/app/core/components/form-generico/model/formular
 })
 export class LoginComponent {
   formulario!: Formulario;
+  @Output() form = new EventEmitter<FormGroup>();
 
   constructor() {
     this.crearFormulario();
@@ -23,7 +24,7 @@ export class LoginComponent {
           nombre: 'Usuario',
           icono: 'bi bi-person',
           placeholder: 'Escriba usuario o correo',
-          validator: [Validators.required]
+          validator: [Validators.required],
         },
         {
           tipo: 'password',
@@ -31,11 +32,12 @@ export class LoginComponent {
           nombre: 'Contraseña',
           icono: 'bi bi-lock',
           placeholder: 'Escriba contraseña',
-          validator: [Validators.required]
+          validator: [Validators.required],
         },
       ],
       columnas: [1, 1],
       skeleton: false,
     };
+    setTimeout(() => this.form.emit(this.formulario.form), 500);
   }
 }

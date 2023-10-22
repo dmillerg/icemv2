@@ -5,6 +5,6 @@ export interface MenuItem {
   subitem?: MenuItem[];
   sm?:boolean;
   accion?:()=>void;
-  ocultar?:()=>boolean;
+  ocultar?:boolean;
   disaled?:()=>boolean;
 }

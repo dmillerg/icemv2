@@ -1,0 +1,56 @@
+.collapsible {
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    position: relative;
+}
+
+.collapsible i {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    transition: all .2s ease-in-out;
+}
+
+.collapsible.active i {
+    transform: rotate(180deg);
+    transition: all .2s ease-in-out;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+// .active,
+// .collapsible:hover {
+//     background-color: var(--firstcolor-hover);
+// }
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+    width: 100%;
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    // background-color: #f1f1f1;
+}
+
+.content.active {
+    /* padding-top: 18px; */
+    max-height: 800px; 
+    padding-bottom: 20px;
+    transition: all .3s ease-in-out;
+}
+
+.categoria{
+    position: absolute;
+    left: 0;
+    bottom: 15px;
+    white-space: nowrap;
+    color: var(--theme-color);
+    padding: 0;
+    transform: rotate(-90deg);
+}

@@ -9,6 +9,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { CollapseComponent } from '../collapse/collapse.component';
+import { Collapse } from '../collapse/model/collapse.model';
 
 interface Estrellas {
   cantidad: number;
@@ -21,7 +23,7 @@ interface Estrellas {
   templateUrl: './producto-especificacion.component.html',
   styleUrls: ['./producto-especificacion.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, CollapseComponent],
 })
 export class ProductoEspecificacionComponent implements OnInit {
   @Input() producto?: Producto;
@@ -30,6 +32,9 @@ export class ProductoEspecificacionComponent implements OnInit {
   promedio = 0;
   form!: FormGroup;
   estrellas: Estrellas[] = [];
+  collapseEspecificaciones!: Collapse;
+  collapseUsos!: Collapse;
+  collapseGarantias!: Collapse;
 
   constructor(
     private productoService: ProductoService,
@@ -37,6 +42,7 @@ export class ProductoEspecificacionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.rellenarCollapses();
     this.loadPost();
     this.form = this.fb.group({
       cantidad: [
@@ -50,11 +56,28 @@ export class ProductoEspecificacionComponent implements OnInit {
     });
   }
 
-  collapse(id: string) {
-    let collap = document.getElementById(id.toString());
-    collap!.classList.toggle('active');
-    let content = document.getElementById(id + 'content');
-    content!.classList.toggle('active');
+  rellenarCollapses() {
+    this.collapseEspecificaciones = {
+      id: 'Especificaciones',
+      nombre: 'Especificaciones',
+      textoVacio: 'No hay especificaciones definidas',
+      texto: this.producto!.especificaciones,
+      tipoContenedor: 'texto',
+    };
+    this.collapseUsos = {
+      id: 'Usos',
+      nombre: 'Usos',
+      textoVacio: 'No hay usos definidas',
+      texto: this.producto!.usos,
+      tipoContenedor: 'texto',
+    };
+    this.collapseGarantias = {
+      id: 'Garantía',
+      nombre: 'Garantía',
+      textoVacio: 'No hay garantía definidas',
+      texto: this.producto!.garantia,
+      tipoContenedor: 'texto',
+    };
   }
 
   cambiarVista(position: number) {

@@ -10,6 +10,8 @@ import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/b
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
+import { CollapseComponent } from 'src/app/core/components/collapse/collapse.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     MatStepperModule,
     MatButtonModule,
+    CollapseComponent,
+    MatDividerModule,
   ],
 })
 export class AuthModule {}

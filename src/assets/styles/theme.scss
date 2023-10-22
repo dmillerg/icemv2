@@ -1,0 +1,38 @@
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$indigo-palette, 500),
+      accent: mat.define-palette(mat.$light-green-palette, A400),
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$indigo-palette, 500),
+      accent: mat.define-palette(mat.$pink-palette, 300),
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($light-theme);
+
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+  $primary: #3b408c;
+}
+
+.dark-theme {
+  @include mat.all-component-themes($dark-theme);
+  $primary: #3b408c;
+}
+

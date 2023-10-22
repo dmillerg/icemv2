@@ -6,7 +6,7 @@ import { Producto } from '../model/producto';
 import { Card } from 'src/app/core/models/card.model';
 import { CatalogoService } from 'src/app/core/services/catalogo.service';
 import { Categoria } from 'src/app/core/models/categoria.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
@@ -24,7 +24,8 @@ export class ProductosComponent implements OnInit, OnDestroy {
   constructor(
     private productoService: ProductoService,
     private catalogoService: CatalogoService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -64,17 +65,11 @@ export class ProductosComponent implements OnInit, OnDestroy {
         botones: [
           {
             icono: 'bi bi-check',
-            label: 'Ver mas',
+            label: 'Ver más',
             class:
-              'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded',
+              'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded daaniel',
             funcion: () => {
-              this.categoria = this.categorias.filter(
-                (cat) => cat.id === e.categoria
-              )[0];
-              const prod = this.producto;
-              this.producto = e;
-              this.productos[i] = prod!;
-              this.generarProductosCard();
+              this.router.navigate([`productos/${e.id}`])
             },
           },
         ],

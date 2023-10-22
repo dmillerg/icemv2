@@ -1,0 +1,37 @@
+<div
+  mat-dialog-title
+  class="dark:bg-gray-800 dark:text-white pl-10 py-3 flex flex-col"
+  *ngIf="modal.titulo || modal.subtitulo"
+>
+  <span class="text-lg dark:bg-gray-800 dark:text-white">{{
+    modal.titulo
+  }}</span>
+  <label
+    class="dark:bg-gray-800 dark:text-gray-300 text-gray-600 font-light text-sm"
+    >{{ modal.subtitulo }}</label
+  >
+</div>
+<div *ngIf="modal.titulo || modal.subtitulo">
+  <mat-divider></mat-divider>
+</div>
+<div mat-dialog-content class="dark:bg-gray-800 dark:text-white px-10 py-7">
+  <p
+    *ngIf="modal.texto"
+    class="dark:text-gray-300 text-gray-700 max-w-xl font-light"
+  >
+    {{ modal.texto }}
+  </p>
+  <app-form-generico
+    *ngIf="modal.formulario"
+    [formulario]="modal.formulario"
+  ></app-form-generico>
+  <app-collapse
+    *ngIf="modal.collapse"
+    [collapseItem]="modal.collapse"
+  ></app-collapse>
+</div>
+<div mat-dialog-actions class="dark:bg-gray-700 bg-gray-100 dark:text-white">
+  <div class="w-full flex justify-end pr-4 py-2">
+    <app-boton-generico [botones]="modal.botones"></app-boton-generico>
+  </div>
+</div>

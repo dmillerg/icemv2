@@ -1,6 +1,18 @@
-import { Component, Input, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  HostListener,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  ReactiveFormsModule,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Control, Formulario } from './model/formulario.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
 
@@ -11,9 +23,10 @@ import { BotonGenericoComponent } from '../boton-generico/boton-generico.compone
   templateUrl: './form-generico.component.html',
   styleUrls: ['./form-generico.component.scss'],
 })
-export class FormGenericoComponent implements OnInit{
+export class FormGenericoComponent implements OnInit {
   @Input() formulario!: Formulario;
-  form: FormGroup =new FormGroup({});
+  @Output() emisor = new EventEmitter<FormGroup>();
+  form: FormGroup = new FormGroup({});
   subscripciones$: any;
   column: any[] = [];
   max: number = 0;
@@ -56,7 +69,9 @@ export class FormGenericoComponent implements OnInit{
       this.column.push(fila);
     });
     this.form = formGroup;
+
     this.formulario.form! = formGroup;
+    this.emisor.emit(formGroup);
   }
 
   emit(fun: Function, value: any) {
@@ -71,8 +86,7 @@ export class FormGenericoComponent implements OnInit{
     let resultado: number = 0;
     if (item) {
       if (item.tipo === 'textarea') resultado = 100;
-      else
-      if (item.width) resultado = Number(item.width);
+      else if (item.width) resultado = Number(item.width);
       else resultado = 100 / this.max;
     } else {
       resultado = 100 / this.max;
@@ -90,5 +104,43 @@ export class FormGenericoComponent implements OnInit{
     return this.form.get(formcontrol)!.hasValidator(Validators.required)
       ? `${texto} *`
       : texto;
+  }
+
+  isValidField = (form: FormGroup, field: string): boolean => {
+    return form.get(field)!.touched && !form.get(field)!.invalid;
+  };
+
+  isRequiered = (form: FormGroup, field: string) => {
+    return form.get(field)?.hasValidator(Validators.required) ? '*' : '';
+  };
+
+  isPristinedField = (form: FormGroup, field: string): boolean => {
+    return form.get(field)!.touched === false;
+  };
+
+  isEmail = (form: FormGroup, field: string): boolean => {
+    return (
+      form.get(field)!.hasValidator(Validators.email) &&
+      form.get(field)!.hasError('email')
+    );
+  };
+
+  error(form: FormGroup, field: string): string {
+    const value = form.get(field)!.value;
+    let mensajeError: string = '';
+    if (form.get(field)!.touched) {
+      if (
+        form.get(field)!.hasValidator(Validators.email) &&
+        form.get(field)!.hasError('email')
+      ) {
+        mensajeError = 'Introduzca una dirección de correo válida.';
+      } else if (
+        form.get(field)!.hasValidator(Validators.required) &&
+        form.get(field)!.hasError('required')
+      ) {
+        mensajeError = `${field} es requerido`;
+      }
+      return mensajeError;
+    } else return '';
   }
 }

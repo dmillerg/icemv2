@@ -5,6 +5,7 @@ export interface Boton {
   class?: string;
   funcion?: (value?: any) => void;
   disabled?: () => boolean;
-  ocultar?: ()=> boolean;
+  ocultar?: () => boolean;
+  cargando?: () => boolean;
   // icono?: string;
 }
