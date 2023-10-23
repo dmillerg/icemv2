@@ -1,0 +1,45 @@
+<div>
+  <table mat-table [dataSource]="dataSource" matSort  class="relative">
+    <ng-container
+      *ngFor="let column of table.columnas"
+      [matColumnDef]="column.campo"
+    >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ column.nombre }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span *ngIf="column.tipo === 'texto'" class="line-clamp-2">{{
+          row[column.campo]
+        }}</span>
+        <span *ngIf="column.tipo === 'precio'" class="line-clamp-2"
+          >$ {{ row[column.campo] | number : "0.0-2" }}</span
+        >
+        <span *ngIf="column.tipo === 'fecha'" class="line-clamp-2">{{
+          row[column.campo] | date : "dd-MM-yyyy HH:mm a"
+        }}</span>
+        <div class="object-fit w-20 h-20 rounded-lg overflow-hidden m-2" *ngIf="column.tipo === 'imagen'">
+            <img [src]="row[column.campo]" alt="...">
+        </div>
+        <!-- <span *ngIf="column.tipo==='texto'" class="line-clamp-2">{{ row[column.campo] }}</span> -->
+      </td>
+    </ng-container>
+
+    <tr class="mat-row" *matNoDataRow>
+      <div class="absolute w-full h-full flex justify-center items-center py-4">
+        <span *ngIf="table.textoVacio">{{table.textoVacio}}</span>
+        <app-boton-generico *ngIf="table.botonVacio" [botones]="table.botonVacio!"></app-boton-generico>
+    </div>
+      <td class="py-10"></td>
+    </tr>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Seleccione la página"
+  >
+  </mat-paginator>
+</div>

@@ -1,6 +1,10 @@
 import { LOCALE_ID, NgModule } from '@angular/core';
 import localEs from '@angular/common/locales/es';
-import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+import {
+  HashLocationStrategy,
+  LocationStrategy,
+  registerLocaleData,
+} from '@angular/common';
 registerLocaleData(localEs, 'es');
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -9,18 +13,16 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { HeaderComponent } from './core/components/header/header.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoticiaFuentePipe } from './core/pipes/noticias/noticias.pipe.spec';
 import { ROOT_REDUCERS } from './shared/state/app.state';
 import { BusquedaComponent } from './core/components/busqueda/busqueda.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpCancelInterceptor } from './core/interceptor/http-cancel.interceptor';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NoticiaFuentePipe,
-    BusquedaComponent,
-  ],
+  declarations: [AppComponent, NoticiaFuentePipe, BusquedaComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -33,7 +35,13 @@ import { BusquedaComponent } from './core/components/busqueda/busqueda.component
   providers: [
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: MatSnackBar },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCancelInterceptor,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

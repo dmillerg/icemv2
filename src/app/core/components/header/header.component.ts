@@ -1,13 +1,19 @@
-import { Component, Inject, OnInit, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ViewContainerRef,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MenuItem } from '../../models/menu.model';
 import { CatalogoService } from '../../services/catalogo.service';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { MenuGenericoComponent } from '../menu-generico/menu-generico.component';
 import { scaleAnimation } from 'src/app/animations';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Usuario } from '../../models/usuario.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RegisterLoginModalComponent } from 'src/app/modules/auth/modal/register-login-modal/register-login-modal.component';
 import { Modal } from '../modal-generico/model/modal.model';
@@ -26,7 +32,7 @@ import { ModalGenericoComponent } from '../modal-generico/modal-generico.compone
   styleUrls: ['./header.component.scss'],
   animations: [scaleAnimation],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   iconoTema: 'bi bi-moon-stars' | 'bi bi-sun' = 'bi bi-moon-stars';
   temaNombre: 'Modo oscuro' | 'Modo claro' = 'Modo oscuro';
   tema: string | null = '';
@@ -118,15 +124,19 @@ export class HeaderComponent implements OnInit {
   menu2: MenuItem[] = [];
   form: FormGroup = new FormGroup({});
 
+  routeSub$: Subscription = new Subscription();
+
   constructor(
     private catalogoService: CatalogoService,
     private router: Router,
     public dialog: MatDialog,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.generarMenu();
+    this.obtenerRuta();
     this.obtenerCategorias();
     this.tema = localStorage.getItem('tema');
     if (this.tema === 'dark') {
@@ -145,6 +155,18 @@ export class HeaderComponent implements OnInit {
     this.menu2[1].icono = this.iconoTema;
     this.menusm[1].subitem![6].nombre = this.temaNombre;
     this.menusm[1].subitem![6].icono = this.iconoTema;
+  }
+
+  ngOnDestroy(): void {
+    this.routeSub$.unsubscribe();
+  }
+
+  obtenerRuta() {
+    this.routeSub$ = this.route.params.subscribe((params) => {
+      console.log(JSON.parse(localStorage.getItem('usuario')!));
+      
+      this.generarMenu();
+    });
   }
 
   cambiarTema() {
@@ -231,7 +253,7 @@ export class HeaderComponent implements OnInit {
         nombre: 'perfil',
         icono: 'bi bi-person-vcard',
         accion: () => {
-          this.router.navigate([`quienes-somos/objetivo`]);
+          this.router.navigate([`usuario`]);
         },
         ocultar: this.dataUsuario === undefined,
       },
@@ -241,7 +263,8 @@ export class HeaderComponent implements OnInit {
         accion: () => {
           this.router.navigate([`quienes-somos/objetivo`]);
         },
-        ocultar: this.dataUsuario === undefined,
+        ocultar:
+          this.dataUsuario === undefined || this.dataUsuario?.rol !== 'admin',
       },
       {
         nombre: 'cerrar sesión',

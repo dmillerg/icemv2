@@ -1,10 +1,10 @@
-<div class="flex gap-2">
+<div class="flex gap-2 flex-wrap">
   <ng-container *ngFor="let item of botones">
     <button
       *ngIf="!item.ocultar"
       [disabled]="item.disabled || (item.cargando?item.cargando():false)"
       (click)="emit(item.funcion)"
-      class="flex items-center justify-center gap-2"
+      class="flex items-center justify-center gap-2 hover:scale-105"
       [class]="
         item.class
           ? item.class
@@ -14,9 +14,9 @@
             'border-none px-4 py-2 my-1 duration-300 text-white rounded-lg '
       "
     >
-      <i style="font-size: 25px" *ngIf="item.cargando?!item.cargando():true" [class]="item.icono"></i>
-      <mat-icon *ngIf="item.cargando?item.cargando():false" class="animate-spin">refresh</mat-icon>
-      <span>{{ item.label }}</span>
+      <i *ngIf="item.cargando?!item.cargando():true" [class]="item.icono"></i>
+      <mat-spinner [diameter]="20" *ngIf="item.cargando?item.cargando():false"></mat-spinner>
+      <span class="truncate">{{ item.label }}</span>
     </button>
   </ng-container>
 </div>

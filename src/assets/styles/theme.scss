@@ -29,10 +29,30 @@ $dark-theme: mat.define-dark-theme(
 .light-theme {
   @include mat.all-component-themes($light-theme);
   $primary: #3b408c;
+
+  .mat-mdc-progress-spinner{
+    --mdc-circular-progress-active-indicator-color: #ffffff;
+  }
+  .mat-mdc-table {
+    background-color: transparent;
+  }
+  .mat-mdc-paginator{
+    background-color: transparent;
+  }
 }
 
 .dark-theme {
   @include mat.all-component-themes($dark-theme);
   $primary: #3b408c;
+
+  .mat-mdc-progress-spinner{
+    --mdc-circular-progress-active-indicator-color: #ffffff;
+  }
+  .mat-mdc-table {
+    background-color: transparent;
+  }
+  .mat-mdc-paginator{
+    background-color: transparent;
+  }
 }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { FormGenericoComponent } from '../form-generico/form-generico.component';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-section-contactenos',
@@ -11,6 +12,7 @@ import { FormGenericoComponent } from '../form-generico/form-generico.component'
 })
 export class SectionContactenosComponent implements OnInit {
   formulario!: Formulario;
+  cargando: boolean = false;
 
   ngOnInit(): void {
     this.generarFormulario();
@@ -24,12 +26,14 @@ export class SectionContactenosComponent implements OnInit {
           nombre: 'Alias',
           control: 'alias',
           icono: 'bi bi-person',
+          validator: [Validators.required],
         },
         {
           tipo: 'text',
           nombre: 'Correo',
           control: 'correo',
           icono: 'bi bi-envelope',
+          validator: [Validators.required, Validators.email],
         },
         {
           tipo: 'text',
@@ -53,6 +57,10 @@ export class SectionContactenosComponent implements OnInit {
             {
               icono: 'bi bi-check',
               label: 'Ver mas',
+              cargando: () => this.cargando,
+              funcion: () => {
+                this.enviarComentario();
+              },
               class:
                 'border-none w-full px-4 py-3 my-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white rounded',
             },
@@ -61,9 +69,13 @@ export class SectionContactenosComponent implements OnInit {
       ],
       columnas: [1, 1, 1, 1, 1],
     };
-    setTimeout(() => {
-    }, 1000);
   }
 
-
+  enviarComentario() {
+    if (this.formulario.form?.valid) {
+      this.cargando = true;
+    } else {
+      this.formulario.form?.markAllAsTouched();
+    }
+  }
 }

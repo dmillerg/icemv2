@@ -6,6 +6,7 @@ import { Formulario } from 'src/app/core/components/form-generico/model/formular
 import { AuthService } from '../../services/auth.service';
 import { take } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { SnackService } from 'src/app/core/components/snack/service/snack.service';
 
 @Component({
   selector: 'app-register-login-modal',
@@ -21,10 +22,12 @@ export class RegisterLoginModalComponent {
   formLogin!: FormGroup;
   formObligatorio!: FormGroup;
   formOpcional!: FormGroup;
+  cargando: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<RegisterLoginModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackService: SnackService
   ) {
     this.obtenerDatos();
   }
@@ -38,7 +41,7 @@ export class RegisterLoginModalComponent {
 
   generarBotones() {
     this.botones = [
-      { icono: 'bi bi-check', label: 'Aceptar', funcion: () => this.aceptar() , cargando: ()=>true },
+      { icono: 'bi bi-check', label: 'Aceptar', funcion: () => this.aceptar() , cargando: ()=>this.cargando },
       { icono: 'bi bi-x', label: 'Cancelar', funcion: () => this.close() },
     ];
   }
@@ -48,6 +51,7 @@ export class RegisterLoginModalComponent {
   }
 
   aceptar() {
+    this.cargando = true;
     if (this.login) this.loginUsuario();
     else this.registrarUsuario();
   }
@@ -64,6 +68,8 @@ export class RegisterLoginModalComponent {
         .pipe(take(1))
         .subscribe({
           next: (result) => {
+            this.cargando = false;
+            this.snackService.success({titulo: 'Notificación', texto: 'Usuario autenticado satisfactoriamente.'});
             const user = {
               id: result.usuario[0].id,
               usuario: result.usuario[0].usuario,
@@ -105,6 +111,7 @@ export class RegisterLoginModalComponent {
         .pipe(take(1))
         .subscribe({
           next: (result) => {
+            this.cargando = false;
             let link = this.generarLink(result.result.insertId);
             this.sendEmailActivacion(
               link,
