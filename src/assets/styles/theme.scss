@@ -30,14 +30,19 @@ $dark-theme: mat.define-dark-theme(
   @include mat.all-component-themes($light-theme);
   $primary: #3b408c;
 
-  .mat-mdc-progress-spinner{
+  .mat-mdc-progress-spinner.button {
     --mdc-circular-progress-active-indicator-color: #ffffff;
   }
   .mat-mdc-table {
     background-color: transparent;
   }
-  .mat-mdc-paginator{
+  .mat-mdc-paginator {
     background-color: transparent;
+  }
+
+
+  mat-tab-group {
+    z-index: 0;
   }
 }
 
@@ -45,14 +50,25 @@ $dark-theme: mat.define-dark-theme(
   @include mat.all-component-themes($dark-theme);
   $primary: #3b408c;
 
-  .mat-mdc-progress-spinner{
+  .mat-mdc-progress-spinner {
     --mdc-circular-progress-active-indicator-color: #ffffff;
   }
   .mat-mdc-table {
     background-color: transparent;
   }
-  .mat-mdc-paginator{
+  .mat-mdc-paginator {
     background-color: transparent;
   }
-}
 
+  mat-tab-group {
+    z-index: 0;
+  }
+
+  .mat-drawer {
+    background-color: #1e293b;
+  }
+
+  .mat-drawer-backdrop.mat-drawer-shown{
+    background-color: rgba($color:#000000, $alpha: 0.6);
+  }
+}

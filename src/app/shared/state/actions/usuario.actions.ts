@@ -1,20 +1,19 @@
 import { createAction, props } from "@ngrx/store";
-import { Producto } from "src/app/modules/productos/model/producto";
+import { Usuario } from "src/app/core/models/usuario.model";
 
 export const addUsuario = createAction(
-    '[USUARIO COMPONENT] add usuario',
-    props<{ product: Producto }>()
+    '[USUARIO COMPONENT] Agrega los datos del usuario autenticado',
+    props<{ usuario: Usuario }>()
 );
 
-export const getProduct = createAction(
+export const getUsuario = createAction(
     '[USUARIO COMPONENT] get all usuario',
-    props<{ products: ReadonlyArray<Producto> }>()
+    props<{ usuario: ReadonlyArray<Usuario> }>()
 )
 
-export const deleteProduct = createAction(
-    '[USUARIO COMPONENT] delete one usuario',
-    props<{ product: Producto }>()
+export const deleteUsuario = createAction(
+    '[USUARIO COMPONENT] delete one usuario'
 )
 
-export const deleteAllProducts = createAction(
+export const deleteAllUsuarios = createAction(
     '[USUARIO COMPONENT] delete all usuario')

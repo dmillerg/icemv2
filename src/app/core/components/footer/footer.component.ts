@@ -27,7 +27,7 @@ export class FooterComponent implements OnInit{
 
   fechaActualizacion() {
     this.configuracionService.ultimaActualizacion().subscribe({
-      next: (response) => { this.fechaActual = response[0].ultsession },
+      next: (response) => { this.fechaActual = response[0].ultsession! },
     })
   }
 

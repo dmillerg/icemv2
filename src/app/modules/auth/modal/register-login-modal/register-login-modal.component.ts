@@ -7,6 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { SnackService } from 'src/app/core/components/snack/service/snack.service';
+import { Store } from '@ngrx/store';
+import { addUsuario } from 'src/app/shared/state/actions/usuario.actions';
+import { Usuario } from 'src/app/core/models/usuario.model';
 
 @Component({
   selector: 'app-register-login-modal',
@@ -27,7 +30,8 @@ export class RegisterLoginModalComponent {
     public dialogRef: MatDialogRef<RegisterLoginModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private authService: AuthService,
-    private snackService: SnackService
+    private snackService: SnackService,
+    private store: Store
   ) {
     this.obtenerDatos();
   }
@@ -41,7 +45,12 @@ export class RegisterLoginModalComponent {
 
   generarBotones() {
     this.botones = [
-      { icono: 'bi bi-check', label: 'Aceptar', funcion: () => this.aceptar() , cargando: ()=>this.cargando },
+      {
+        icono: 'bi bi-check',
+        label: 'Aceptar',
+        funcion: () => this.aceptar(),
+        cargando: () => this.cargando,
+      },
       { icono: 'bi bi-x', label: 'Cancelar', funcion: () => this.close() },
     ];
   }
@@ -69,8 +78,11 @@ export class RegisterLoginModalComponent {
         .subscribe({
           next: (result) => {
             this.cargando = false;
-            this.snackService.success({titulo: 'Notificación', texto: 'Usuario autenticado satisfactoriamente.'});
-            const user = {
+            this.snackService.success({
+              titulo: 'Notificación',
+              texto: 'Usuario autenticado satisfactoriamente.',
+            });
+            const user: Usuario = {
               id: result.usuario[0].id,
               usuario: result.usuario[0].usuario,
               nombre: result.usuario[0].nombre,
@@ -83,6 +95,8 @@ export class RegisterLoginModalComponent {
               token: result.token,
             };
             localStorage.setItem('usuario', JSON.stringify(user));
+            this.store.dispatch(addUsuario({ usuario: user }));
+
             setTimeout(() => {
               this.close(user);
             }, 500);

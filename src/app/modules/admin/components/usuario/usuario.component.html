@@ -1,0 +1,9 @@
+<div class="bg-transparent dark:bg-gray-800">
+  <h1 class="text-md ml-3">Usuarios</h1>
+  <app-table-generico
+    *ngIf="tabla"
+    [table]="tabla"
+    [seleccionableRow]="true"
+    (select)="seleccionado($event)"
+  ></app-table-generico>
+</div>

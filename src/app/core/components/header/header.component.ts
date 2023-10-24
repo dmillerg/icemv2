@@ -18,6 +18,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RegisterLoginModalComponent } from 'src/app/modules/auth/modal/register-login-modal/register-login-modal.component';
 import { Modal } from '../modal-generico/model/modal.model';
 import { ModalGenericoComponent } from '../modal-generico/modal-generico.component';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -131,7 +132,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     public dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -164,7 +166,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   obtenerRuta() {
     this.routeSub$ = this.route.params.subscribe((params) => {
       console.log(JSON.parse(localStorage.getItem('usuario')!));
-      
+
       this.generarMenu();
     });
   }
@@ -261,7 +263,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         nombre: 'administrar',
         icono: 'bi bi-kanban',
         accion: () => {
-          this.router.navigate([`quienes-somos/objetivo`]);
+          this.router.navigate([`admin`]);
         },
         ocultar:
           this.dataUsuario === undefined || this.dataUsuario?.rol !== 'admin',
@@ -270,8 +272,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         nombre: 'cerrar sesión',
         icono: 'bi bi-box-arrow-right',
         accion: () => {
-          localStorage.removeItem('usuario');
-          this.generarMenu();
+          this.authService
+            .logout()
+            .pipe(take(1))
+            .subscribe({ next: () => {
+              location.reload();
+              this.generarMenu();
+            } });
+          
         },
         ocultar: this.dataUsuario === undefined,
       },

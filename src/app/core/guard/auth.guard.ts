@@ -25,6 +25,9 @@ export class AuthGuard implements CanActivate {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
+      if(!localStorage.getItem('usuario')){
+        this._router.navigate(['inicio']);
+      }
     return localStorage.getItem('usuario') ? true : false;
   }
 }

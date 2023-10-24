@@ -24,7 +24,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 export class PerfilComponent {
   botonAtras: Boton[] = [];
   botonRefrescar: Boton[] = [
-    { label: 'refrescar', icono: 'bi bi-arrow-clockwise' },
+    { label: 'refrescar', icono: 'bi bi-arrow-clockwise', funcion: ()=>this.obtenerPedidos()},
   ];
   botonesPerfil: Boton[] = [];
   usuario!: Usuario;
@@ -77,7 +77,7 @@ export class PerfilComponent {
     const botonAdmin: Boton = {
       label: 'Administrar',
       icono: 'bi bi-kanban',
-      funcion: () => '',
+      funcion: () => this.router.navigate(['admin']),
     };
 
     this.botonesPerfil = [
@@ -97,17 +97,17 @@ export class PerfilComponent {
     }
   }
 
-  generarTablaPedido(values: Pedido[]) {
+  generarTablaPedido(values?: Pedido[]) {
     this.tablePedido = {
       columnas: [
         { nombre: 'Nombre', campo: 'titulo', tipo: 'texto' },
-        { nombre: 'Cantidad', campo: 'cantidad', tipo: 'texto' },
+        { nombre: 'Cantidad', campo: 'cantidad', tipo: 'numero' },
         { nombre: 'Precio', campo: 'precio', tipo: 'precio' },
         { nombre: 'Precio total', campo: 'precio_total', tipo: 'precio' },
         { nombre: 'Estado', campo: 'estado', tipo: 'texto' },
         { nombre: 'Fecha', campo: 'fecha', tipo: 'fecha' },
       ],
-      values: values,
+      values: values ?? [],
       botonVacio: [
         {
           label: 'Vea nuestro catálogo',
@@ -115,10 +115,11 @@ export class PerfilComponent {
           funcion: () => this.router.navigate(['productos/-1']),
         },
       ],
+      cargando: !values,
     };
   }
 
-  generarTablaCarrito(values: any[]) {
+  generarTablaCarrito(values?: Carrito[]) {
     this.tableCarrito = {
       columnas: [
         { nombre: 'Imagen', campo: 'imagen', tipo: 'imagen' },
@@ -128,7 +129,7 @@ export class PerfilComponent {
         { nombre: 'Estado', campo: 'estado', tipo: 'texto' },
         { nombre: 'Fecha', campo: 'fecha', tipo: 'fecha' },
       ],
-      values: values,
+      values: values ?? [],
       botonVacio: [
         {
           label: 'Vea nuestro catálogo',
@@ -136,21 +137,26 @@ export class PerfilComponent {
           funcion: () => this.router.navigate(['productos/-1']),
         },
       ],
+      cargando: !values,
     };
   }
 
   obtenerPedidos() {
+    this.generarTablaPedido();
     this.perfilService
       .getPedidos(this.usuario.id)
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.generarTablaPedido(result);
+          setTimeout(() => {
+            this.generarTablaPedido(result);
+          }, 5000);
         },
       });
   }
 
   obtenerCarrito() {
+    this.generarTablaCarrito();
     this.perfilService
       .getCarrito(this.usuario.id)
       .pipe(take(1))
@@ -176,6 +182,7 @@ export class PerfilComponent {
     const formularioEditar: Formulario = {
       controles: [
         {
+          icono: 'bi bi-person',
           tipo: 'text',
           nombre: 'Nombre',
           control: 'nombre',
@@ -183,6 +190,7 @@ export class PerfilComponent {
           validator: [Validators.required],
         },
         {
+          icono: 'bi bi-envelope',
           tipo: 'text',
           nombre: 'correo',
           control: 'correo',
@@ -190,22 +198,25 @@ export class PerfilComponent {
           validator: [Validators.required, Validators.email],
         },
         {
+          icono: 'bi bi-flag',
           tipo: 'text',
           nombre: 'País',
           control: 'pais',
           valor: this.usuario.pais,
         },
         {
-          tipo: 'text',
-          nombre: 'Dirección',
-          control: 'direccion',
-          valor: this.usuario.direccion,
-        },
-        {
+          icono: 'bi bi-telephone',
           tipo: 'text',
           nombre: 'Teléfono',
           control: 'telefono',
           valor: this.usuario.telefono,
+        },
+        {
+          icono: 'bi bi-geo-alt',
+          tipo: 'text',
+          nombre: 'Dirección',
+          control: 'direccion',
+          valor: this.usuario.direccion,
         },
       ],
       columnas: [2, 2, 1],
@@ -246,10 +257,10 @@ export class PerfilComponent {
     formData.append('nombre', data.nombre.toString());
     formData.append('fecha', this.usuario.fecha.toString());
     formData.append('correo', data.correo.toString());
-    formData.append('pais', data.pais.toString());
-    formData.append('direccion', data.direccion.toString());
-    formData.append('telefono', data.telefono.toString());
-    formData.append('rol', this.usuario.rol.toString());
+    formData.append('pais', data.pais!.toString());
+    formData.append('direccion', data.direccion!.toString());
+    formData.append('telefono', data.telefono!.toString());
+    formData.append('rol', this.usuario.rol!.toString());
     this.perfilService
       .updateUsuarioWithOutPass(formData, this.usuario.id)
       .pipe(take(1))
@@ -328,7 +339,7 @@ export class PerfilComponent {
     };
     ref = this.dialog.open(ModalGenericoComponent, {
       data: modal,
-      width: '50%',
+      width: '500px',
     });
   }
 

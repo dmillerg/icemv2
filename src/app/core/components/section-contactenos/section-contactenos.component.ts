@@ -1,21 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { FormGenericoComponent } from '../form-generico/form-generico.component';
 import { Validators } from '@angular/forms';
+import { ContactoService } from '../../services/contacto.service';
+import { take } from 'rxjs';
+import { SnackService } from '../snack/service/snack.service';
+import { Store } from '@ngrx/store';
+import { selectUsuario } from 'src/app/shared/state/selectors/usuario.selector';
+import { Usuario } from '../../models/usuario.model';
 
 @Component({
   selector: 'app-section-contactenos',
   templateUrl: './section-contactenos.component.html',
   imports: [FormGenericoComponent],
+  providers: [ContactoService],
   styleUrls: ['./section-contactenos.component.scss'],
   standalone: true,
 })
-export class SectionContactenosComponent implements OnInit {
+export class SectionContactenosComponent implements OnInit, OnDestroy {
   formulario!: Formulario;
   cargando: boolean = false;
+  usuario$: any;
+
+  constructor(
+    private contactoService: ContactoService,
+    private snackService: SnackService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.generarFormulario();
+    setTimeout(() => {
+      this.usuario$ = this.store.select(selectUsuario).subscribe({
+        next: (usuario) => {
+          this.rellenarFormAutomatico(usuario);
+        },
+      });
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    this.usuario$.unsubscribe();
+  }
+
+  rellenarFormAutomatico(usuario: ReadonlyArray<Usuario>) {
+    if (!usuario) {
+      this.formulario.form?.get('alias')?.enable();
+      this.formulario.form?.get('correo')?.enable();
+    } else if (usuario?.length > 0) {
+      const user: Usuario = usuario[0];
+      this.formulario.form?.get('alias')?.setValue(user.usuario);
+      this.formulario.form?.get('alias')?.disable();
+      this.formulario.form?.get('correo')?.setValue(user.correo);
+      this.formulario.form?.get('correo')?.disable();
+    }
   }
 
   generarFormulario() {
@@ -74,8 +112,33 @@ export class SectionContactenosComponent implements OnInit {
   enviarComentario() {
     if (this.formulario.form?.valid) {
       this.cargando = true;
+      this.enviarMensaje();
     } else {
       this.formulario.form?.markAllAsTouched();
     }
+  }
+
+  enviarMensaje() {
+    const data = this.formulario.form!.getRawValue();
+    let formData = new FormData();
+    formData.append('alias', data.alias);
+    formData.append('correo', data.correo);
+    formData.append('asunto', data.asunto);
+    formData.append('mensaje', data.mensaje);
+    this.contactoService
+      .addMensaje(formData)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.cargando = false;
+          this.snackService.success({
+            titulo: 'Mensaje enviado',
+            texto:
+              'Su mensaje fue enviado satisfactoriamente, en breve recibirá respuesta.',
+          });
+          this.formulario.form?.reset();
+          this.rellenarFormAutomatico([JSON.parse(localStorage.getItem('usuario')!)])
+        },
+      });
   }
 }
