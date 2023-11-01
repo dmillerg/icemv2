@@ -6,6 +6,10 @@ export interface Formulario {
   autofixed?: boolean;
   skeleton?: boolean;
   form?: FormGroup;
+  formDataImage?: FormData;
+  imagen?: boolean;
+  imagenes?:string[];
+  maximoImagenes?: number;
 }
 
 export interface Control {
@@ -35,9 +39,10 @@ export type Tipos =
   | 'date'
   | 'textarea'
   | 'password'
-  | 'boton';
+  | 'boton'
+  | 'imagen';
 
-  export interface Opciones{
-    codigo: string,
-    nombre: string,
-  }
+export interface Opciones {
+  codigo: string;
+  nombre: string;
+}

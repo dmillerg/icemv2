@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { AdminContainerComponent } from './components/admin-container/admin-container.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -23,6 +23,6 @@ import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/b
     DetalleGenericoComponent,
     BotonGenericoComponent,
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, DecimalPipe],
 })
 export class AdminModule {}

@@ -16,6 +16,8 @@ import {
 import { Control, Formulario } from './model/formulario.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRippleModule } from '@angular/material/core';
+import { Boton } from '../boton-generico/model/boton.model';
 
 @Component({
   selector: 'app-form-generico',
@@ -37,6 +39,15 @@ export class FormGenericoComponent implements OnInit {
   column: any[] = [];
   max: number = 0;
   anchoPantalla: number = 0;
+  error_cantidad_img: string = '';
+  uploadFiles: any;
+  botonEliminar: Boton[] = [
+    {
+      icono: 'bi bi-x',
+      class: 'w-4 h-4 rounded-full bg-icem-500 text-white',
+      funcion: (value)=> this.eliminarFoto(value)
+    },
+  ];
 
   ngOnInit(): void {
     this.obtenerForm(this.formulario);
@@ -148,5 +159,51 @@ export class FormGenericoComponent implements OnInit {
       }
       return mensajeError;
     } else return '';
+  }
+
+  fileEvent(fileInput: any) {
+    // this.imagenes = []
+    let files = (<HTMLInputElement>fileInput.target).files;
+    if (
+      this.formulario.imagenes!.length <= this.formulario.maximoImagenes! &&
+      this.formulario.imagenes!.length + files!.length <= this.formulario.maximoImagenes!
+    ) {
+      this.error_cantidad_img = '';
+      for (let i = 0; i < files!.length; i++) {
+        let file = files![i];
+        //  console.log(fileInput);
+        this.uploadFiles = fileInput.target.files;
+        this.formulario.formDataImage = new FormData();
+        if (this.uploadFiles != undefined) {
+          for (let i = 0; i < this.uploadFiles.length; i++) {
+            this.formulario.formDataImage!.append(
+              'foto',
+              this.uploadFiles[i],
+              this.uploadFiles[i].name
+            );
+          }
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.formulario.imagenes!.push(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      this.error_cantidad_img = `El máximo de imagenes por producto es de ${this.formulario.maximoImagenes}`;
+    }
+  }
+
+  eliminarFoto(name: string) {
+    // if (this.uploadFiles.filter((e: any) => e.name === nombre).length > 0) {
+    //   // let i = this.producto.imagen.split(',').indexOf(nombre);
+    //   // this.producto.imagen = this.producto.imagen.split(',').splice(i).toString();
+    //   // this.imagenes_eliminadas.push(nombre);
+    // }
+    
+    
+    this.formulario.imagenes = this.formulario.imagenes!.filter(
+      (e) => e !== name
+    );
   }
 }

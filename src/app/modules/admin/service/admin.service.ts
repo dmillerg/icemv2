@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { Usuario } from 'src/app/core/models/usuario.model';
 import { environment } from 'src/environments/environment';
+import { Producto } from '../../productos/model/producto';
 
 @Injectable({
   providedIn: 'root',
@@ -108,5 +109,54 @@ export class AdminService {
     const headers = { 'content-type': 'application/json' };
     let direccion = this.url + 'saveUsuario';
     return this.http.post<any>(direccion, formData);
+  }
+
+  /**
+   * Obtener los productos en base de datos
+   * @param limit cantidad de productos a devolver
+   * @returns
+   */
+  getProducto(
+    limit: number = 0,
+    categoria: number = -1,
+    excluir: number = -1,
+    activo: boolean = false
+  ): Observable<Producto[]> {
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      categoria: categoria,
+      excluir: excluir,
+      activo: activo
+    };
+    let direccion = this.url + 'productos/' + limit.toString();
+    return this.http.get<Producto[]>(direccion, {
+      headers: headers,
+      params: params,
+    });
+  }
+
+  /**
+   * Actualiza el producto
+   * @param formData datos actualizados del producto
+   * @param id id del producto a actualizar
+   * @returns
+   */
+  updateProducto(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'productos/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda un nuevo producto
+   * @param formData datos del producto
+   * @returns
+   */
+  addProducto(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'saveProducto';
+    return this.http.post(direccion, formData);
   }
 }

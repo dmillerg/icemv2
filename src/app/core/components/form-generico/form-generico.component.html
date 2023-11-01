@@ -5,6 +5,36 @@
   style="min-width: 250px"
 >
   <ng-content select=".header"> </ng-content>
+  <div class="flex gap-2 flex-wrap" *ngIf="formulario.imagen">
+    <input
+      style="display: none"
+      name="imagen"
+      type="file"
+      id="formFile"
+      #formFile
+      accept="image/*"
+      (change)="fileEvent($event)"
+      multiple
+    />
+    <div
+      *ngFor="let item of formulario.imagenes"
+      class="w-16 h-16 flex justify-center items-center relative"
+    >
+      <app-boton-generico
+        [botones]="botonEliminar"
+        class="absolute -top-1 -right-1"
+        [valor]="item"
+      ></app-boton-generico>
+      <img class="object-fit rounded-lg" [src]="item" [alt]="item" />
+    </div>
+    <div
+      class="w-16 h-16 flex justify-center items-center dark:bg-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 duration-300 cursor-pointer"
+      (click)="formFile.click()"
+    >
+      <i class="bi bi-plus"></i>
+    </div>
+    <small class="text-red-500">{{ error_cantidad_img }}</small>
+  </div>
   <div
     class="flex w-full md:flex-row flex-column gap-1"
     *ngFor="let fila of column"
@@ -29,11 +59,24 @@
           <i [class]="item.icono"></i>
           {{ esRequerido(item.control, item.nombre) }}</label
         >
+
         <input
           type="text"
           *ngIf="item.tipo === 'text'"
           [class]="
-          error(form, item.control).length > 0
+            error(form, item.control).length > 0
+              ? 'border border-red-500'
+              : 'border border-1 dark:border-gray-500'
+          "
+          class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+          [formControlName]="item.control"
+          [placeholder]="item.placeholder ?? item.nombre"
+        />
+        <input
+          type="number"
+          *ngIf="item.tipo === 'number'"
+          [class]="
+            error(form, item.control).length > 0
               ? 'border border-red-500'
               : 'border border-1 dark:border-gray-500'
           "
@@ -44,7 +87,7 @@
         <div class="relative" *ngIf="item.tipo === 'password'">
           <input
             [class]="
-            error(form, item.control).length > 0
+              error(form, item.control).length > 0
                 ? 'border border-red-500'
                 : 'border border-1 dark:border-gray-500'
             "
@@ -73,20 +116,23 @@
           <mat-select
             [formControlName]="item.control"
             [class]="
-            error(form, item.control).length > 0
+              error(form, item.control).length > 0
                 ? 'border border-red-500'
                 : 'border border-1 dark:border-gray-500'
             "
             class="block w-full px-4 py-3 text-base text-gray-900 rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <mat-option *ngFor="let opcion of item.opciones"  [value]="opcion.codigo">
+            <mat-option
+              *ngFor="let opcion of item.opciones"
+              [value]="opcion.codigo"
+            >
               {{ opcion.nombre }}
             </mat-option>
           </mat-select>
         </div>
         <textarea
           [class]="
-          error(form, item.control).length > 0
+            error(form, item.control).length > 0
               ? 'border border-red-500'
               : 'border border-1 dark:border-gray-500'
           "

@@ -1,7 +1,7 @@
 <div class="lg:p-4 md:p-4 p-0 z-0">
   <mat-drawer-container
     class="absolute w-full h-full lg:rounded-lg md:rounded-lg lg:border md:border lg:border-1 md:border-1 border-gray-300 dark:border-gray-800"
-    style="height: fit-content"
+    style="height: fit-content; min-height: 500px;"
     autosize
   >
     <mat-drawer #drawer position="end" [mode]="drawerMode" class="relative">
@@ -9,30 +9,16 @@
         <div class="bg-gray-100 dark:bg-gray-700 w-full" *ngIf="detalle.imagen">
           <img
             class="object-cover h-48 w-full"
-            src="http://localhost:9707/pictures/1037?tipo=productos"
+            [src]="detalle.imagen"
             alt="..."
           />
         </div>
         <div class="flex flex-col p-4 gap-1 relative mb-20">
           <div class="flex gap-1" *ngIf="detalle.imagenes">
-            <div class="w-12 h-12 rounded-md border border-1 overflow-hidden">
+            <div class="w-12 h-12 rounded-md border border-1 overflow-hidden" *ngFor="let imagen of detalle.imagenes">
               <img
                 class="object-cover h-12 w-full"
-                src="assets/clip-actions/searching.png"
-                alt="..."
-              />
-            </div>
-            <div class="w-12 h-12 rounded-md border border-1 overflow-hidden">
-              <img
-                class="object-cover h-12 w-full"
-                src="assets/clip-actions/searching.png"
-                alt="..."
-              />
-            </div>
-            <div class="w-12 h-12 rounded-md border border-1 overflow-hidden">
-              <img
-                class="object-cover h-12 w-full"
-                src="assets/clip-actions/searching.png"
+                [src]="imagen"
                 alt="..."
               />
             </div>
@@ -48,10 +34,10 @@
           </p>
           <ng-container *ngIf="detalle.textos">
             <p
-              class="dark:text-gray-200 text-gray-700 text-xs font-light"
+              class="dark:text-gray-200 text-gray-700 text-sm font-light"
               *ngFor="let texto of detalle.textos"
             >
-              <span>{{ texto.nombre }}: </span>
+              <span class="font-semibold">{{ texto.nombre }}: </span>
               {{ texto.valor }}
             </p>
           </ng-container>
