@@ -9,4 +9,5 @@ export interface Modal {
   collapse?: Collapse;
   texto?: string;
   botones: Boton[];
+  icono?: string;
 }

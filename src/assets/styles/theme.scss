@@ -40,6 +40,19 @@ $dark-theme: mat.define-dark-theme(
     background-color: transparent;
   }
 
+  .mat-drawer {
+    background-color: #f9fafb;
+  }
+
+  .mat-mdc-row.select:hover {
+    background-color: #e5e7eb;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+  }
+
+  .row-selected{
+    background-color: #e5e7eb;
+  }
 
   mat-tab-group {
     z-index: 0;
@@ -68,7 +81,13 @@ $dark-theme: mat.define-dark-theme(
     background-color: #1e293b;
   }
 
-  .mat-drawer-backdrop.mat-drawer-shown{
-    background-color: rgba($color:#000000, $alpha: 0.6);
+  .mat-mdc-row.select:hover {
+    background-color: #374151;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+  }
+
+  .row-selected{
+    background-color: #374151;
   }
 }

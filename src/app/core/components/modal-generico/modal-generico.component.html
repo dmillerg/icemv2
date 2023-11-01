@@ -15,12 +15,16 @@
   <mat-divider></mat-divider>
 </div>
 <div mat-dialog-content class="dark:bg-gray-800 dark:text-white px-10 py-7">
-  <p
+  <div class="flex gap-2" >
+    <i class="text-xl" [class]="modal.icono"></i>
+    <p
     *ngIf="modal.texto"
     class="dark:text-gray-300 text-gray-700 max-w-xl font-light"
   >
     {{ modal.texto }}
   </p>
+  </div>
+  
   <app-form-generico
     *ngIf="modal.formulario"
     [formulario]="modal.formulario"

@@ -45,6 +45,13 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="acciones" *ngIf="table.acciones">
+      <th mat-header-cell *matHeaderCellDef>{{ table.accionesTexto }}</th>
+      <td mat-cell *matCellDef="let element">
+        <app-boton-generico [botones]="table.acciones" [valor]="element"></app-boton-generico>
+      </td>
+    </ng-container>
+
     <tr class="mat-row relative" *matNoDataRow>
       <div class="absolute w-full h-full flex justify-center items-center">
         <mat-spinner
@@ -66,7 +73,7 @@
     <tr mat-header-row *matHeaderRowDef="columnas"></tr>
     <tr
       mat-row
-      (click)="mostrar(row)"
+      (click)="table.acciones?'':mostrar(row)"
       [class.ripple-row]="row.ripple"
       [class.row-selected]="columnasSeleccionadas.has(row)"
       [class]="seleccionableRow ? 'select' : ''"

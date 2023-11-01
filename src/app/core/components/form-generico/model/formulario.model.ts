@@ -17,7 +17,7 @@ export interface Control {
   minimo?: string;
   maximo?: string;
   valor?: any;
-  opciones?: any[];
+  opciones?: Opciones[];
   disabled?: boolean;
   width?: string;
   validator?: any[];
@@ -36,3 +36,8 @@ export type Tipos =
   | 'textarea'
   | 'password'
   | 'boton';
+
+  export interface Opciones{
+    codigo: string,
+    nombre: string,
+  }

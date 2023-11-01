@@ -1,14 +1,14 @@
-.mat-drawer-container{
-    z-index: 0;
+.mat-drawer-container {
+  z-index: 0;
 }
 
-
 .mat-drawer-container {
-    background-color: transparent;
-  }
+  background-color: transparent;
+}
 
-
-
-.mat-drawer{
-    min-width: 400px;
+.mat-drawer {
+  min-width: 400px;
+  margin-left: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }

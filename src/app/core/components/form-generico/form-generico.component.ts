@@ -15,11 +15,17 @@ import {
 } from '@angular/forms';
 import { Control, Formulario } from './model/formulario.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-form-generico',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BotonGenericoComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    BotonGenericoComponent,
+    MatSelectModule,
+  ],
   templateUrl: './form-generico.component.html',
   styleUrls: ['./form-generico.component.scss'],
 })

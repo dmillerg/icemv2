@@ -31,4 +31,14 @@ export class ModalGenericoComponent {
   ) {
     this.modal = data;
   }
+
+  soloTexto() {
+    return (
+      !this.modal.titulo &&
+      !this.modal.subtitulo &&
+      !this.modal.formulario &&
+      !this.modal.collapse &&
+      this.modal.texto
+    );
+  }
 }

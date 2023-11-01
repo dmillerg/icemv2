@@ -71,6 +71,7 @@ export class TableGenericoComponent
   ngAfterViewInit() {
     this.columnasTodas = this.table.columnas.map((e) => e.campo);
     this.columnas = [...this.columnasTodas];
+    this.addAcciones();
     this.construirTabla();
     this.breakpointSub = this.breakpoint$.subscribe({
       next: () => this.breakpointChanged(),
@@ -97,6 +98,7 @@ export class TableGenericoComponent
     } else {
       this.columnas = [...this.columnasTodas];
     }
+    this.addAcciones();
   }
 
   construirTabla() {
@@ -116,6 +118,10 @@ export class TableGenericoComponent
       }
       this.columnasSeleccionadas.add(item);
     }
-    this.select.emit(this.columnasSeleccionadas);
+    this.select.emit(this.columnasSeleccionadas.values().next().value);
+  }
+
+  addAcciones() {
+    if (this.table.acciones) this.columnas.push('acciones');
   }
 }

@@ -5,70 +5,57 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription, distinctUntilChanged } from 'rxjs';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
+import { Store } from '@ngrx/store';
+import { deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
 
 @Component({
   selector: 'app-admin-container',
   templateUrl: './admin-container.component.html',
   styleUrls: ['./admin-container.component.scss'],
 })
-export class AdminContainerComponent implements OnDestroy {
-  @ViewChild('tabGroup', { static: false }) tab!: MatTabGroup;
-  @ViewChild('drawer') drawer!: MatDrawer;
-  formulario!: Formulario;
+export class AdminContainerComponent {
   seleccionado: number = 0;
 
-  readonly breakpoint$ = this._breakpointObserver
-    .observe([Breakpoints.Large, Breakpoints.Medium, Breakpoints.Small])
-    .pipe(distinctUntilChanged());
-  private breakpointSub!: Subscription;
-  drawerMode: 'side' | 'over' = 'side';
-
   tabs: Tab[] = [
-    { nombre: 'Usuarios', icono: 'bi bi-person' },
-    { nombre: 'Productos' },
-    { nombre: 'Noticias' },
-    { nombre: 'Categorías' },
-    { nombre: 'Desarrollos' },
-    { nombre: 'Comentarios' },
-    { nombre: 'Quienes' },
-    { nombre: 'Recogida' },
-    { nombre: 'Pedidos' },
-    { nombre: 'Configuración' },
-    { nombre: 'Ventas' },
-    { nombre: 'Preguntas' },
-    { nombre: 'Cerrar sesión' },
+    { nombre: 'Usuarios', icono: 'bi bi-person', ruta: 'usuario' },
+    { nombre: 'Productos', ruta: 'producto' },
+    { nombre: 'Noticias', ruta: 'noticia' },
+    { nombre: 'Categorías', ruta: 'categoria' },
+    { nombre: 'Desarrollos', ruta: 'desarrollo' },
+    { nombre: 'Comentarios', ruta: 'comentario' },
+    { nombre: 'Quienes', ruta: 'quiene' },
+    { nombre: 'Recogida', ruta: 'recogida' },
+    { nombre: 'Pedidos', ruta: 'pedido' },
+    { nombre: 'Configuración', ruta: 'configuracion' },
+    { nombre: 'Ventas', ruta: 'venta' },
+    { nombre: 'Preguntas', ruta: 'pregunta' },
   ];
+  rutaSub$: Subscription = new Subscription();
 
-  showFiller: boolean = false;
+  constructor(private router: Router,private store: Store) {
+    this.obtenerRuta();
+  }
 
-  constructor(private _breakpointObserver: BreakpointObserver) {
-    this.breakpointSub = this.breakpoint$.subscribe({
-      next: () => this.breakpointChanged(),
+  obtenerRuta() {
+    this.rutaSub$ = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const ruta = event.url.split('/').pop();
+        this.tabs.forEach((e, i) => {
+          if (e.ruta === ruta) this.seleccionado = i;
+        });
+      }
     });
   }
 
-  ngOnDestroy(): void {
-    this.breakpointSub.unsubscribe();
-  }
-
-  private breakpointChanged() {
-    if (this._breakpointObserver.isMatched(Breakpoints.Large)) {
-      this.drawerMode = 'side';
-    } else if (this._breakpointObserver.isMatched(Breakpoints.Medium)) {
-      this.drawerMode = 'side';
-    } else if (this._breakpointObserver.isMatched(Breakpoints.Small)) {
-      this.drawerMode = 'over';
-    } else if (this._breakpointObserver.isMatched(Breakpoints.XSmall)) {
-      this.drawerMode = 'over';
-    } else {
-      this.drawerMode = 'over';
-    }
-  }
-
-  OnSeleccion(item?: Formulario) {
-    if (item) {
-      this.drawer.open();
-      this.formulario = item;
-    } else this.drawer.close();
+  seleccionaTab(tab: number) {
+    this.store.dispatch(deleteAllDetalle());
+    this.seleccionado = tab;
+    this.router.navigate(['admin/' + this.tabs[tab].ruta]);
   }
 }

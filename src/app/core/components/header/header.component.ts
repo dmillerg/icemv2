@@ -198,15 +198,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: (response) => {
+          const submenu = Array.isArray(response)
+            ? response.map((e) => {
+                return {
+                  nombre: e.nombre,
+                  icono: this.menu[1].icono,
+                  link: '',
+                };
+              })
+            : [];
           const menu = [
             { nombre: 'Todos', icono: this.menu[1].icono, link: '' },
-            ...response.map((e) => {
-              return {
-                nombre: e.nombre,
-                icono: this.menu[1].icono,
-                link: '',
-              };
-            }),
+            ...submenu,
           ];
           this.menu[1].subitem = menu;
         },
@@ -275,11 +278,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.authService
             .logout()
             .pipe(take(1))
-            .subscribe({ next: () => {
-              location.reload();
-              this.generarMenu();
-            } });
-          
+            .subscribe({
+              next: () => {
+                location.reload();
+                this.generarMenu();
+              },
+            });
         },
         ocultar: this.dataUsuario === undefined,
       },

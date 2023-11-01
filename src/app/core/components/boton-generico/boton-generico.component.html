@@ -2,8 +2,13 @@
   <ng-container *ngFor="let item of botones">
     <button
       matRipple
+      [matTooltip]="item.tooltip ?? ''"
       *ngIf="!item.ocultar"
-      [disabled]="item.disabled || (item.cargando ? item.cargando() : false)"
+      [disabled]="
+        item.disabled
+          ? item.disabled()
+          : false || (item.cargando ? item.cargando() : false)
+      "
       (click)="emit(item.funcion)"
       class="flex items-center justify-center gap-2 hover:scale-105"
       [class]="
@@ -24,7 +29,7 @@
         class="button"
         *ngIf="item.cargando ? item.cargando() : false"
       ></mat-spinner>
-      <span class="truncate">{{ item.label }}</span>
+      <span class="truncate" *ngIf="item.label">{{ item.label }}</span>
     </button>
   </ng-container>
 </div>

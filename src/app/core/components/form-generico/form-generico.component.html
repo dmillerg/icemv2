@@ -70,14 +70,19 @@
           </button>
         </div>
         <div class="relative w-full" *ngIf="item.tipo === 'select'">
-          <select
+          <mat-select
             [formControlName]="item.control"
-            class="bg-white py-3 px-4 pr-9 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-700"
+            [class]="
+            error(form, item.control).length > 0
+                ? 'border border-red-500'
+                : 'border border-1 dark:border-gray-500'
+            "
+            class="block w-full px-4 py-3 text-base text-gray-900 rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option *ngFor="let opcion of item.opciones" [value]="opcion.codgo">
+            <mat-option *ngFor="let opcion of item.opciones"  [value]="opcion.codigo">
               {{ opcion.nombre }}
-            </option>
-          </select>
+            </mat-option>
+          </mat-select>
         </div>
         <textarea
           [class]="

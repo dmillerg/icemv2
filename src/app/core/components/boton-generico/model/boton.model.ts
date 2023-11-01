@@ -3,9 +3,9 @@ export interface Boton {
   label?: string;
   color?: string;
   class?: string;
-  funcion?: (value?: any) => void;
+  tooltip?:string;
+  funcion?: (valor?: any) => void;
   disabled?: () => boolean;
   ocultar?: () => boolean;
   cargando?: () => boolean;
-  // icono?: string;
 }

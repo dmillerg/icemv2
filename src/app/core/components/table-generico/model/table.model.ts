@@ -6,6 +6,8 @@ export interface Table {
   textoVacio?: string;
   botonVacio?: Boton[];
   cargando?: boolean;
+  acciones?: Boton[];
+  accionesTexto?: string;
 }
 
 export interface Columnas {
