@@ -20,6 +20,7 @@ import { ROOT_REDUCERS } from './shared/state/app.state';
 import { BusquedaComponent } from './core/components/busqueda/busqueda.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpCancelInterceptor } from './core/interceptor/http-cancel.interceptor';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [AppComponent, NoticiaFuentePipe, BusquedaComponent],
@@ -30,6 +31,7 @@ import { HttpCancelInterceptor } from './core/interceptor/http-cancel.intercepto
     HttpClientModule,
     HeaderComponent,
     FooterComponent,
+    NgApexchartsModule,
     StoreModule.forRoot(ROOT_REDUCERS),
   ],
   providers: [

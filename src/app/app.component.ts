@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, Inject, HostListener, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ConfiguracionService } from './core/services/configuracion.service';
 import { take } from 'rxjs';
 import { AuthService } from './modules/auth/services/auth.service';
 import { Configuraciones } from './core/constantes/configuracion';
+import { ChartComponent } from "ng-apexcharts";
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,10 @@ export class AppComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     private configuracionService: ConfiguracionService,
     private authService: AuthService
-  ) {}
+  ) {
+    this.chartOp();
+  }
+
   ngOnInit(): void {
     this.obtenerTema();
     if (this.authService.isLogging()) this.comprobarToken();
@@ -90,5 +94,31 @@ export class AppComponent implements OnInit {
     clearInterval(this.inactividad);
     localStorage.setItem('ultimaActividad', new Date().toString());
     this.establecerContadorInactividad();
+  }
+
+  @ViewChild("chart") chart!: ChartComponent;
+  public chartOptions!: Partial<any>;
+
+  chartOp() {
+    this.chartOptions = {
+      series: [44, 55, 13, 43, 22],
+      chart: {
+        type: "donut"
+      },
+      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
   }
 }
