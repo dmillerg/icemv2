@@ -1,7 +1,7 @@
 <div
-  class="fixed top-0 flex justify-between py-4 px-4 bg-icem-900 dark:bg-icem-500 items-center w-full"
+  class="fixed top-0 flex justify-between py-2 px-4 bg-icem-900 dark:bg-icem-500 items-center w-full"
 >
-  <h1 class="h1 font-bold text-white">ICEM</h1>
+  <span class="text-xl font-bold text-white">ICEM</span>
   <div class="lg:flex items-center gap-4 hidden">
     <app-menu-generico [menu]="menu" *ngIf="!buscar"></app-menu-generico>
     <app-menu-generico [menu]="menu2"></app-menu-generico>
@@ -12,7 +12,7 @@
   </div>
 
   <form [formGroup]="form"
-    class="flex absolute lg:left-52 lg:right-52 md:left-20 md:right-20 left-16 right-16 top-2 bottom-2 rounded bg-white -left-96 mx-auto"
+    class="flex absolute duration-300 lg:left-56 lg:right-56 md:left-20 md:right-20 left-16 right-16 top-2 bottom-2 rounded bg-white -left-96 mx-auto"
     *ngIf="buscar"
     [@scaleAnimation]="'enter'"
   >

@@ -23,7 +23,10 @@ export interface Control {
   validator?: any[];
   icono?: string;
   botones?: Boton[];
+  tiposPassword?: TiposPassword;
 }
+
+export type TiposPassword = 'text' | 'password';
 
 export type Tipos =
   | 'text'
@@ -31,4 +34,5 @@ export type Tipos =
   | 'select'
   | 'date'
   | 'textarea'
+  | 'password'
   | 'boton';

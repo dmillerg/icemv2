@@ -6,7 +6,7 @@
 >
   <ng-content select=".header"> </ng-content>
   <div
-    class="flex w-full md:flex-row flex-column gap-2"
+    class="flex w-full md:flex-row flex-column gap-1"
     *ngFor="let fila of column"
   >
     <ng-container *ngFor="let item of fila">
@@ -21,7 +21,7 @@
             !['checkbox', 'boton'].includes(item.tipo) && !formulario.skeleton
           "
           for=""
-          class="block my-1"
+          class="block mb-1"
         >
           <i [class]="item.icono"></i>
           {{ esRequerido(item.control, item.nombre) }}</label
@@ -29,10 +29,33 @@
         <input
           type="text"
           *ngIf="item.tipo === 'text'"
-          class="py-1 px-2 w-full border border-1 dark:border-none dark:shadow-md rounded outline-none bg-white dark:bg-gray-700"
+          class="py-3 px-3 w-full border border-1 dark:border-none dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
         />
+        <div class="relative" *ngIf="item.tipo === 'password'">
+          <input
+            [type]="item.tiposPassword ?? 'password'"
+            class="py-3 px-3 w-full border border-1 dark:border-none dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+            [formControlName]="item.control"
+            [placeholder]="item.placeholder ?? item.nombre"
+          />
+          <button
+            class="absolute h-full right-2 border-none text-gray-400 dark:text-gray-400"
+            (click)="
+              item.tiposPassword =
+                item.tiposPassword === 'text' ? 'password' : 'text'
+            "
+          >
+            <i
+              [class]="
+                item.tiposPassword === 'password' || !item.tiposPassword
+                  ? 'bi bi-eye'
+                  : 'bi bi-eye-slash'
+              "
+            ></i>
+          </button>
+        </div>
         <div class="relative w-full" *ngIf="item.tipo === 'select'">
           <select
             [formControlName]="item.control"
@@ -45,7 +68,7 @@
         </div>
         <textarea
           *ngIf="item.tipo === 'textarea'"
-          class="py-1 px-2 w-full border border-1 rounded outline-none dark:border-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
+          class="py-3 px-3 w-full border border-1 rounded outline-none dark:border-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
           [name]="item.control"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"

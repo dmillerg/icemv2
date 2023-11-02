@@ -1,0 +1,11 @@
+<div mat-dialog-title class="dark:bg-gray-900 dark:text-white">
+  <h1>{{ titulo }}</h1>
+  <h3>{{ subtitulo }}</h3>
+</div>
+<div mat-dialog-content class="dark:bg-gray-900 dark:text-white">
+  <app-login *ngIf="login"></app-login>
+  <app-register *ngIf="!login"></app-register>
+</div>
+<div mat-dialog-actions class="dark:bg-gray-900 dark:text-white">
+    <app-boton-generico [botones]="botones"></app-boton-generico>
+</div>

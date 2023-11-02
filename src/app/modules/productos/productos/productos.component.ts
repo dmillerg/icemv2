@@ -1,31 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { ProductoService } from '../services/producto.service';
 import { Producto } from '../model/producto';
 import { Card } from 'src/app/core/models/card.model';
 import { CatalogoService } from 'src/app/core/services/catalogo.service';
 import { Categoria } from 'src/app/core/models/categoria.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.scss'],
 })
-export class ProductosComponent implements OnInit {
+export class ProductosComponent implements OnInit, OnDestroy {
   producto?: Producto;
   productos: Producto[] = [];
   productosCard: Card[] = [];
   categorias: Categoria[] = [];
   categoria?: Categoria;
+  sub$: Subscription = new Subscription();
 
   constructor(
     private productoService: ProductoService,
-    private catalogoService: CatalogoService
+    private catalogoService: CatalogoService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.loadCategorias();
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 
   obtenerProducto() {
@@ -39,6 +46,7 @@ export class ProductosComponent implements OnInit {
           );
           this.producto = this.productos.shift();
           this.generarProductosCard();
+          this.obtenerRuta();
         },
       });
   }
@@ -65,13 +73,21 @@ export class ProductosComponent implements OnInit {
               )[0];
               const prod = this.producto;
               this.producto = e;
-              this.productos[i]=prod!;
+              this.productos[i] = prod!;
               this.generarProductosCard();
             },
           },
         ],
       };
     });
+  }
+
+  cambiarEspecificacion(e: Producto, i: number) {
+    this.categoria = this.categorias.filter((cat) => cat.id === e.categoria)[0];
+    const prod = this.producto;
+    this.producto = e;
+    this.productos[i] = prod!;
+    this.generarProductosCard();
   }
 
   obtenerImagenes(producto: Producto) {
@@ -103,7 +119,14 @@ export class ProductosComponent implements OnInit {
       this.categorias = [...result];
       this.categoria = result[0];
       this.obtenerProducto();
-      // this.rellenarCategorias();
+    });
+  }
+
+  obtenerRuta() {
+    this.sub$ = this.route.params.subscribe((params) => {
+      const id = +params['id'];
+      const prod = this.productos.filter((e) => e.id === id)[0];
+      if (prod) this.cambiarEspecificacion(prod, this.productos.indexOf(prod));
     });
   }
 }

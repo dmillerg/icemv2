@@ -10,8 +10,7 @@ import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/b
 import { SectionCatalogoComponent } from './section-catalogo/section-catalogo.component';
 import { FormGenericoComponent } from 'src/app/core/components/form-generico/form-generico.component';
 import { SectionContactenosComponent } from 'src/app/core/components/section-contactenos/section-contactenos.component';
-
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,8 @@ import { SectionContactenosComponent } from 'src/app/core/components/section-con
     CardComponent,
     BotonGenericoComponent,
     FormGenericoComponent,
-    SectionContactenosComponent
-
-  ]
+    SectionContactenosComponent,
+    MatDialogModule,
+  ],
 })
-export class HomeModule { }
+export class HomeModule {}

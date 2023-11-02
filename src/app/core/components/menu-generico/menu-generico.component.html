@@ -1,31 +1,32 @@
 <div class="flex gap-3">
-  <ng-container *ngFor="let item of menu">
+  <div class="menu relative" *ngFor="let item of menu">
     <button
-      class="relative flex items-center gap-2 text-white menu cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
+      class="relative flex items-center gap-2 text-white cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
       *ngIf="!item.ocultar"
       (click)="emit(item.accion)"
-      [routerLink]="item.link"
     >
-      <i [class]="!item.sm &&item.subitem?'bi bi-chevron-down':item.icono" class="drop-shadow-lg"></i>
       {{ item.nombre }}
-      <ng-container *ngIf="item.subitem">
-        <div
-          class="submenu overflow-hidden text-icem-500 absolute bg-white dark:bg-gray-800 dark:text-white rounded right-0 shadow-md animate-flip-down animate-once animate-ease-in-out flex-col flex"
-          style="top: 180%"
-        >
-          <ng-container *ngFor="let subitem of item.subitem">
-            <div
-              class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-2 py-2"
-              *ngIf="!subitem.ocultar"
-              (click)="emit(subitem.accion)"
-              [routerLink]="subitem.link"
-            >
-              <i [class]="subitem.icono"></i>
-              {{ subitem.nombre }}
-            </div>
-          </ng-container>
-        </div>
-      </ng-container>
+      <i
+        [class]="!item.sm && item.subitem ? 'bi bi-chevron-down' : item.icono"
+        class="drop-shadow-lg"
+      ></i>
     </button>
-  </ng-container>
+    <ng-container *ngIf="item.subitem">
+      <div
+        class="submenu overflow-hidden text-icem-500 absolute bg-white dark:bg-gray-800 dark:text-white rounded right-0 shadow-lg flex-col flex"
+        style="top: 180%"
+      >
+        <ng-container *ngFor="let subitem of item.subitem">
+          <button
+            class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-4 py-4"
+            *ngIf="!subitem.ocultar"
+            (click)="emit(subitem.accion)"
+          >
+            <i [class]="subitem.icono"></i>
+            {{ subitem.nombre }}
+          </button>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
 </div>

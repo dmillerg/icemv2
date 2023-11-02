@@ -4,6 +4,7 @@ import { ProductoService } from '../../productos/services/producto.service';
 import { Producto } from '../../productos/model/producto';
 import { environment } from 'src/environments/environment';
 import { Boton } from '../../../core/components/boton-generico/model/boton.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-section-productos',
@@ -14,7 +15,7 @@ export class SectionProductosComponent implements OnInit {
   cards: Card[] = [];
   productos_recientes: any[] = [];
 
-  constructor(private productoService: ProductoService) {}
+  constructor(private productoService: ProductoService, private router: Router) {}
 
   ngOnInit(): void {
     this.obtenerProducto();
@@ -67,6 +68,7 @@ export class SectionProductosComponent implements OnInit {
             label: 'Ver mas',
             class:
               'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded',
+              funcion:()=>this.router.navigate([`productos/${e.id}`])
           },
         ],
         alerta: this.esHoy(new Date(e.fecha)) ? 'Nuevo' : '',

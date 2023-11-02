@@ -10,12 +10,12 @@
             [alt]="producto.titulo"
             class="absolute w-full h-full object-cover -top-6 -right-6 shadow-md rounded bg-white dark:bg-gray-700 border-none"
           />
-          <h1 class="text-white absolute bottom-1 right-1 text-sm">
+          <span class="text-white absolute bottom-1 right-1 text-sm">
             disponibles: {{ producto.disponibilidad }}
-          </h1>
-          <h1 class="text-white text-md -rotate-90 pl-8 font-bold w-96">
+          </span>
+          <span class="text-white text-md -rotate-90 pl-8 font-bold w-96">
             Categoria: {{ categoria }}
-          </h1>
+          </span>
         </div>
         <div class="flex gap-1">
           <ng-container *ngIf="producto.imagenes">

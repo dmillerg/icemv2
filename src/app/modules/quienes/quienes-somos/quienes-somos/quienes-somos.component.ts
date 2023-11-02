@@ -1,71 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Quienes } from '../../model/quienes';
 import { QuienesService } from '../../services/quienes.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-quienes-somos',
   templateUrl: './quienes-somos.component.html',
-  styleUrls: ['./quienes-somos.component.scss']
+  styleUrls: ['./quienes-somos.component.scss'],
 })
-export class QuienesSomosComponent implements OnInit {
+export class QuienesSomosComponent implements OnInit, OnDestroy {
   integrantes: Quienes[] = [];
-  integrante: Quienes = {
-    id: -1,
-    nombre: '',
-    cargo: '',
-    imagen: '',
-    orden: 0,
-  };
+  sub$: Subscription = new Subscription();
 
-  video: string = '';
-  constructor(private quienesSomosService: QuienesService) {
-  }
+  constructor(
+    private quienesSomosService: QuienesService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
-    this.cargaInicial();
-    this.cargaInicial2();
     this.loadQuienes();
+    this.obtenerRuta();
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 
   loadQuienes() {
     this.quienesSomosService.getQuienes().subscribe({
       next: (response) => {
-        this.integrantes = response && response.length > 0 ? response : []
-      }
-    })
-}
-
-// loadVideo() {
-//   this.quienesSomosService.loadVideo().subscribe(
-//     (result) => console.log('result', result),
-//     (error) => (console.log(error))
-//   );
-// }
-
-cargaInicial() {
-  let scroll = document.getElementById('scroll');
-  scroll!.addEventListener("scroll", () => {
-    this.cargaInicial2();
-  });
-}
-
-cargaInicial2(){
-  let scroll = document.getElementById('scroll');
-  let animados = document.querySelectorAll('.animado');
-  for (let i = 0; i < animados.length; i++) {
-    let animado = <HTMLElement>animados[i]
-    if (animado.offsetTop - 600 < scroll!.scrollTop) {
-      animado.classList.add('activoitem');
-      // console.log('scroll ', scroll.scrollTop,' animado ' , animado.offsetTop)
-    }
+        this.integrantes = response && response.length > 0 ? response : [];
+      },
+    });
   }
-}
 
-scrollInicial(id: string){
-  let target = document.getElementById(id);
-  console.log(target);
-
-  target!.scrollIntoView({ behavior: 'smooth' });
-}
-
+  obtenerRuta() {
+    this.sub$ = this.route.params.subscribe((params) => {
+      const section = params['section'];
+      document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 }
