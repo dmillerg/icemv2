@@ -11,7 +11,10 @@ import {
 import { Table } from 'src/app/core/components/table-generico/model/table.model';
 import { Producto } from 'src/app/modules/productos/model/producto';
 import { Boton } from 'src/app/core/components/boton-generico/model/boton.model';
-import { addDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import {
+  addDetalle,
+  deleteAllDetalle,
+} from 'src/app/shared/state/actions/detalle.actions';
 import { environment } from 'src/environments/environment';
 import { Validators } from '@angular/forms';
 import { CatalogoService } from 'src/app/core/services/catalogo.service';
@@ -28,6 +31,10 @@ import { DialogRef } from '@angular/cdk/dialog';
 export class ProductoComponent implements OnInit {
   formulario?: Formulario;
   tabla!: Table;
+  deshabilitarActivo: boolean = false;
+
+  botonesDetalle: Boton[] = [];
+
   botones: Boton[] = [
     {
       icono: 'bi bi-pencil',
@@ -53,37 +60,59 @@ export class ProductoComponent implements OnInit {
     },
   ];
 
-  botonesDetalle: Boton[] = [
+  botonesAgregarActualizar: Boton[] = [
     {
-      icono: 'bi bi-pencil',
-      tooltip: 'Editar',
-      cargando: () => this.loadingEditar,
-      funcion: () =>
-        this.formulario!.form?.valid
-          ? true
-          : this.formulario!.form?.markAllAsTouched(),
+      label: 'Actualizar',
+      icono: 'bi bi-arrow-clockwise',
+      funcion: () => this.obtenerProductos(),
     },
     {
-      icono: 'bi bi-check',
-      tooltip: 'Activar',
-      // disabled: () => this.deshabilitarActivar,
-      // funcion: () => this.activar(),
-    },
-    {
-      icono: 'bi bi-trash',
-      tooltip: 'Eliminar',
-      funcion: (value) => {
-        console.log(value);
-
-        this.eliminar(value);
+      label: 'Agregar',
+      icono: 'bi bi-plus',
+      funcion: () => {
+        this.generarFormulario();
+        this.adminService.setFormulario(this.formulario!);
+        this.store.dispatch(
+          addDetalle({
+            detalle: {
+              botones: [
+                {
+                  label: 'Aceptar',
+                  icono: 'bi bi-check',
+                  cargando: () => this.loading,
+                  funcion: () => this.agregarOEditar(false),
+                },
+                {
+                  label: 'Cancelar',
+                  icono: 'bi bi-x',
+                  funcion: () => this.store.dispatch(deleteAllDetalle()),
+                },
+              ],
+              titulo: 'Agregar Producto',
+              subtitulo:
+                'Los productos que se agreguen deben activarse más tarde para que puedan ser visibles por los usuarios.',
+              textos: [
+                {
+                  nombre: 'NOTA',
+                  valor:
+                    'Una vez que se active el producto, se enviará un correo a todos aquellos usuarios que hayan realizado su ultima compra con la misma categoría de producto.',
+                },
+              ],
+            },
+          })
+        );
       },
     },
   ];
 
+  imagenPasada: string = '';
   categorias: Opciones[] = [];
+  activos: number = 0;
+  inactivos: number = 0;
 
   loading: boolean = false;
   loadingEditar: boolean = false;
+  loadingActivar: boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -100,12 +129,47 @@ export class ProductoComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+  generarBotonesDetalle() {
+    this.botonesDetalle = [
+      {
+        icono: 'bi bi-pencil',
+        tooltip: 'Editar',
+        cargando: () => this.loadingEditar,
+        funcion: () =>
+          this.formulario!.form?.valid
+            ? this.agregarOEditar(true)
+            : this.formulario!.form?.markAllAsTouched(),
+      },
+      {
+        icono: this.deshabilitarActivo ? 'bi bi-x' : 'bi bi-check',
+        tooltip: this.deshabilitarActivo ? 'Desactivar' : 'Activar',
+        cargando: () => this.loadingActivar,
+        funcion: (value) => this.activarProducto(value),
+      },
+      {
+        icono: 'bi bi-trash',
+        tooltip: 'Eliminar',
+        funcion: (value) => {
+          this.eliminar(value);
+        },
+      },
+    ];
+  }
+
   obtenerProductos() {
     this.generarTabla();
-    this.adminService.getProducto().subscribe((result) => {
-      if (Array.isArray(result)) this.generarTabla(result);
-      else this.generarTabla([]);
-    });
+    this.adminService
+      .getProducto()
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          if (Array.isArray(result)) {
+            this.activos = result.filter((e) => e.activo).length;
+            this.inactivos = result.filter((e) => !e.activo).length;
+            this.generarTabla(result);
+          } else this.generarTabla([]);
+        },
+      });
   }
 
   obtenerCategorias() {
@@ -143,7 +207,7 @@ export class ProductoComponent implements OnInit {
           campo: 'categoria',
         },
         {
-          tipo: 'texto',
+          tipo: 'boolean',
           nombre: 'Activo',
           campo: 'activo',
         },
@@ -157,15 +221,18 @@ export class ProductoComponent implements OnInit {
       cargando: !values,
       acciones: this.botones,
       accionesTexto: 'Acciones',
+      textoVacio: 'No hay produtos que gestionar',
     };
   }
 
   seleccionado(item: Producto) {
+    this.generarBotonesDetalle();
     if (item) {
       this.formulario = undefined;
       this.adminService.setFormulario(this.formulario!);
       const producto: Producto = item;
-      // this.deshabilitarActivar = item.activo!;
+      this.deshabilitarActivo = item.activo!;
+
       const imagenes = producto.imagen
         .split(',')
         .map(
@@ -173,6 +240,7 @@ export class ProductoComponent implements OnInit {
             environment.url_backend +
             `pictures/${producto.id}?tipo=productos&name=${e}`
         );
+      this.imagenPasada = producto.imagen.split(',')[0];
       this.store.dispatch(
         addDetalle({
           detalle: {
@@ -233,6 +301,7 @@ export class ProductoComponent implements OnInit {
   }
 
   mostrarFormulario(producto?: Producto) {
+    this.generarBotonesDetalle();
     this.generarFormulario(producto);
     this.adminService.setFormulario(this.formulario!);
     this.store.dispatch(
@@ -312,17 +381,18 @@ export class ProductoComponent implements OnInit {
       ],
       columnas: [1, 1, 2, 1, 1, 1, 1],
       autofixed: true,
-      imagen: true,
-      maximoImagenes: 10,
-      imagenes: producto
-        ? producto.imagen
-            .split(',')
-            .map(
-              (e) =>
-                environment.url_backend +
-                `pictures/${producto.id}?tipo=productos&name=${e}`
-            )
-        : [],
+      imagen: {
+        maximoImagenes: 10,
+        imagenes: producto
+          ? producto.imagen
+              .split(',')
+              .map(
+                (e) =>
+                  environment.url_backend +
+                  `pictures/${producto.id}?tipo=productos&name=${e}`
+              )
+          : [],
+      },
     };
   }
 
@@ -349,10 +419,10 @@ export class ProductoComponent implements OnInit {
   eliminarProducto(id: number, ref: DialogRef) {
     this.loading = true;
     this.adminService
-      .deleteUsuarios(id)
+      .deleteProducto(id)
       .pipe(take(1))
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.loading = false;
           this.obtenerProductos();
           setTimeout(() => ref.close(), 300);
@@ -361,53 +431,78 @@ export class ProductoComponent implements OnInit {
       });
   }
 
-  agregarEliminarProducto(acction: boolean) {
-    const producto: Producto = this.formulario?.form?.getRawValue();
-    this.formulario!.formDataImage!.append('id', producto.id.toString());
-    this.formulario!.formDataImage!.append(
-      'titulo',
-      producto.titulo.toString()
-    );
-    this.formulario!.formDataImage!.append(
-      'descripcion',
-      producto.descripcion.toString()
-    );
-    this.formulario!.formDataImage!.append(
-      'categoria',
-      producto.categoria.toString()
-    );
-    this.formulario!.formDataImage!.append('usos', producto.usos.toString());
-    this.formulario!.formDataImage!.append(
-      'especificaciones',
-      producto.especificaciones.toString()
-    );
-    this.formulario!.formDataImage!.append(
-      'garantia',
-      producto.garantia.toString()
-    );
-    this.formulario!.formDataImage!.append(
-      'precio',
-      producto.precio.toString()
-    );
-    this.formulario!.formDataImage!.append(
-      'disponibilidad',
-      producto.disponibilidad.toString()
-    );
-    if(this.formulario?.form?this.formulario?.form.valid:this.formulario?.form)
-    this.formulario!.formDataImage!.append(
-      'imagen',
-      producto.imagen.toString()
-    );
+  activarProducto(item: Producto) {
+    this.loadingActivar = true;
     this.adminService
-      .addProducto(this.formulario?.formDataImage!)
+      .activarProducto(item.id, !item.activo)
       .pipe(take(1))
       .subscribe({
-        next: (result) => {
+        next: () => {
+          this.deshabilitarActivo = !this.deshabilitarActivo;
+          this.mostrarFormulario(item);
+          this.loadingActivar = false;
           this.snackService.success({
-            texto: 'producto actualizado correctamente.',
+            texto:
+              'Su producto ha sido activado correctamente, ahora es visible para todos.',
           });
+          // this.darPublicidadNuevoProducto(item);
+          this.obtenerProductos();
         },
-        error: (error) => {},
       });
+  }
+
+  agregarOEditar(accion: boolean) {
+    this.loading = true;
+    const data = this.formulario?.form?.getRawValue();
+    const formData = this.formulario?.imagen!.formDataImage ?? new FormData();
+    formData.append('id', data.id.toString());
+    formData.append('titulo', data.titulo.toString());
+    formData.append('descripcion', data.descripcion.toString());
+    formData.append('categoria', data.categoria.toString());
+    formData.append('usos', data.usos.toString());
+    formData.append('especificaciones', data.especificaciones.toString());
+    formData.append('garantia', data.garantia.toString());
+    formData.append('precio', data.precio.toString());
+    formData.append('disponibilidad', data.disponibilidad.toString());
+    if (accion) {
+      formData.append(
+        'eliminadas',
+        this.formulario!.imagen!.imagenesEliminadas!.toString()
+      );
+      formData.append('anteriores', this.imagenPasada.toString());
+      this.adminService
+        .updateProducto(formData, data.id)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.loading = false;
+            this.obtenerProductos();
+            this.snackService.success({
+              texto: 'Producto editado correctamente.',
+            });
+          },
+          error: () => {
+            this.loading = false;
+          },
+        });
+    } else {
+      formData.append('imagen', '');
+      this.adminService
+        .addProducto(formData)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.loading = false;
+            this.obtenerProductos();
+            this.store.dispatch(deleteAllDetalle());
+            this.snackService.success({
+              texto: 'Producto agregado satisfactoriamente.',
+            });
+          },
+          error: () => {
+            this.loading = false;
+          },
+        });
+    }
   }
 }

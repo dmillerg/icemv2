@@ -6,9 +6,14 @@ export interface Formulario {
   autofixed?: boolean;
   skeleton?: boolean;
   form?: FormGroup;
+  imagen?: Imagenes
+}
+
+export interface Imagenes{
   formDataImage?: FormData;
   imagen?: boolean;
   imagenes?:string[];
+  imagenesEliminadas?: string[];
   maximoImagenes?: number;
 }
 

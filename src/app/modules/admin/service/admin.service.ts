@@ -5,6 +5,8 @@ import { Formulario } from 'src/app/core/components/form-generico/model/formular
 import { Usuario } from 'src/app/core/models/usuario.model';
 import { environment } from 'src/environments/environment';
 import { Producto } from '../../productos/model/producto';
+import { Desarrollo } from '../../desarrollo/model/desarrollo';
+import { Noticia } from '../../noticias/model/noticias';
 
 @Injectable({
   providedIn: 'root',
@@ -99,7 +101,6 @@ export class AdminService {
     return this.http.post(direccion, formData);
   }
 
-  
   /**
    * Guarda una nuevo usuarios
    * @param formData datos del usuarios
@@ -126,7 +127,7 @@ export class AdminService {
     const params = {
       categoria: categoria,
       excluir: excluir,
-      activo: activo
+      activo: activo,
     };
     let direccion = this.url + 'productos/' + limit.toString();
     return this.http.get<Producto[]>(direccion, {
@@ -143,7 +144,10 @@ export class AdminService {
    */
   updateProducto(formData: FormData, id: number) {
     const headers = { 'content-type': 'application/json' };
-    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
     let direccion = this.url + 'productos/' + id;
     return this.http.post(direccion, formData);
   }
@@ -155,8 +159,201 @@ export class AdminService {
    */
   addProducto(formData: FormData) {
     const headers = { 'content-type': 'application/json' };
-    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
     let direccion = this.url + 'saveProducto';
     return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Activa o desactiva el producto para mostrar a la venta
+   * @param id del producto
+   * @param activo estado del producto
+   * @returns
+   */
+  activarProducto(id: number = -1, activo: boolean = false) {
+    let direccion = this.url + 'activarproducto/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+      activo: activo,
+    };
+    return this.http.get(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Elimina un producto
+   * @param id producto a eliminar
+   * @returns
+   */
+  deleteProducto(id: number) {
+    let direccion = this.url + 'deleteProducto/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Elimina una categoria
+   * @param id categoria a eliminar
+   * @returns
+   */
+  deleteCategoria(id: number) {
+    let direccion = this.url + 'deleteCategoria/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Actualiza la categoria
+   * @param formData datos actualizados de la categoria
+   * @param id id de la categoria a actualizar
+   * @returns
+   */
+  updateCategoria(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'categorias/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda una nueva categoria
+   * @param formData datos de la categoria
+   * @returns
+   */
+  addCategoria(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'saveCategoria';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Obtener los desarrollos en base de datos
+   * @param limit cantidad de desarrollos a devolver
+   * @returns
+   */
+  getDesarrollos(limit: number = 0): Observable<Desarrollo[]> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'desarrollos/' + limit.toString();
+    return this.http.get<Desarrollo[]>(direccion, { headers: headers });
+  }
+
+  /**
+   * Actualiza el desarrollo
+   * @param formData datos actualizados del desarrollo
+   * @param id id del desarrollo a actualizar
+   * @returns
+   */
+  updateDesarrollo(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'desarrollos/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda una nuevo desarrollo
+   * @param formData datos del desarrollo
+   * @returns
+   */
+  addDesarrollos(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'saveDesarrollo';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Elimina un desarrollo
+   * @param id desarrollo a eliminar
+   * @returns
+   */
+  deleteDesarrollo(id: number) {
+    let direccion = this.url + 'deleteDesarrollo/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Obtener las noticias en base de datos
+   * @param limit cantidad de noticias a devolver
+   * @returns
+   */
+  getNoticias(limit: number = 0, search: string = ''): Observable<Noticia[]> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'noticias/' + limit.toString();
+    return this.http.get<Noticia[]>(direccion, {
+      headers: headers,
+      params: { search: search },
+    });
+  }
+
+  /**
+   * Actualiza la noticia
+   * @param formData datos actualizados de la noticia
+   * @param id id de la noticia a actualizar
+   * @returns
+   */
+  updateNoticia(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'noticias/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda una nueva noticia
+   * @param formData datos de la noticia
+   * @returns
+   */
+  addNoticia(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'saveNoticia';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Elimina una noticia
+   * @param id noticia a eliminar
+   * @returns
+   */
+  deleteNoticia(id: number) {
+    let direccion = this.url + 'deleteNoticia/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
   }
 }

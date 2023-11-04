@@ -16,8 +16,10 @@ import {
 import { Control, Formulario } from './model/formulario.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
 import { MatSelectModule } from '@angular/material/select';
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { Boton } from '../boton-generico/model/boton.model';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-form-generico',
@@ -27,6 +29,10 @@ import { Boton } from '../boton-generico/model/boton.model';
     ReactiveFormsModule,
     BotonGenericoComponent,
     MatSelectModule,
+    MatRippleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
   templateUrl: './form-generico.component.html',
   styleUrls: ['./form-generico.component.scss'],
@@ -45,7 +51,7 @@ export class FormGenericoComponent implements OnInit {
     {
       icono: 'bi bi-x',
       class: 'w-4 h-4 rounded-full bg-icem-500 text-white',
-      funcion: (value)=> this.eliminarFoto(value)
+      funcion: (value) => this.eliminarFoto(value),
     },
   ];
 
@@ -164,19 +170,36 @@ export class FormGenericoComponent implements OnInit {
   fileEvent(fileInput: any) {
     // this.imagenes = []
     let files = (<HTMLInputElement>fileInput.target).files;
-    if (
-      this.formulario.imagenes!.length <= this.formulario.maximoImagenes! &&
-      this.formulario.imagenes!.length + files!.length <= this.formulario.maximoImagenes!
+    if (this.formulario.imagen?.maximoImagenes === 1) {
+      this.error_cantidad_img = '';
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.formulario.imagen!.imagenes = [reader.result as string].map(
+          (e) => e
+        );
+      };
+      reader.readAsDataURL(files![0]);
+      this.formulario.imagen.formDataImage = new FormData();
+      this.formulario.imagen!.formDataImage!.append(
+        'foto',
+        files![0],
+        files![0].name
+      );
+    } else if (
+      this.formulario.imagen!.imagenes!.length <=
+        this.formulario.imagen!.maximoImagenes! &&
+      this.formulario.imagen!.imagenes!.length + files!.length <=
+        this.formulario.imagen!.maximoImagenes!
     ) {
       this.error_cantidad_img = '';
       for (let i = 0; i < files!.length; i++) {
         let file = files![i];
         //  console.log(fileInput);
         this.uploadFiles = fileInput.target.files;
-        this.formulario.formDataImage = new FormData();
+        this.formulario.imagen!.formDataImage = new FormData();
         if (this.uploadFiles != undefined) {
           for (let i = 0; i < this.uploadFiles.length; i++) {
-            this.formulario.formDataImage!.append(
+            this.formulario.imagen!.formDataImage!.append(
               'foto',
               this.uploadFiles[i],
               this.uploadFiles[i].name
@@ -185,24 +208,31 @@ export class FormGenericoComponent implements OnInit {
         }
         const reader = new FileReader();
         reader.onload = () => {
-          this.formulario.imagenes!.push(reader.result as string);
+          this.formulario.imagen!.imagenes!.push(reader.result as string);
         };
         reader.readAsDataURL(file);
       }
     } else {
-      this.error_cantidad_img = `El máximo de imagenes por producto es de ${this.formulario.maximoImagenes}`;
+      this.error_cantidad_img = `El máximo de imagenes por producto es de ${
+        this.formulario.imagen!.maximoImagenes
+      }`;
     }
   }
 
   eliminarFoto(name: string) {
-    // if (this.uploadFiles.filter((e: any) => e.name === nombre).length > 0) {
-    //   // let i = this.producto.imagen.split(',').indexOf(nombre);
-    //   // this.producto.imagen = this.producto.imagen.split(',').splice(i).toString();
-    //   // this.imagenes_eliminadas.push(nombre);
+    console.log(name);
+
+    let nombre = name.substring(name.indexOf('=') + 1, name.length);
+    console.log(name);
+    if (!this.formulario.imagen?.imagenesEliminadas) {
+      this.formulario.imagen!.imagenesEliminadas = [];
+    }
+    // if (this.producto.imagen.split(',').filter((e) => e == nombre).length > 0) {
+    //   let i = this.producto.imagen.split(',').indexOf(nombre);
+    //   this.producto.imagen = this.producto.imagen.split(',').splice(i).toString();
     // }
-    
-    
-    this.formulario.imagenes = this.formulario.imagenes!.filter(
+    this.formulario.imagen?.imagenesEliminadas!.push(nombre);
+    this.formulario.imagen!.imagenes = this.formulario.imagen!.imagenes!.filter(
       (e) => e !== name
     );
   }

@@ -5,7 +5,7 @@
   style="min-width: 250px"
 >
   <ng-content select=".header"> </ng-content>
-  <div class="flex gap-2 flex-wrap" *ngIf="formulario.imagen">
+  <div class="flex gap-2 flex-wrap w-full" *ngIf="formulario.imagen">
     <input
       style="display: none"
       name="imagen"
@@ -14,27 +14,48 @@
       #formFile
       accept="image/*"
       (change)="fileEvent($event)"
-      multiple
+      [multiple]="formulario.imagen!.maximoImagenes! > 1"
     />
     <div
-      *ngFor="let item of formulario.imagenes"
-      class="w-16 h-16 flex justify-center items-center relative"
+      class="w-full h-40 relative"
+      *ngIf="formulario.imagen!.maximoImagenes === 1"
     >
-      <app-boton-generico
-        [botones]="botonEliminar"
-        class="absolute -top-1 -right-1"
-        [valor]="item"
-      ></app-boton-generico>
-      <img class="object-fit rounded-lg" [src]="item" [alt]="item" />
+      <img
+        class="object-cover w-full h-40 rounded-lg"
+        [src]="formulario.imagen!.imagenes![0]"
+        [alt]="formulario.imagen!.imagenes![0]"
+      />
+      <div
+        class="absolute w-full h-full opacity-0 hover:bg-hover-100 hover:opacity-100 duration-300 top-0 left-0 cursor-pointer flex justify-center items-center"
+      >
+        <i
+          matRipple
+          class="bi bi-camera text-white absolute text-4xl cursor-pointer rounded-full p-2"
+          (click)="formFile.click()"
+        ></i>
+      </div>
     </div>
-    <div
-      class="w-16 h-16 flex justify-center items-center dark:bg-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 duration-300 cursor-pointer"
-      (click)="formFile.click()"
-    >
-      <i class="bi bi-plus"></i>
-    </div>
-    <small class="text-red-500">{{ error_cantidad_img }}</small>
+    <ng-container *ngIf="formulario.imagen!.maximoImagenes! > 1">
+      <div
+        *ngFor="let item of formulario.imagen!.imagenes"
+        class="w-16 h-16 flex justify-center items-center relative"
+      >
+        <app-boton-generico
+          [botones]="botonEliminar"
+          class="absolute -top-1 -right-1"
+          [valor]="item"
+        ></app-boton-generico>
+        <img class="object-fit rounded-lg" [src]="item" [alt]="item" />
+      </div>
+      <div
+        class="w-16 h-16 flex justify-center items-center dark:bg-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 duration-300 cursor-pointer"
+        (click)="formFile.click()"
+      >
+        <i class="bi bi-plus"></i>
+      </div>
+    </ng-container>
   </div>
+  <small class="text-red-500">{{ error_cantidad_img }}</small>
   <div
     class="flex w-full md:flex-row flex-column gap-1"
     *ngFor="let fila of column"
@@ -129,6 +150,13 @@
               {{ opcion.nombre }}
             </mat-option>
           </mat-select>
+        </div>
+        <div class="relative w-full" *ngIf="item.tipo === 'date'">
+          <input
+            matInput
+            [matDatepicker]="picker"
+          />
+          <mat-datepicker #picker></mat-datepicker>
         </div>
         <textarea
           [class]="

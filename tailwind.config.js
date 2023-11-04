@@ -18,6 +18,9 @@ module.exports = {
           DEFAULT: '#06b6d4',
           dark: '#0e7490',
         },
+        hover: {
+          100: '#28282872'
+        },
         icem: {
           100: "#6871ee",
           200: "#5e66d8",

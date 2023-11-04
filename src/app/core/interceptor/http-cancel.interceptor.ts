@@ -22,7 +22,7 @@ export class HttpCancelInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
+    return next.handle(this.addAuthToken(request)).pipe(
       debounceTime(600),
       catchError((error: any) => {
         this.snackService.error({
@@ -42,5 +42,19 @@ export class HttpCancelInterceptor implements HttpInterceptor {
         return throwError(() => error);
       })
     );
+  }
+
+  addAuthToken(request: HttpRequest<any>) {
+    if (localStorage.getItem('usuario')) {
+      const token = JSON.parse(localStorage.getItem('usuario')!).token;
+      ///administracion/obtener-datos-apariencia
+      let url = request.clone({ url: `${request.url}` });
+      return url.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+    return request;
   }
 }

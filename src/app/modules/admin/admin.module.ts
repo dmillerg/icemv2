@@ -10,9 +10,12 @@ import { TableGenericoComponent } from 'src/app/core/components/table-generico/t
 import { FormGenericoComponent } from 'src/app/core/components/form-generico/form-generico.component';
 import { DetalleGenericoComponent } from 'src/app/core/components/detalle-generico/detalle-generico.component';
 import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/boton-generico.component';
+import { CategoriaComponent } from './components/categoria/categoria.component';
+import { DesarrolloComponent } from './components/desarrollo/desarrollo.component';
+import { NoticiaComponent } from './components/noticia/noticia.component';
 
 @NgModule({
-  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent],
+  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

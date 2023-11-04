@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminContainerComponent } from './components/admin-container/admin-container.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { ProductoComponent } from './components/producto/producto.component';
+import { CategoriaComponent } from './components/categoria/categoria.component';
+import { DesarrolloComponent } from './components/desarrollo/desarrollo.component';
+import { NoticiaComponent } from './components/noticia/noticia.component';
 
 const routes: Routes = [
   {
@@ -24,15 +27,15 @@ const routes: Routes = [
       },
       {
         path: 'noticia',
-        component: ProductoComponent,
+        component: NoticiaComponent,
       },
       {
         path: 'categoria',
-        component: ProductoComponent,
+        component: CategoriaComponent,
       },
       {
         path: 'desarrollo',
-        component: ProductoComponent,
+        component: DesarrolloComponent,
       },
       {
         path: 'comentario',
