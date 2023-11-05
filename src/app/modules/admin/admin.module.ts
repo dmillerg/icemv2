@@ -15,9 +15,10 @@ import { DesarrolloComponent } from './components/desarrollo/desarrollo.componen
 import { NoticiaComponent } from './components/noticia/noticia.component';
 import { QuieneComponent } from './components/quiene/quiene.component';
 import { PedidoComponent } from './components/pedido/pedido.component';
+import { ComentarioComponent } from './components/comentario/comentario.component';
 
 @NgModule({
-  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent, QuieneComponent, PedidoComponent],
+  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent, QuieneComponent, PedidoComponent, ComentarioComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

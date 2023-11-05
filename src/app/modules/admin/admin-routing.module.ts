@@ -8,6 +8,7 @@ import { DesarrolloComponent } from './components/desarrollo/desarrollo.componen
 import { NoticiaComponent } from './components/noticia/noticia.component';
 import { QuieneComponent } from './components/quiene/quiene.component';
 import { PedidoComponent } from './components/pedido/pedido.component';
+import { ComentarioComponent } from './components/comentario/comentario.component';
 
 const routes: Routes = [
   {
@@ -41,7 +42,7 @@ const routes: Routes = [
       },
       {
         path: 'comentario',
-        component: ProductoComponent,
+        component: ComentarioComponent,
       },
       {
         path: 'desarrollo',

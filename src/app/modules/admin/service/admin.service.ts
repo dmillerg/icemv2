@@ -9,6 +9,7 @@ import { Desarrollo } from '../../desarrollo/model/desarrollo';
 import { Noticia } from '../../noticias/model/noticias';
 import { Quienes } from '../../quienes/model/quienes';
 import { Pedido } from 'src/app/core/models/pedido.model';
+import { Comentario } from '../model/comentario.model';
 
 @Injectable({
   providedIn: 'root',
@@ -465,4 +466,55 @@ export class AdminService {
     let direccion = this.url + 'cambiarestadopedidos/' + id_pedido;
     return this.http.put(direccion, formData);
   }
+
+  //comentario services
+  
+  /**
+   * Obtener los comentario en base de datos
+   * @param id_producto cantidad de comentario a devolver
+   * @returns
+   */
+  getComentario(id_producto: number = -1): Observable<Comentario[]> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'posts/' + id_producto.toString();
+    return this.http.get<Comentario[]>(direccion, { headers: headers });
+  }
+
+/**
+   * Obtiene un comentario por un id
+   * @param idComentario del comentario a obtener
+   * @returns 
+   */
+getComentarioByID(idComentario: number = -1): Observable<Comentario> {
+  const headers = { 'content-type': 'application/json' };
+  let direccion = this.url + 'postsByID/' + idComentario.toString();
+  return this.http.get<Comentario>(direccion, { headers: headers });
+  }
+
+/**
+  * Elimina un comentario
+  * @param id comentario a eliminar
+  * @returns
+  */
+deleteComentario(id: number = -1) {
+  let direccion = this.url + 'deletePosts/' + id.toString();
+  const headers = { 'content-type': 'application/json' };
+  const params = {
+    token: JSON.parse(localStorage.getItem('usuario')!).token,
+  };
+  return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+/**
+   * Guarda una nueva respuesta
+   * @param formData datos de la respuesta
+   * @returns
+   */
+addRespuestaComentario(formData: any) {
+  const headers = { 'content-type': 'application/json' };
+  formData.append('token',JSON.parse(localStorage.getItem('usuario')!).token,
+  );
+  let direccion = this.url + 'saveRespuesta';
+  return this.http.post(direccion, formData);
+  }
 }
