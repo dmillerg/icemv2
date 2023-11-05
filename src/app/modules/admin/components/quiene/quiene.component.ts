@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { SnackService } from 'src/app/core/components/snack/service/snack.service';
 import { take } from 'rxjs';
-import { Noticia } from 'src/app/modules/noticias/model/noticias';
+import { Quienes } from 'src/app/modules/quienes/model/quienes';
 import {
   addDetalle,
   deleteAllDetalle,
@@ -20,11 +20,11 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { Detalle } from 'src/app/core/components/detalle-generico/model/detalle.model';
 
 @Component({
-  selector: 'app-noticia',
-  templateUrl: './noticia.component.html',
-  styleUrls: ['./noticia.component.scss'],
+  selector: 'app-quiene',
+  templateUrl: './quiene.component.html',
+  styleUrls: ['./quiene.component.scss'],
 })
-export class NoticiaComponent implements OnInit {
+export class QuieneComponent implements OnInit {
   formulario?: Formulario;
   tabla!: Table;
 
@@ -39,9 +39,6 @@ export class NoticiaComponent implements OnInit {
     },
     {
       icono: 'bi bi-trash',
-      disabled: (value)=>{
-        return value.logo !== 'ICEM'
-      },
       class:
         'p-2 rounded h-fit hover:shadow-md text-icem-500 dark:text-gray-100 flex justify-center items-center',
       funcion: (value) => this.eliminar(value),
@@ -69,14 +66,14 @@ export class NoticiaComponent implements OnInit {
 
   botonesAgregarActualizar: Boton[] = [
     {
-      label: 'Agregar noticia',
+      label: 'Agregar persona',
       icono: 'bi bi-plus',
-      funcion: () => this.agregarDesarrollo(),
+      funcion: () => this.agregarQuienes(),
     },
     {
       label: 'Actualizar',
       icono: 'bi bi-arrow-clockwise',
-      funcion: () => this.obtenerNoticias(),
+      funcion: () => this.obtenerQuienes(),
     },
   ];
 
@@ -91,62 +88,59 @@ export class NoticiaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.obtenerNoticias();
+    this.obtenerQuienes();
   }
 
-  obtenerNoticias() {
+  obtenerQuienes() {
     this.generarTabla([]);
     this.adminService
-      .getNoticias()
+      .getQuienes()
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.generarTabla(result.map(e=>{
-            e.fecha = e.fecha==='0000-00-00 00:00:00'? '': e.fecha;
-            return e
-          }));
+          this.generarTabla(result);
         },
       });
   }
 
-  generarTabla(values?: Noticia[]) {
+  generarTabla(values?: Quienes[]) {
     this.tabla = {
       columnas: [
         {
           tipo: 'texto',
-          nombre: 'Título',
-          campo: 'titulo',
+          nombre: 'Nombre',
+          campo: 'nombre',
         },
         {
           tipo: 'texto',
-          nombre: 'Descripción',
-          campo: 'descripcion',
+          nombre: 'Cargo',
+          campo: 'cargo',
         },
         {
-          tipo: 'fecha',
-          nombre: 'Fecha',
-          campo: 'fecha',
+          tipo: 'texto',
+          nombre: 'Orden',
+          campo: 'orden',
         },
       ],
       values: values ?? [],
       cargando: !values,
       acciones: this.botones,
       accionesTexto: 'Acciones',
-      textoVacio: 'No hay noticias que gestionar',
+      textoVacio: 'No hay personas que gestionar',
     };
   }
 
-  seleccionado(item: Noticia) {
+  seleccionado(item: Quienes) {
     if (item) {
       this.generarFormulario(item);
       this.adminService.setFormulario(this.formulario!);
-      const noticia: Noticia = item;
+      const quienes: Quienes = item;
       this.store.dispatch(
         addDetalle({
           detalle: {
-            titulo: 'Editar noticia',
+            titulo: 'Editar persona',
             botones: this.botonesDetalle,
-            data: noticia,
+            data: quienes,
           },
         })
       );
@@ -158,64 +152,55 @@ export class NoticiaComponent implements OnInit {
       );
   }
 
-  generarFormulario(item?: Noticia) {
+  generarFormulario(item?: Quienes) {
     this.formulario = {
       controles: [
         {
           tipo: 'text',
-          nombre: 'Título',
-          control: 'titulo',
-          valor: item ? item.titulo : '',
-          validator: [Validators.required],
-        },
-        {
-          tipo: 'textarea',
-          nombre: 'Descripción',
-          control: 'descripcion',
-          valor: item ? item.descripcion : '',
+          nombre: 'Nombre',
+          control: 'nombre',
+          valor: item ? item.nombre : '',
           validator: [Validators.required],
         },
         {
           tipo: 'text',
-          nombre: 'Fuente',
-          control: 'fuente',
-          disabled: true,
-          valor: item ? item.fuente : 'ICEM',
+          nombre: 'Cargo',
+          control: 'cargo',
+          valor: item ? item.cargo : '',
           validator: [Validators.required],
         },
         {
-          tipo: 'date',
-          nombre: 'Fecha',
-          control: 'fecha',
-          valor: item ? item.fuente : '',
-          validator: [Validators.required],
+          tipo: 'number',
+          nombre: 'Orden',
+          control: 'orden',
+          valor: item ? item.orden : 1,
         },
         {
           tipo: 'text',
-          nombre: 'id',
+          nombre: 'ID',
           control: 'id',
-          valor: item ? item.id : '',
+          valor: item ? item.id : 1,
         },
       ],
-      columnas: [1, 1, 1, 1],
+      columnas: [1, 1, 1],
       imagen: {
         maximoImagenes: 1,
         imagenes: item
-          ? [environment.url_backend + `pictures/${item.id}?tipo=noticias`]
+          ? [environment.url_backend + `pictures/${item.id}?tipo=quienes`]
           : [],
       },
     };
   }
 
-  eliminar(noticia: Noticia) {
+  eliminar(quienes: Quienes) {
     let ref: any;
     const modal: Modal = {
-      texto: `Desea eliminar "${noticia.titulo}", esta acción no tiene vuelta atrás?`,
+      texto: `Desea eliminar "${quienes.nombre}", esta acción no tiene vuelta atrás?`,
       botones: [
         {
           label: 'Aceptar',
           icono: 'bi bi-check',
-          funcion: () => this.eliminarNoticia(noticia.id, ref),
+          funcion: () => this.eliminarQuienes(quienes.id, ref),
           cargando: () => this.loading,
         },
         { label: 'Cancelar', icono: 'bi bi-x', funcion: () => ref.close() },
@@ -227,15 +212,15 @@ export class NoticiaComponent implements OnInit {
     });
   }
 
-  eliminarNoticia(id: number, ref: DialogRef) {
+  eliminarQuienes(id: number, ref: DialogRef) {
     this.loading = true;
     this.adminService
-      .deleteNoticia(id)
+      .deleteQuienes(id)
       .pipe(take(1))
       .subscribe({
         next: () => {
           this.loading = false;
-          this.obtenerNoticias();
+          this.obtenerQuienes();
           this.store.dispatch(deleteAllDetalle());
           setTimeout(() => ref.close(), 300);
         },
@@ -243,10 +228,10 @@ export class NoticiaComponent implements OnInit {
       });
   }
 
-  agregarDesarrollo() {
+  agregarQuienes() {
     this.generarFormulario();
     const detalle: Detalle = {
-      titulo: 'Agregar Noticia',
+      titulo: 'Agregar nuevo desarrollo',
       subtitulo: 'Rellene todos los campos necesarios',
       botones: [
         {
@@ -269,17 +254,18 @@ export class NoticiaComponent implements OnInit {
     const data = this.formulario?.form?.getRawValue();
     const formData = this.formulario?.imagen?.formDataImage ?? new FormData();
     formData.append('id', data.id.toString());
-    formData.append('titulo', data.titulo.toString());
-    formData.append('descripcion', data.descripcion.toString());
+    formData.append('nombre', data.nombre.toString());
+    formData.append('cargo', data.cargo.toString());
+    formData.append('orden', data.orden.toString());
 
     if (accion) {
-      this.adminService.updateNoticia(formData, data.id).subscribe({
+      this.adminService.updateQuienes(formData, data.id).subscribe({
         next: () => {
           this.loadingEditar = false;
-          this.obtenerNoticias();
+          this.obtenerQuienes();
           this.store.dispatch(deleteAllDetalle());
           this.snackService.success({
-            texto: 'La noticia se ha editado correctamente.',
+            texto: 'La persona se ha editado correctamente.',
           });
         },
         error: () => {
@@ -288,15 +274,15 @@ export class NoticiaComponent implements OnInit {
       });
     } else {
       this.adminService
-        .addNoticia(formData)
+        .addQuienes(formData)
         .pipe(take(1))
         .subscribe({
           next: () => {
             this.loadingEditar = false;
-            this.obtenerNoticias();
+            this.obtenerQuienes();
             this.store.dispatch(deleteAllDetalle());
             this.snackService.success({
-              texto: 'La noticia se ha agregado correctamente.',
+              texto: 'La persona se ha agregado correctamente.',
             });
           },
           error: () => {

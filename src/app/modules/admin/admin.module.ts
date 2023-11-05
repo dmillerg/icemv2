@@ -13,9 +13,11 @@ import { BotonGenericoComponent } from 'src/app/core/components/boton-generico/b
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { DesarrolloComponent } from './components/desarrollo/desarrollo.component';
 import { NoticiaComponent } from './components/noticia/noticia.component';
+import { QuieneComponent } from './components/quiene/quiene.component';
+import { PedidoComponent } from './components/pedido/pedido.component';
 
 @NgModule({
-  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent],
+  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent, QuieneComponent, PedidoComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

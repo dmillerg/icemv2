@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { Producto } from '../../productos/model/producto';
 import { Desarrollo } from '../../desarrollo/model/desarrollo';
 import { Noticia } from '../../noticias/model/noticias';
+import { Quienes } from '../../quienes/model/quienes';
+import { Pedido } from 'src/app/core/models/pedido.model';
 
 @Injectable({
   providedIn: 'root',
@@ -355,5 +357,112 @@ export class AdminService {
       token: JSON.parse(localStorage.getItem('usuario')!).token,
     };
     return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Obtener las personas en base de datos
+   * @param limit cantidad de personas a devolver
+   * @returns
+   */
+  getQuienes(limit: number = 0): Observable<Quienes[]> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'quienes/' + limit.toString();
+    return this.http.get<Quienes[]>(direccion, { headers: headers });
+  }
+
+  /**
+   * Actualiza la persona
+   * @param formData datos actualizados de la persona
+   * @param id id de la persona a actualizar
+   * @returns
+   */
+  updateQuienes(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'quienes/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda una nueva persona
+   * @param formData datos de la persona
+   * @returns
+   */
+  addQuienes(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'saveQuienes';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Elimina una persona
+   * @param id persona a eliminar
+   * @returns
+   */
+  deleteQuienes(id: number = -1) {
+    let direccion = this.url + 'deleteQuienes/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Obtiene todos los pedidos de los usuarios
+   * @param user_id id del usuario
+   * @returns 
+   */
+  getPedidos(user_id: number = -1): Observable<Pedido[]> {
+    let direccion = this.url + 'pedidos/' + user_id;
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.get<Pedido[]>(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Agrega un pedido
+   * @param formData datos de un pedido
+   * @returns 
+   */
+  addPedido(formData: FormData) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'pedidos';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+ * Elimina un pedido
+ * @param id pedido a eliminar
+ * @returns
+ */
+  deletePedido(id: number = -1) {
+    let direccion = this.url + 'pedidos/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Cambia el estado actula del pedido
+   * @param formData Estado del pedido
+   * @param id_pedido del pedido
+   * @returns 
+   */
+  cambiarEstadoPedido(formData: FormData, id_pedido: number = -1) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'cambiarestadopedidos/' + id_pedido;
+    return this.http.put(direccion, formData);
   }
 }

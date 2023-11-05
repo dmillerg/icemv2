@@ -5,7 +5,7 @@ export interface Boton {
   class?: string;
   tooltip?:string;
   funcion?: (valor?: any) => void;
-  disabled?: () => boolean;
+  disabled?: (valor?: any) => boolean;
   ocultar?: () => boolean;
   cargando?: () => boolean;
 }

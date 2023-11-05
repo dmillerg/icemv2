@@ -6,8 +6,8 @@
       *ngIf="!item.ocultar"
       [disabled]="
         item.disabled
-          ? item.disabled()
-          : false || (item.cargando ? item.cargando() : false)
+          ? item.disabled(valor)
+          : false 
       "
       (click)="emit(item.funcion)"
       class="flex items-center justify-center gap-2 hover:scale-105"

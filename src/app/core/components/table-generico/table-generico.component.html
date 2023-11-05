@@ -18,9 +18,17 @@
           class="line-clamp-2 whitespace-nowrap"
           >$ {{ row[column.campo] | number : "1.1-3" }}</span
         >
-        <span *ngIf="column.tipo === 'fecha'" class="line-clamp-2">{{
-          row[column.campo] | date : "dd-MM-yyyy HH:mm a"
-        }}</span>
+        <span
+          *ngIf="column.tipo === 'fecha'"
+          class="line-clamp-2"
+          [ngClass]="{ 'text-center': row[column.campo].length === 0 }"
+        >
+          {{
+            row[column.campo].length > 0
+              ? (row[column.campo] | date : "dd-MM-yyyy HH:mm a")
+              : "-"
+          }}</span
+        >
         <span
           *ngIf="column.tipo === 'numero'"
           class="line-clamp-2 w-full text-center"
@@ -46,9 +54,14 @@
     </ng-container>
 
     <ng-container matColumnDef="acciones" *ngIf="table.acciones">
-      <th mat-header-cell *matHeaderCellDef class="w-32">{{ table.accionesTexto }}</th>
+      <th mat-header-cell *matHeaderCellDef class="w-32">
+        {{ table.accionesTexto }}
+      </th>
       <td mat-cell *matCellDef="let element">
-        <app-boton-generico [botones]="table.acciones" [valor]="element"></app-boton-generico>
+        <app-boton-generico
+          [botones]="table.acciones"
+          [valor]="element"
+        ></app-boton-generico>
       </td>
     </ng-container>
 
@@ -73,7 +86,7 @@
     <tr mat-header-row *matHeaderRowDef="columnas"></tr>
     <tr
       mat-row
-      (click)="table.acciones?'':mostrar(row)"
+      (click)="table.acciones ? '' : mostrar(row)"
       [class.ripple-row]="row.ripple"
       [class.row-selected]="columnasSeleccionadas.has(row)"
       [class]="seleccionableRow ? 'select' : ''"

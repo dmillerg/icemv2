@@ -6,6 +6,8 @@ import { ProductoComponent } from './components/producto/producto.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { DesarrolloComponent } from './components/desarrollo/desarrollo.component';
 import { NoticiaComponent } from './components/noticia/noticia.component';
+import { QuieneComponent } from './components/quiene/quiene.component';
+import { PedidoComponent } from './components/pedido/pedido.component';
 
 const routes: Routes = [
   {
@@ -46,8 +48,8 @@ const routes: Routes = [
         component: ProductoComponent,
       },
       {
-        path: 'quienes',
-        component: ProductoComponent,
+        path: 'quiene',
+        component: QuieneComponent,
       },
       {
         path: 'recogida',
@@ -55,8 +57,8 @@ const routes: Routes = [
       },
 
       {
-        path: 'pedidos',
-        component: ProductoComponent,
+        path: 'pedido',
+        component: PedidoComponent,
       },
       {
         path: 'configuracion',
