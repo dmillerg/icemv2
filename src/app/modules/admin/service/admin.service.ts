@@ -10,6 +10,7 @@ import { Noticia } from '../../noticias/model/noticias';
 import { Quienes } from '../../quienes/model/quienes';
 import { Pedido } from 'src/app/core/models/pedido.model';
 import { Comentario } from '../model/comentario.model';
+import { Recogida } from '../model/recogida.model';
 
 @Injectable({
   providedIn: 'root',
@@ -419,7 +420,7 @@ export class AdminService {
   /**
    * Obtiene todos los pedidos de los usuarios
    * @param user_id id del usuario
-   * @returns 
+   * @returns
    */
   getPedidos(user_id: number = -1): Observable<Pedido[]> {
     let direccion = this.url + 'pedidos/' + user_id;
@@ -427,25 +428,31 @@ export class AdminService {
     const params = {
       token: JSON.parse(localStorage.getItem('usuario')!).token,
     };
-    return this.http.get<Pedido[]>(direccion, { headers: headers, params: params });
+    return this.http.get<Pedido[]>(direccion, {
+      headers: headers,
+      params: params,
+    });
   }
 
   /**
    * Agrega un pedido
    * @param formData datos de un pedido
-   * @returns 
+   * @returns
    */
   addPedido(formData: FormData) {
-    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
     let direccion = this.url + 'pedidos';
     return this.http.post(direccion, formData);
   }
 
   /**
- * Elimina un pedido
- * @param id pedido a eliminar
- * @returns
- */
+   * Elimina un pedido
+   * @param id pedido a eliminar
+   * @returns
+   */
   deletePedido(id: number = -1) {
     let direccion = this.url + 'pedidos/' + id.toString();
     const headers = { 'content-type': 'application/json' };
@@ -459,16 +466,19 @@ export class AdminService {
    * Cambia el estado actula del pedido
    * @param formData Estado del pedido
    * @param id_pedido del pedido
-   * @returns 
+   * @returns
    */
   cambiarEstadoPedido(formData: FormData, id_pedido: number = -1) {
-    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
     let direccion = this.url + 'cambiarestadopedidos/' + id_pedido;
     return this.http.put(direccion, formData);
   }
 
   //comentario services
-  
+
   /**
    * Obtener los comentario en base de datos
    * @param id_producto cantidad de comentario a devolver
@@ -477,44 +487,108 @@ export class AdminService {
   getComentario(id_producto: number = -1): Observable<Comentario[]> {
     const headers = { 'content-type': 'application/json' };
     let direccion = this.url + 'posts/' + id_producto.toString();
-    return this.http.get<Comentario[]>(direccion, { headers: headers });
-  }
+    return this.http.get<Comentario[]>(direccion, { headers: headers });
+  }
 
-/**
+  /**
    * Obtiene un comentario por un id
    * @param idComentario del comentario a obtener
-   * @returns 
+   * @returns
    */
-getComentarioByID(idComentario: number = -1): Observable<Comentario> {
-  const headers = { 'content-type': 'application/json' };
-  let direccion = this.url + 'postsByID/' + idComentario.toString();
-  return this.http.get<Comentario>(direccion, { headers: headers });
-  }
+  getComentarioByID(idComentario: number = -1): Observable<Comentario> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'postsByID/' + idComentario.toString();
+    return this.http.get<Comentario>(direccion, { headers: headers });
+  }
 
-/**
-  * Elimina un comentario
-  * @param id comentario a eliminar
-  * @returns
-  */
-deleteComentario(id: number = -1) {
-  let direccion = this.url + 'deletePosts/' + id.toString();
-  const headers = { 'content-type': 'application/json' };
-  const params = {
-    token: JSON.parse(localStorage.getItem('usuario')!).token,
-  };
-  return this.http.delete(direccion, { headers: headers, params: params });
-  }
+  /**
+   * Elimina un comentario
+   * @param id comentario a eliminar
+   * @returns
+   */
+  deleteComentario(id: number = -1) {
+    let direccion = this.url + 'deletePosts/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
 
-/**
+  /**
    * Guarda una nueva respuesta
    * @param formData datos de la respuesta
    * @returns
    */
-addRespuestaComentario(formData: any) {
-  const headers = { 'content-type': 'application/json' };
-  formData.append('token',JSON.parse(localStorage.getItem('usuario')!).token,
-  );
-  let direccion = this.url + 'saveRespuesta';
-  return this.http.post(direccion, formData);
-  }
+  addRespuestaComentario(formData: any) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append(
+      'token',
+      JSON.parse(localStorage.getItem('usuario')!).token
+    );
+    let direccion = this.url + 'saveRespuesta';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Obtener los scraps en base de datos
+   * @param limit cantidad de scraps a devolver
+   * @returns
+   */
+  getScraps(limit: number = 0): Observable<Recogida[]> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'scrap/' + limit.toString();
+    return this.http.get<Recogida[]>(direccion, { headers: headers });
+  }
+
+  /**
+   * Actualiza el scrap
+   * @param formData datos actualizados del scrap
+   * @param id id del scrap a actualizar
+   * @returns
+   */
+  updateScrap(formData: FormData, id: number) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'scrap/' + id;
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Guarda una nuevo scrap
+   * @param formData datos del scrap
+   * @returns
+   */
+  addScrap(formData: FormData) {
+    const headers = { 'content-type': 'application/json' };
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'saveScrap';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Elimina un scrap
+   * @param id scrap a eliminar
+   * @returns
+   */
+  deleteScrap(id: number = -1) {
+    let direccion = this.url + 'deleteScrap/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+  * Prueba un scrap para ver si devuelve correctamente
+  * @param id scrap a probar
+  * @returns
+  */
+  probarScrap(id: number = -1, formData: FormData): Observable<any[]> {
+    let direccion = this.url + 'probarScrap/' + id.toString();
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    const headers = { 'content-type': 'application/json' };
+    return this.http.post<any[]>(direccion, formData);
+  }
 }

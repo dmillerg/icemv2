@@ -16,9 +16,10 @@ import { NoticiaComponent } from './components/noticia/noticia.component';
 import { QuieneComponent } from './components/quiene/quiene.component';
 import { PedidoComponent } from './components/pedido/pedido.component';
 import { ComentarioComponent } from './components/comentario/comentario.component';
+import { RecogidaComponent } from './components/recogida/recogida.component';
 
 @NgModule({
-  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent, QuieneComponent, PedidoComponent, ComentarioComponent],
+  declarations: [AdminContainerComponent, UsuarioComponent, ProductoComponent, CategoriaComponent, DesarrolloComponent, NoticiaComponent, QuieneComponent, PedidoComponent, ComentarioComponent, RecogidaComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

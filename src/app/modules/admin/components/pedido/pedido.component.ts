@@ -8,13 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { SnackService } from 'src/app/core/components/snack/service/snack.service';
 import { take } from 'rxjs';
 import { Pedido } from 'src/app/core/models/pedido.model';
-import { addDetalle, deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import {
+  addDetalle,
+  deleteAllDetalle,
+} from 'src/app/shared/state/actions/detalle.actions';
 import { Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { Modal } from 'src/app/core/components/modal-generico/model/modal.model';
 import { ModalGenericoComponent } from 'src/app/core/components/modal-generico/modal-generico.component';
 import { DialogRef } from '@angular/cdk/dialog';
-import { Detalle } from 'src/app/core/components/detalle-generico/model/detalle.model';
 
 @Component({
   selector: 'app-pedido',
@@ -27,7 +28,7 @@ export class PedidoComponent implements OnInit {
 
   botones: Boton[] = [
     {
-      icono: 'bi bi-pencil',
+      icono: 'bi bi-basket',
       class:
         'p-2 rounded h-fit hover:border dark:border-icem-500 text-icem-500 dark:text-gray-100 flex justify-center items-center',
       funcion: (value) => {
@@ -39,16 +40,6 @@ export class PedidoComponent implements OnInit {
       class:
         'p-2 rounded h-fit hover:shadow-md text-icem-500 dark:text-gray-100 flex justify-center items-center',
       funcion: (value) => this.eliminar(value),
-    },
-  ];
-
-  botonesDetalle: Boton[] = [
-    {
-      icono: 'bi bi-trash',
-      tooltip: 'Eliminar',
-      funcion: (value) => {
-        this.eliminar(value);
-      },
     },
   ];
 
@@ -114,7 +105,6 @@ export class PedidoComponent implements OnInit {
           nombre: 'Fecha',
           campo: 'fecha',
         },
-        
       ],
       values: values ?? [],
       cargando: !values,
@@ -132,8 +122,27 @@ export class PedidoComponent implements OnInit {
       this.store.dispatch(
         addDetalle({
           detalle: {
-            titulo: 'Editar pedido',
-            botones: this.botonesDetalle,
+            titulo: 'Procesar el pedido',
+            subtitulo:
+              'Informe al usuario que su pedido cambiando el estado de su pedido o simplemente finalicelo.',
+            botones: [
+              {
+                icono: 'bi bi-check',
+                tooltip: 'Modificar estado',
+                cargando: () => this.loading,
+                disabled: () => item.estado === 'finalizado',
+                funcion: () => {
+                  this.aplicarCambio();
+                },
+              },
+              {
+                icono: 'bi bi-trash',
+                tooltip: 'Eliminar',
+                funcion: (value) => {
+                  this.eliminar(value);
+                },
+              },
+            ],
             data: pedido,
           },
         })
@@ -150,10 +159,15 @@ export class PedidoComponent implements OnInit {
     this.formulario = {
       controles: [
         {
-          tipo: 'text',
+          tipo: 'select',
           nombre: 'Estado',
           control: 'estado',
-          valor: item ? item.user_id : '',
+          valor: item ? item.estado : '',
+          opciones: [
+            { codigo: 'reservado', nombre: 'Reservado' },
+            { codigo: 'espera', nombre: 'En espera' },
+            { codigo: 'finalizado', nombre: 'Finalizado' },
+          ],
           validator: [Validators.required],
         },
         {
@@ -190,12 +204,15 @@ export class PedidoComponent implements OnInit {
   eliminarPedido(id: number, ref: DialogRef) {
     this.loading = true;
     this.adminService
-      .deleteQuienes(id)
+      .deletePedido(id)
       .pipe(take(1))
       .subscribe({
         next: () => {
           this.loading = false;
           this.obtenerPedidos();
+          this.snackService.success({
+            texto: 'Pedido eliminado exitosamente.',
+          });
           this.store.dispatch(deleteAllDetalle());
           setTimeout(() => ref.close(), 300);
         },
@@ -203,4 +220,26 @@ export class PedidoComponent implements OnInit {
       });
   }
 
+  aplicarCambio() {
+    this.loading = true;
+    const data = this.formulario?.form?.getRawValue();
+    const formData: FormData = new FormData();
+    formData.append('estado', data.estado);
+    this.adminService
+      .cambiarEstadoPedido(formData, data.id)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.snackService.success({
+            texto: `El estado del pedido ha cambiado a ${data.estado}`,
+          });
+          this.obtenerPedidos();
+          this.store.dispatch(deleteAllDetalle());
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
+  }
 }
