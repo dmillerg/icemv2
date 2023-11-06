@@ -26,6 +26,7 @@ import { Detalle } from 'src/app/core/components/detalle-generico/model/detalle.
 export class RecogidaComponent implements OnInit {
   formulario?: Formulario;
   tabla!: Table;
+  scrappingLoop: boolean = false;
 
   botones: Boton[] = [
     {
@@ -92,11 +93,20 @@ export class RecogidaComponent implements OnInit {
       icono: 'bi bi-arrow-clockwise',
       funcion: () => this.obtenerQuienes(),
     },
+    {
+      label: this.scrappingLoop ? 'Iniciar recogida' : 'Detener recogida',
+      tooltip:
+        (this.scrappingLoop ? 'Activa' : 'Desactiva') +
+        ' una recogida de noticias automática de los sitios previamente configurados, en un intervalo configurado.',
+      icono: this.scrappingLoop ? 'bi bi-play-circle' : 'bi bi-stop-circle',
+      funcion: () => this.obtenerScrappingLoop(),
+    },
   ];
 
   loading: boolean = false;
   loadingEditar: boolean = false;
   loadingPrueba: boolean = false;
+  loadingScrap: boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -107,6 +117,8 @@ export class RecogidaComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerQuienes();
+    this.obtenerScrappingLoop();
+    this.generarBotonesSuperiores();
   }
 
   obtenerQuienes() {
@@ -477,5 +489,69 @@ export class RecogidaComponent implements OnInit {
           }
         },
       });
+  }
+
+  obtenerScrappingLoop() {
+    this.adminService
+      .obtenerScrappingLoop()
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.scrappingLoop = result;
+
+          this.generarBotonesSuperiores();
+        },
+      });
+  }
+
+  generarBotonesSuperiores() {
+    this.botonesAgregarActualizar = [
+      {
+        label: 'Agregar sitio de recogida',
+        icono: 'bi bi-plus',
+        funcion: () => this.agregarQuienes(),
+      },
+      {
+        label: 'Actualizar',
+        icono: 'bi bi-arrow-clockwise',
+        funcion: () => this.obtenerQuienes(),
+      },
+      {
+        label: this.scrappingLoop ? 'Iniciar recogida' : 'Detener recogida',
+        tooltip:
+          (this.scrappingLoop ? 'Activa' : 'Desactiva') +
+          ' una recogida de noticias automática de los sitios previamente configurados, en un intervalo configurado.',
+        icono: this.scrappingLoop ? 'bi bi-play-circle' : 'bi bi-stop-circle',
+        funcion: () => this.iniciarDetenerScrapping(),
+      },
+    ];
+  }
+
+  iniciarDetenerScrapping() {
+    this.loadingScrap = true;
+    if (this.scrappingLoop) {
+      this.adminService
+        .IniciarScrap()
+        .pipe(take(1))
+        .subscribe({
+          next: (result) => {
+            this.loadingScrap = false;
+            this.scrappingLoop = false;
+            this.snackService.success({
+              texto: 'Se ha iniciado la búsqueda automática.',
+            });
+            this.generarBotonesSuperiores();
+          },
+        });
+    } else {
+      this.adminService.DetenerScrap().subscribe((result) => {
+        this.snackService.success({
+          texto: 'La búsqueda automática se ha detenido.',
+        });
+        this.loadingScrap = false;
+        this.scrappingLoop = true;
+        this.generarBotonesSuperiores();
+      });
+    }
   }
 }

@@ -12,6 +12,7 @@ import { ComentarioComponent } from './components/comentario/comentario.componen
 import { RecogidaComponent } from './components/recogida/recogida.component';
 import { VentaComponent } from './components/venta/venta.component';
 import { PreguntaComponent } from './components/pregunta/pregunta.component';
+import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 
 const routes: Routes = [
   {
@@ -62,7 +63,7 @@ const routes: Routes = [
       },
       {
         path: 'configuracion',
-        component: ProductoComponent,
+        component: ConfiguracionComponent,
       },
       {
         path: 'venta',

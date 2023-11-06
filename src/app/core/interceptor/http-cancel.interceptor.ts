@@ -25,19 +25,26 @@ export class HttpCancelInterceptor implements HttpInterceptor {
     return next.handle(this.addAuthToken(request)).pipe(
       debounceTime(600),
       catchError((error: any) => {
-        this.snackService.error({
-          titulo: 'Error',
-          texto: `${MensajesError[error.status]}`,
-        });
         if (error.status === 401) {
-          this.authService
-            .logout()
-            .pipe(take(1))
-            .subscribe({
-              next: () => {
-                location.reload();
-              },
+          if (request.url.includes('login')) {
+            this.snackService.error({
+              titulo: 'Usuario o contraseña incorrecta',
+              texto: 'Revise que haya puesto sus credenciales correctamente.',
             });
+          } else {
+            this.snackService.error({
+              titulo: 'Error',
+              texto: `${MensajesError[error.status]}`,
+            });
+            this.authService
+              .logout()
+              .pipe(take(1))
+              .subscribe({
+                next: () => {
+                  location.reload();
+                },
+              });
+          }
         }
         return throwError(() => error);
       })

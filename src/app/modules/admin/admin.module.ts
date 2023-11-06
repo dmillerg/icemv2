@@ -19,6 +19,7 @@ import { ComentarioComponent } from './components/comentario/comentario.componen
 import { VentaComponent } from './components/venta/venta.component';
 import { PreguntaComponent } from './components/pregunta/pregunta.component';
 import { RecogidaComponent } from './components/recogida/recogida.component';
+import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { RecogidaComponent } from './components/recogida/recogida.component';
     ComentarioComponent,
     RecogidaComponent,
     VentaComponent,
-    PreguntaComponent
+    PreguntaComponent,
+    ConfiguracionComponent
   ],
   imports: [
     CommonModule,

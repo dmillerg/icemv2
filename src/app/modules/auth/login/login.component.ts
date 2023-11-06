@@ -34,8 +34,22 @@ export class LoginComponent {
           placeholder: 'Escriba contraseña',
           validator: [Validators.required],
         },
+        {
+          tipo: 'boton',
+          control: 'Boton',
+          nombre: 'boton',
+          icono: 'bi bi-lock',
+          botones: [
+            {
+              label: '¿Olvidaste tu contraseña?',
+              class:
+                'text-icem-700 dark:text-icem-100 bg-transparent py-2 px-2 rounded-full',
+            },
+          ],
+          placeholder: 'Escriba contraseña',
+        },
       ],
-      columnas: [1, 1],
+      columnas: [1, 1, 1],
       skeleton: false,
     };
     setTimeout(() => this.form.emit(this.formulario.form), 500);

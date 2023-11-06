@@ -13,6 +13,7 @@ import { Comentario } from '../model/comentario.model';
 import { Recogida } from '../model/recogida.model';
 import { Mensaje } from '../model/pregunta.model';
 import { Venta } from '../model/venta.model';
+import { Configuracion } from 'src/app/core/models/configuracion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -698,5 +699,63 @@ export class AdminService {
       token: JSON.parse(localStorage.getItem('usuario')!).token,
     };
     return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Obtiene todas las configuraciones de la pagina
+   * @returns 
+   */
+  getConfiguraciones(): Observable<Configuracion[]> {
+    let direccion = this.url + 'configuraciones';
+    return this.http.get<Configuracion[]>(direccion);
+  }
+
+  /**
+   * Obtiene los datos de una configuracion
+   * @param formData nombre de la configuracion a buscar
+   * @returns 
+   */
+  getConfiguracion(nombre: string): Observable<Configuracion> {
+    // formData.append('token', this.storage.retrieve('usuario').token);
+    let direccion = this.url + 'configuracion'
+    return this.http.get<Configuracion>(direccion, { params: { nombre: nombre } });
+  }
+
+  /**
+   * Guarda los cambios en las configuraciones
+   * @param formData configuraciones nuevas
+   * @returns 
+   */
+  saveConfigs(formData: FormData) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'configuraciones/'
+    return this.http.post<any>(direccion, formData);
+  }
+
+  /**
+   * Obtiene si esta corriendo el intervalo de scrap
+   * @returns 
+   */
+  obtenerScrappingLoop(): Observable<boolean>{
+    const direccion = this.url + 'scraploop'
+    return this.http.get<boolean>(direccion);
+  }
+
+  /**
+   * Inicia la busqueda de scrapp
+   * @returns 
+   */
+  IniciarScrap() {
+    let direccion = this.url + 'iniciarScrap' ;
+    return this.http.get(direccion);
+  }
+
+  /**
+   * Detiene el scrap para que no siga buscando
+   * @returns 
+   */
+  DetenerScrap() {
+    let direccion = this.url + 'detenerScrap';
+    return this.http.get(direccion);
   }
 }

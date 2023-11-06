@@ -101,6 +101,7 @@ export class RegisterLoginModalComponent {
               this.close(user);
             }, 500);
           },
+          error: () => (this.cargando = false),
         });
     } else {
       this.formLogin.markAllAsTouched();

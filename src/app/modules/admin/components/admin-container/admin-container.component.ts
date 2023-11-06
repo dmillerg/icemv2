@@ -29,7 +29,7 @@ export class AdminContainerComponent {
     { nombre: 'Categorías', ruta: 'categoria' },
     { nombre: 'Desarrollos', ruta: 'desarrollo' },
     { nombre: 'Comentarios', ruta: 'comentario' },
-    { nombre: 'Quienes', ruta: 'quiene' },
+    { nombre: 'Quienes', ruta: 'quienes' },
     { nombre: 'Recogida', ruta: 'recogida' },
     { nombre: 'Pedidos', ruta: 'pedido' },
     { nombre: 'Configuración', ruta: 'configuracion' },
