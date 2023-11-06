@@ -11,6 +11,7 @@ import { SectionCatalogoComponent } from './section-catalogo/section-catalogo.co
 import { FormGenericoComponent } from 'src/app/core/components/form-generico/form-generico.component';
 import { SectionContactenosComponent } from 'src/app/core/components/section-contactenos/section-contactenos.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SectionNoticiasComponent } from './section-noticias/section-noticias.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     SectionProductosComponent,
     SectionDesarrolloComponent,
     SectionCatalogoComponent,
+    SectionNoticiasComponent,
   ],
   imports: [
     CommonModule,
