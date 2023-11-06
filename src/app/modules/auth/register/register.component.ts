@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Collapse } from 'src/app/core/components/collapse/model/collapse.model';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
+import { matchPasswordValidator } from 'src/app/core/validators/match-password.validator';
 
 @Component({
   selector: 'app-register',
@@ -77,7 +78,7 @@ export class RegisterComponent implements OnInit {
           control: 'confirm',
           nombre: 'Confirmación de contraseña',
           icono: 'bi bi-lock',
-          validator: [Validators.required],
+          validator: [Validators.required,matchPasswordValidator],
         },
       ],
       columnas: [1, 1, 1, 1, 1],

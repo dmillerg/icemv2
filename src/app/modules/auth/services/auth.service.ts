@@ -91,4 +91,47 @@ export class AuthService {
       return true;
     } else return false;
   }
+
+  /**
+   * Obtener un usuario por su id
+   * @param id del usauario
+   * @returns
+   */
+  getUsuariosById(id: number = -1): Observable<Usuario> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'usuario/' + id.toString();
+    return this.http.get<Usuario>(direccion, { headers: headers });
+  }
+
+  /**
+   * Obtener un usuario por su user
+   * @param user del usuario
+   * @returns
+   */
+  getUsuariosByUser(user: string = ''): Observable<Usuario> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'usuariobyuser/' + user.toString();
+    return this.http.get<Usuario>(direccion, { headers: headers });
+  }
+
+  /**
+   * Obtener un usuario por su email
+   * @param email del usuario
+   * @returns
+   */
+  getUsuariosByEmail(email: string = ''): Observable<Usuario> {
+    const headers = { 'content-type': 'application/json' };
+    let direccion = this.url + 'usuariobyemail/' + email.toString();
+    return this.http.get<Usuario>(direccion, { headers: headers });
+  }
+
+  /**
+   * Activa la cuenta de un usuario
+   * @param id del usuario
+   * @returns 
+   */
+  activarUsuario(id: number) {
+    let direccion = this.url + 'activarUsuario/' + id.toString();
+    return this.http.get<any>(direccion)
+  }
 }

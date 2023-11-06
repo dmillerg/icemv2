@@ -12,6 +12,7 @@ import {
   ReactiveFormsModule,
   FormControl,
   Validators,
+  FormBuilder,
 } from '@angular/forms';
 import { Control, Formulario } from './model/formulario.model';
 import { BotonGenericoComponent } from '../boton-generico/boton-generico.component';
@@ -55,6 +56,10 @@ export class FormGenericoComponent implements OnInit {
     },
   ];
 
+  constructor(private fb: FormBuilder){
+
+  }
+
   ngOnInit(): void {
     this.obtenerForm(this.formulario);
   }
@@ -62,7 +67,7 @@ export class FormGenericoComponent implements OnInit {
   obtenerForm(form: Formulario): void {
     this.formulario = form;
     let control = [...form.controles];
-    const formGroup: FormGroup = new FormGroup({});
+    const formGroup: FormGroup = this.fb.group({});
 
     this.formulario.controles.forEach((e) => {
       if (e)
@@ -91,6 +96,12 @@ export class FormGenericoComponent implements OnInit {
       if (this.max < e) this.max = e;
       this.column.push(fila);
     });
+    // formGroup.setValidators(this.formulario.validator!)
+    // if(this.formulario.validator){
+    //   this.formulario.validator.forEach(e=>{
+    //     formGroup.setValidators(e)
+    //   })
+    // }
     this.form = formGroup;
 
     this.formulario.form! = formGroup;

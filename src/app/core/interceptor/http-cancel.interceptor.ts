@@ -31,7 +31,13 @@ export class HttpCancelInterceptor implements HttpInterceptor {
               titulo: 'Usuario o contraseña incorrecta',
               texto: 'Revise que haya puesto sus credenciales correctamente.',
             });
-          } else {
+          } else if(request.url.includes('links')){
+            this.snackService.error({
+              titulo: 'Link inválido',
+              texto: 'El tiempo de validez del link ha expirado o no es correcto.',
+            });
+          }
+          else {
             this.snackService.error({
               titulo: 'Error',
               texto: `${MensajesError[error.status]}`,
@@ -45,6 +51,11 @@ export class HttpCancelInterceptor implements HttpInterceptor {
                 },
               });
           }
+        }else{
+          this.snackService.error({
+            titulo: 'Error',
+            texto: `${MensajesError[error.status]}`,
+          });
         }
         return throwError(() => error);
       })

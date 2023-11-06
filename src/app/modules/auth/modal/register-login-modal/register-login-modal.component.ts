@@ -60,13 +60,13 @@ export class RegisterLoginModalComponent {
   }
 
   aceptar() {
-    this.cargando = true;
     if (this.login) this.loginUsuario();
     else this.registrarUsuario();
   }
 
   loginUsuario() {
     if (this.formLogin.valid) {
+      this.cargando = true;
       const login = this.formLogin.getRawValue();
       const formData = new FormData();
       formData.append('usuario', login.usuario);
@@ -110,6 +110,7 @@ export class RegisterLoginModalComponent {
 
   registrarUsuario() {
     if (this.formObligatorio.valid) {
+      this.cargando = true;
       const registerObligatorio = this.formObligatorio.getRawValue();
       const registerOpcional = this.formOpcional.getRawValue();
       const formData = new FormData();
@@ -172,7 +173,11 @@ export class RegisterLoginModalComponent {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          console.log(result);
+          this.snackService.success({
+            texto:
+              'Se le ha enviado un correo a su dirección de correo por favor verifiquelo.',
+          });
+          this.close();
         },
       });
   }

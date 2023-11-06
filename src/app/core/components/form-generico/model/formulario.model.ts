@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validator } from '@angular/forms';
 import { Boton } from '../../boton-generico/model/boton.model';
 export interface Formulario {
   controles: Control[];
@@ -6,7 +6,8 @@ export interface Formulario {
   autofixed?: boolean;
   skeleton?: boolean;
   form?: FormGroup;
-  imagen?: Imagenes
+  validator?: Validator[];
+  imagen?: Imagenes;
 }
 
 export interface Imagenes{
