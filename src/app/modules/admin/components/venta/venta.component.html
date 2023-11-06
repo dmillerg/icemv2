@@ -1,0 +1,14 @@
+<div class="bg-transparent dark:bg-gray-800 rounded-lg">
+    <div class="flex justify-between items-center pt-3 px-3">
+        <h1 class="text-lg font-medium tracking-tight leading-6 truncate">
+            Gestión de ventas
+        </h1>
+        <app-boton-generico [botones]="botonActualizarGenerarReporte"></app-boton-generico>
+    </div>
+
+    <app-table-generico
+     *ngIf="tabla"
+     [table]="tabla"
+     [seleccionableRow]="true"
+   ></app-table-generico>
+</div>

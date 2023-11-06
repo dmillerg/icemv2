@@ -10,6 +10,8 @@ import { QuieneComponent } from './components/quiene/quiene.component';
 import { PedidoComponent } from './components/pedido/pedido.component';
 import { ComentarioComponent } from './components/comentario/comentario.component';
 import { RecogidaComponent } from './components/recogida/recogida.component';
+import { VentaComponent } from './components/venta/venta.component';
+import { PreguntaComponent } from './components/pregunta/pregunta.component';
 
 const routes: Routes = [
   {
@@ -46,11 +48,7 @@ const routes: Routes = [
         component: ComentarioComponent,
       },
       {
-        path: 'desarrollo',
-        component: ProductoComponent,
-      },
-      {
-        path: 'quiene',
+        path: 'quienes',
         component: QuieneComponent,
       },
       {
@@ -68,11 +66,11 @@ const routes: Routes = [
       },
       {
         path: 'venta',
-        component: ProductoComponent,
+        component: VentaComponent,
       },
       {
         path: 'pregunta',
-        component: ProductoComponent,
+        component: PreguntaComponent,
       },
     ],
   },

@@ -11,6 +11,8 @@ import { Quienes } from '../../quienes/model/quienes';
 import { Pedido } from 'src/app/core/models/pedido.model';
 import { Comentario } from '../model/comentario.model';
 import { Recogida } from '../model/recogida.model';
+import { Mensaje } from '../model/pregunta.model';
+import { Venta } from '../model/venta.model';
 
 @Injectable({
   providedIn: 'root',
@@ -590,5 +592,111 @@ export class AdminService {
     formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
     const headers = { 'content-type': 'application/json' };
     return this.http.post<any[]>(direccion, formData);
+  }
+
+
+  //**Ventas */
+  /**
+     * Obtiene todas las ventas
+     * @returns 
+     */
+  getVentas(id_user: number = -1, fecha: string = '', producto_id: number = -1): Observable<Venta[]> {
+    let direccion = this.url + 'ventas';
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      id_user: id_user,
+      fecha: fecha.toString(),
+      producto_id: producto_id,
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.get<Venta[]>(direccion, { headers: headers, params: params });
+  }
+
+  /**
+     * genera un excel con el reporte
+     * @param user_id id del usuario
+     * @param fecha fecha de la venta
+     * @param producto_id id del producto
+     * @param name nombre del archiivo a devolver
+     * @returns 
+     */
+  generarReportes(
+    user_id: number = -1,
+    fecha: string = '',
+    producto_id: number = -1,
+    name: string = ''
+  ): Observable<any> {
+    let direccion = this.url + 'reportes';
+    const headers = { 'content-type': 'application/json' };
+
+    const params = {
+      user_id: user_id,
+      fecha: fecha,
+      producto_id: producto_id,
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.get(direccion, { headers: headers, params: params, observe: 'response', responseType: 'blob' });
+  }
+
+  /**
+   * Eliminar el archivo descargado
+   * @param name del archivo
+   * @returns 
+   */
+  deleteFile(name: string = '') {
+    let direccion = this.url + 'reportes';
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      name: name,
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  //**Pregunta */
+  /**
+   * Agrega un mensaje
+   * @param formData datos del mensaje del usuario
+   * @returns 
+   */
+  addMensaje(formData: FormData) {
+    let direccion = this.url + 'mensajes'
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Devuelve todos los mensajes 
+   * @returns 
+   */
+  getMensajes(): Observable<Mensaje[]> {
+    let direccion = this.url + 'mensajes'
+    const headers = { 'content-type': 'application/json' };
+    return this.http.get<Mensaje[]>(direccion, { headers: headers, params: { token: JSON.parse(localStorage.getItem('usuario')!).token, } });
+  }
+
+  /**
+   * Actualiza un mensaje
+   * @param id del mensaje
+   * @param formData datos
+   * @returns 
+   */
+  updateMensaje(id: number = -1, formData: FormData) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'mensajes/' + id.toString();
+    return this.http.put(direccion, formData);
+  }
+
+  /**
+   * Elimina un mensaje por su id
+   * @param id del mensaje
+   * @returns 
+   */
+  deleteMensaje(id: number) {
+    let direccion = this.url + 'mensajes/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
   }
 }

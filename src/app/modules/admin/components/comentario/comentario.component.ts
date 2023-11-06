@@ -25,8 +25,7 @@ export class ComentarioComponent implements OnInit {
   comentariosRespondidos: number = 0;
   comentariosSinResponder: number = 0;
   loading: boolean = false;
-  loadingEditar: boolean = false;
-  loadingActivar: boolean = false;
+  loadingResponder: boolean = false;
 
   botonActualizar: Boton[] = [
     {
@@ -55,7 +54,6 @@ export class ComentarioComponent implements OnInit {
 
   botonesDetalle: Boton[] = [];
 
-
   botonMostrar: Boton[] = [
     {
       icono: 'bi bi-eye',
@@ -63,11 +61,6 @@ export class ComentarioComponent implements OnInit {
       funcion: (value) => this.mostrarFormulario(value),
     },
   ];
-
-  // botoneresponder: Boton[] = [
-  //   icono: 'bi bi-reply',
-  //   class: ''
-  // ]
 
   constructor(
     private adminService: AdminService,
@@ -183,7 +176,7 @@ export class ComentarioComponent implements OnInit {
       {
         icono: 'bi bi-reply',
         tooltip: 'Responder',
-        cargando: () => this.loadingEditar,
+        cargando: () => this.loadingResponder,
         funcion: (value) => this.responderComentario(value)
 
       },
