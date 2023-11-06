@@ -26,12 +26,7 @@ export class VentaComponent implements OnInit {
     {
       label: 'Generar Reporte',
       icono: 'bi bi-journal-text',
-      funcion: (values) => this.generarReporte(
-        -1,
-        '',
-       -1,
-
-      )
+      funcion: (values) => this.generarReporte(-1, '', -1)
     }
   ];
 
@@ -57,7 +52,7 @@ export class VentaComponent implements OnInit {
     this.adminService.generarReportes(user_id, fecha, producto_id).pipe(take(1)).subscribe({
       next: (result) => {
         console.log(result);
-        
+
         let filename = result.headers.get('content-disposition')?.split(';')[1].split('=')[1];
         let blob: Blob = result.body as Blob;
         let a = document.createElement('a');

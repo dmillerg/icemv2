@@ -54,7 +54,6 @@ export class ComentarioComponent implements OnInit {
 
   botonesDetalle: Boton[] = [];
 
-
   botonMostrar: Boton[] = [
     {
       icono: 'bi bi-eye',
@@ -62,11 +61,6 @@ export class ComentarioComponent implements OnInit {
       funcion: (value) => this.mostrarFormulario(value),
     },
   ];
-
-  // botoneresponder: Boton[] = [
-  //   icono: 'bi bi-reply',
-  //   class: ''
-  // ]
 
   constructor(
     private adminService: AdminService,

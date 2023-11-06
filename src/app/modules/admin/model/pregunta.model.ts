@@ -3,7 +3,7 @@ export interface Mensaje {
     alias: string;
     correo: string;
     asunto: string;
-    comentario: string;
+    mensaje: string;
     fecha:string;
     visto: boolean;
 }
