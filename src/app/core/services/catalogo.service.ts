@@ -23,4 +23,13 @@ export class CatalogoService {
     let direccion = this.url + 'categorias/';
     return this.http.get<Categoria[]>(direccion);
   }
+
+  /**
+   * Obtener noticias de scrapping
+   * @returns 
+   */
+  cargaNoticias(): Observable<any[]> {
+    let direccion = this.url + 'scrapping';
+    return this.http.get<any[]>(direccion);
+  }
 }
