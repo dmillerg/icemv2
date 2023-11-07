@@ -21,6 +21,7 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { Boton } from '../boton-generico/model/boton.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { matchPasswordValidator } from '../../validators/match-password.validator';
 
 @Component({
   selector: 'app-form-generico',
@@ -33,7 +34,7 @@ import { MatInputModule } from '@angular/material/input';
     MatRippleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './form-generico.component.html',
   styleUrls: ['./form-generico.component.scss'],
@@ -56,9 +57,7 @@ export class FormGenericoComponent implements OnInit {
     },
   ];
 
-  constructor(private fb: FormBuilder){
-
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.obtenerForm(this.formulario);
@@ -160,7 +159,6 @@ export class FormGenericoComponent implements OnInit {
   };
 
   error(form: FormGroup, field: string): string {
-    const value = form.get(field)!.value;
     let mensajeError: string = '';
     if (form.get(field)!.touched) {
       if (
@@ -173,6 +171,12 @@ export class FormGenericoComponent implements OnInit {
         form.get(field)!.hasError('required')
       ) {
         mensajeError = `${field} es requerido`;
+      } else if (
+        form.get(field)?.hasValidator(matchPasswordValidator) &&
+        form.get(field)!.invalid
+      ) {
+        const err: any = form.get(field)!.errors!;
+        mensajeError = err.message;
       }
       return mensajeError;
     } else return '';

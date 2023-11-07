@@ -134,4 +134,15 @@ export class AuthService {
     let direccion = this.url + 'activarUsuario/' + id.toString();
     return this.http.get<any>(direccion)
   }
+
+   /**
+   * Resetea la contrasenna siendo admin ded un usuario
+   * @param formData datos para reiniciar la contrase;a
+   * @returns 
+   */
+   adminResetPassword(formData: FormData) {
+    formData.append('reset', 'reset');
+    let direccion = this.url + 'adminreset/'
+    return this.http.post(direccion, formData);
+  }
 }

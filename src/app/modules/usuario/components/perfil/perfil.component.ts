@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalGenericoComponent } from 'src/app/core/components/modal-generico/modal-generico.component';
 import { SnackService } from 'src/app/core/components/snack/service/snack.service';
 import { DialogRef } from '@angular/cdk/dialog';
+import { matchPasswordValidator } from 'src/app/core/validators/match-password.validator';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-perfil',
@@ -24,7 +26,11 @@ import { DialogRef } from '@angular/cdk/dialog';
 export class PerfilComponent {
   botonAtras: Boton[] = [];
   botonRefrescar: Boton[] = [
-    { label: 'refrescar', icono: 'bi bi-arrow-clockwise', funcion: ()=>this.obtenerPedidos()},
+    {
+      label: 'refrescar',
+      icono: 'bi bi-arrow-clockwise',
+      funcion: () => this.obtenerPedidos(),
+    },
   ];
   botonesPerfil: Boton[] = [];
   usuario!: Usuario;
@@ -38,7 +44,8 @@ export class PerfilComponent {
     private perfilService: PerfilService,
     private router: Router,
     public dialog: MatDialog,
-    private snackService: SnackService
+    private snackService: SnackService,
+    private authService: AuthService
   ) {
     this.generarBoton();
     this.obtenerDatosUsuario();
@@ -162,11 +169,13 @@ export class PerfilComponent {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          if (result.length > 0) this.tiempo = new Date(result[0].fecha);
+          if (result.length > 0) this.tiempo = new Date(result[0].fecha!);
           this.generarTablaCarrito(
             result.map((e) => {
               return {
                 ...e,
+                precio_total: Number(e.precio) * e.cantidad!,
+                estado: 'En espera de confirmación',
                 imagen:
                   environment.url_backend +
                   `pictures/${e.producto_id}?tipo=productos`,
@@ -298,14 +307,14 @@ export class PerfilComponent {
         {
           tipo: 'password',
           nombre: 'Contraseña nueva',
-          control: 'nueva',
+          control: 'password',
           validator: [Validators.required],
         },
         {
           tipo: 'password',
           nombre: 'Confirma la contraseña',
           control: 'confirm',
-          validator: [Validators.required],
+          validator: [Validators.required, matchPasswordValidator],
         },
       ],
       columnas: [1, 1, 1],
@@ -348,7 +357,7 @@ export class PerfilComponent {
     formData.append('usuario', this.usuario.usuario);
     formData.append('id_usuario', this.usuario.id.toString());
     formData.append('pass_old', data.anterior);
-    formData.append('new_password', data.nueva);
+    formData.append('new_password', data.password);
     this.perfilService
       .changePassword(formData)
       .pipe(take(1))
@@ -360,8 +369,10 @@ export class PerfilComponent {
           });
           this.cargando = false;
           ref.close();
-          localStorage.removeItem('usuario');
-          setTimeout(() => this.router.navigate(['inicio']), 200);
+          this.authService
+            .logout()
+            .pipe(take(1))
+            .subscribe({ next: () => location.reload() });
         },
         error: () => {
           this.cargando = false;

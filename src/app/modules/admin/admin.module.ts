@@ -20,6 +20,7 @@ import { VentaComponent } from './components/venta/venta.component';
 import { PreguntaComponent } from './components/pregunta/pregunta.component';
 import { RecogidaComponent } from './components/recogida/recogida.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ConfiguracionComponent } from './components/configuracion/configuracion
     FormGenericoComponent,
     DetalleGenericoComponent,
     BotonGenericoComponent,
+    NgApexchartsModule
   ],
   providers: [DatePipe, DecimalPipe],
 })

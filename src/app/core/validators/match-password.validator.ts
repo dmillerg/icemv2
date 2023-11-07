@@ -7,7 +7,7 @@ export function matchPasswordValidator(
   const confirmPassword = control.value;
 
   if (password && confirmPassword !== password.value) {
-    return { passwordMismatch: true };
+    return { message: 'Las contraseñas deben coincidir' };
   }
 
   return null;

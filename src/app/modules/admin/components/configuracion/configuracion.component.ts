@@ -76,7 +76,7 @@ export class ConfiguracionComponent implements OnInit {
         next: (result) => {
           this.generarTabla(
             result.map((e) => {
-              e.config = e.config / 60000;
+              e.config = e.config;
               return e;
             })
           );

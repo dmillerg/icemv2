@@ -18,6 +18,10 @@ import { Modal } from './core/components/modal-generico/model/modal.model';
 import { ModalGenericoComponent } from './core/components/modal-generico/modal-generico.component';
 import { Usuario } from './core/models/usuario.model';
 import { SnackService } from './core/components/snack/service/snack.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Formulario } from './core/components/form-generico/model/formulario.model';
+import { Validators } from '@angular/forms';
+import { matchPasswordValidator } from './core/validators/match-password.validator';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +34,7 @@ export class AppComponent implements OnInit {
   inactividad: any;
   tiempoInactividad: number = 0;
   cargando: boolean = false;
+  formulario!: Formulario;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -37,7 +42,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private catalogoService: CatalogoService,
-    private dialog: Dialog,
+    private dialog: MatDialog,
     private snackService: SnackService
   ) {
     this.chartOp();
@@ -89,10 +94,9 @@ export class AppComponent implements OnInit {
           : new Date()
       ).getTime();
       const ahora = new Date().getTime();
-
       if (
         this.authService.isLogging() &&
-        ahora - ultimaActividad >= this.tiempoInactividad
+        ahora - ultimaActividad >= this.tiempoInactividad*60000
       ) {
         this.authService
           .logout()
@@ -157,11 +161,11 @@ export class AppComponent implements OnInit {
           .subscribe({
             next: (res) => {
               console.log(res);
-              Number(
-                link.substring(link.indexOf('Edd') + 3, link.indexOf('Dde'))
+              this.obtenerUsuarioPorId(
+                Number(
+                  link.substring(link.indexOf('Edd') + 3, link.indexOf('Dde'))
+                )
               );
-
-              // this.modalService.open(ModalActivationComponent, { backdrop: 'static' });
             },
           });
       } else if (reset != undefined) {
@@ -170,22 +174,30 @@ export class AppComponent implements OnInit {
           .pipe(take(1))
           .subscribe({
             next: (res) => {
-              console.log(res);
-
-              // this.modalService.open(ModalUserResetPasswordComponent, { backdrop: 'static' });
+              this.obtenerUsuarioPorId(
+                Number(
+                  reset.substring(
+                    reset.indexOf('Edd') + 3,
+                    reset.indexOf('Dde')
+                  )
+                ),
+                true
+              );
             },
           });
       }
     });
   }
 
-  obtenerUsuarioPorId(id: number) {
+  obtenerUsuarioPorId(id: number, reset?: boolean) {
     this.authService
       .getUsuariosById(id)
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.activarCuentaModal(result);
+          if (reset) {
+            this.resetearCuentaModal(result);
+          } else this.activarCuentaModal(result);
         },
       });
   }
@@ -195,7 +207,7 @@ export class AppComponent implements OnInit {
     this.cargando = true;
     const modal: Modal = {
       titulo: 'Activación de la cuenta de usuario',
-      subtitulo: `Si su usuario es ${usuario.usuario} por favor presione el botón de Aceptar en caso contrario cancele.`,
+      texto: `Si su usuario es "${usuario.usuario}" por favor presione el botón de Aceptar en caso contrario cancele.`,
       botones: [
         {
           label: 'Aceptar',
@@ -221,6 +233,84 @@ export class AppComponent implements OnInit {
             texto: 'Su cuenta se ha activado con exito',
           });
           ref.close();
+        },
+      });
+  }
+
+  resetearCuentaModal(usuario: Usuario) {
+    let ref: any;
+    this.generarFormulario(usuario);
+    const modal: Modal = {
+      titulo: `Reinicie su contraseña '${usuario.usuario}'`,
+      texto: `Rellene los campos a continuación, para resetear su contraseña.`,
+      formulario: this.formulario,
+      botones: [
+        {
+          label: 'Aceptar',
+          icono: 'bi bi-check',
+          funcion: () =>
+            this.formulario.form?.valid
+              ? this.cambiarPass(ref)
+              : this.formulario.form?.markAllAsTouched(),
+        },
+        {
+          label: 'Cancelar',
+          icono: 'bi bi-x',
+          funcion: () => ref.close(),
+        },
+      ],
+    };
+    ref = this.dialog.open(ModalGenericoComponent, {
+      data: modal,
+    });
+  }
+
+  generarFormulario(usuario: Usuario) {
+    this.formulario = {
+      controles: [
+        {
+          tipo: 'password',
+          nombre: 'Contraseña',
+          control: 'password',
+          validator: [Validators.required, Validators.minLength(8)],
+        },
+        {
+          tipo: 'password',
+          nombre: 'Confirmación',
+          control: 'confirm',
+          validator: [Validators.required, matchPasswordValidator],
+        },
+        {
+          tipo: 'text',
+          nombre: 'ID',
+          control: 'id',
+          valor: usuario.id,
+        },
+      ],
+      columnas: [1, 1],
+    };
+  }
+
+  cambiarPass(ref: DialogRef) {
+    const data = this.formulario.form?.getRawValue();
+    const formData = new FormData();
+    formData.append('id_usuario', data.id.toString());
+    formData.append('new_password', data.password);
+    this.authService
+      .adminResetPassword(formData)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.snackService.success({
+            texto: 'Contraseña cambiada correctamente',
+          });
+          ref.close();
+        },
+        error: (error) => {
+          this.snackService.error({
+            texto:
+              'Error al intentar cambiar la contraseña, por favor intentelo mas tarde',
+          });
         },
       });
   }

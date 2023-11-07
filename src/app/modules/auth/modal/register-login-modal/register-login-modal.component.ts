@@ -115,7 +115,7 @@ export class RegisterLoginModalComponent {
       const registerOpcional = this.formOpcional.getRawValue();
       const formData = new FormData();
       formData.append('usuario', registerObligatorio.usuario);
-      formData.append('nombre', registerObligatorio.nombre);
+      formData.append('nombre', registerObligatorio.nombreApellido);
       formData.append('password', registerObligatorio.password);
       formData.append('correo', registerObligatorio.correo);
       formData.append('pais', registerOpcional.pais);

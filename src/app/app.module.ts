@@ -21,6 +21,9 @@ import { BusquedaComponent } from './core/components/busqueda/busqueda.component
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpCancelInterceptor } from './core/interceptor/http-cancel.interceptor';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { ModalGenericoComponent } from './core/components/modal-generico/modal-generico.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormGenericoComponent } from './core/components/form-generico/form-generico.component';
 
 @NgModule({
   declarations: [AppComponent, NoticiaFuentePipe, BusquedaComponent],
@@ -32,6 +35,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     HeaderComponent,
     FooterComponent,
     NgApexchartsModule,
+    ModalGenericoComponent,
+    FormGenericoComponent,
     StoreModule.forRoot(ROOT_REDUCERS),
   ],
   providers: [
