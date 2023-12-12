@@ -127,10 +127,10 @@ export class LoginComponent {
         user.correo,
         'Contraseña olvidada por el usuario ' + user.usuario,
         `Hola ${user.usuario}, hemos notado que ha olvidado su contraseña, no hay de que preocuparse solo presione el botón a continuación para confirmar su identidad.`,
-        `En caso de que el botón no funcionará solo siga el link: ${environment.url_page}/#/inicio?reset=${reset}`,
+        `En caso de que el botón no funcionará solo siga el link: ${environment.url_page}#/inicio?reset=${reset}`,
         'reset',
         reset,
-        `${environment.url_page}/#/inicio?reset=${reset}`
+        `${environment.url_page}#/inicio?reset=${reset}`
       )
       .pipe(take(1))
       .subscribe({

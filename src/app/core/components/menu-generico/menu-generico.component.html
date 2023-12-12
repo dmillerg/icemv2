@@ -29,5 +29,51 @@
         </ng-container>
       </div>
     </ng-container>
+    <ng-container *ngIf="item.listado">
+      <div
+        class="submenu overflow-hidden text-icem-500 absolute bg-white dark:bg-gray-800 dark:text-white rounded right-0 shadow-lg flex-col flex min-w-full w-72"
+        style="top: 180%"
+      >
+        <div
+          class="w-full py-4 text-start pl-4 border-b-2 border-slate-200 dark:border-slate-700"
+        >
+          Carrito
+        </div>
+        <div *ngIf="item.listado.length === 0" class="w-full h-40 flex justify-center items-center text-sm flex flex-col">
+          <i class="bi bi-inbox" style="font-size: 40px;"></i>
+          No hay productos en el carrito.
+        </div>
+        <div
+          class="w-full p-4 rounded-md flex items-center justify-between gap-2 border-1"
+          *ngFor="let list of item.listado; let ultimo = last"
+        >
+          <div class="flex flex-col w-20">
+            <small class="whitespace-nowrap text-ellipsis overflow-hidden">{{ list.nombre }}</small>
+            <small class="whitespace-nowrap text-gray-400"
+            >$ {{ list.precio | number : "1.2-2" }}</small
+          >
+          </div>
+          <small class="whitespace-nowrap w-fit">{{ list.cantidad }}</small>
+          <small class="whitespace-nowrap w-fit"
+            >$ {{ list.cantidad! * list.precio! | number : "1.2-2" }}</small
+          >
+          <button matRipple matTooltip="Eliminar de la lista" class="rounded w-8 h-8 text-icem-500" (click)="finalizo([list!])"><i class="bi bi-trash"></i></button>
+        </div>
+        <button
+          matRipple
+          (click)="reservar()"
+          [disabled]="item.listado.length === 0"
+          class="w-full py-2 text-center disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-between px-3 dark:border-slate-700 text-sm bg-icem-500 dark:bg-icem-400 text-white dark:hover:bg-icem-300 hover:bg-icem-700"
+        >
+          <span> <i class="bi bi-cart3 mr-2"></i>comprar </span>
+          <div class="w-fit whitespace-nowrap text-xs" *ngIf="item.listado.length>0">
+            <app-count-timer
+              [fechaEntrada]="item.listado[0].fecha!"
+              (finalizo)="finalizo(item.listado)"
+            ></app-count-timer>
+          </div>
+        </button>
+      </div>
+    </ng-container>
   </div>
 </div>

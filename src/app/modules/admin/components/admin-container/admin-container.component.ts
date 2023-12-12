@@ -4,7 +4,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subscription, distinctUntilChanged } from 'rxjs';
+import { Subscription, distinctUntilChanged, take } from 'rxjs';
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -13,6 +13,7 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-admin-container',
@@ -38,8 +39,13 @@ export class AdminContainerComponent {
   ];
   rutaSub$: Subscription = new Subscription();
 
-  constructor(private router: Router,private store: Store) {
+  constructor(
+    private router: Router,
+    private store: Store,
+    private adminService: AdminService
+  ) {
     this.obtenerRuta();
+    this.obtenerReporte();
   }
 
   obtenerRuta() {
@@ -57,5 +63,29 @@ export class AdminContainerComponent {
     this.store.dispatch(deleteAllDetalle());
     this.seleccionado = tab;
     this.router.navigate(['admin/' + this.tabs[tab].ruta]);
+  }
+
+  obtenerReporte() {
+    this.adminService
+      .reporteAdmin()
+      .pipe(take(1))
+      .subscribe({
+        next: (result: any) => {
+          this.tabs=[
+            { nombre: 'Usuarios', ruta: 'usuario' },
+            { nombre: 'Productos', ruta: 'producto' },
+            { nombre: 'Noticias', ruta: 'noticia' },
+            { nombre: 'Categorías', ruta: 'categoria' },
+            { nombre: 'Desarrollos', ruta: 'desarrollo' },
+            { nombre: 'Comentarios', ruta: 'comentario', notificacion: result.comentarios },
+            { nombre: 'Quienes', ruta: 'quienes' },
+            { nombre: 'Recogida', ruta: 'recogida' },
+            { nombre: 'Pedidos', ruta: 'pedido' },
+            { nombre: 'Configuración', ruta: 'configuracion' },
+            { nombre: 'Ventas', ruta: 'venta' },
+            { nombre: 'Preguntas', ruta: 'pregunta', notificacion: result.preguntas },
+          ]
+        },
+      });
   }
 }

@@ -3,6 +3,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { Collapse } from 'src/app/core/components/collapse/model/collapse.model';
 import { Formulario } from 'src/app/core/components/form-generico/model/formulario.model';
 import { matchPasswordValidator } from 'src/app/core/validators/match-password.validator';
+import { reglasPasswordValidator } from 'src/app/core/validators/reglas-password.validator';
 
 @Component({
   selector: 'app-register',
@@ -71,7 +72,7 @@ export class RegisterComponent implements OnInit {
           control: 'password',
           nombre: 'Contraseña',
           icono: 'bi bi-lock',
-          validator: [Validators.required],
+          validator: [Validators.required, reglasPasswordValidator],
         },
         {
           tipo: 'password',

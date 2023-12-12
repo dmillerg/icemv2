@@ -22,6 +22,7 @@ import { Boton } from '../boton-generico/model/boton.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { matchPasswordValidator } from '../../validators/match-password.validator';
+import { reglasPasswordValidator } from '../../validators/reglas-password.validator';
 
 @Component({
   selector: 'app-form-generico',
@@ -171,8 +172,9 @@ export class FormGenericoComponent implements OnInit {
         form.get(field)!.hasError('required')
       ) {
         mensajeError = `${field} es requerido`;
-      } else if (
-        form.get(field)?.hasValidator(matchPasswordValidator) &&
+      }else if (
+        (form.get(field)?.hasValidator(matchPasswordValidator) ||
+          form.get(field)?.hasValidator(reglasPasswordValidator)) &&
         form.get(field)!.invalid
       ) {
         const err: any = form.get(field)!.errors!;

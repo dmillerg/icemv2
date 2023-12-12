@@ -12,12 +12,12 @@ export interface AppState {
   product: ReadonlyArray<Producto>;
   usuario: ReadonlyArray<Usuario>;
   detalle: Detalle;
-//   carrito: ReadonlyArray<Carrito>;
+  carrito: ReadonlyArray<Carrito>;
 }
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   product: productReducer,
   usuario: usuarioReducer,
   detalle: detalleReducer,
-//   carrito: carritoReducer,
+  carrito: carritoReducer,
 };

@@ -13,7 +13,7 @@ import { Boton } from 'src/app/core/components/boton-generico/model/boton.model'
   styleUrls: ['./section-noticias.component.scss'],
 })
 export class SectionNoticiasComponent implements OnInit {
-  noticia: any;
+  noticia?: any = undefined;
   botones: Boton[] = [
     {
       icono: 'bi bi-check',
@@ -39,6 +39,7 @@ export class SectionNoticiasComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
+          
           if (result.length > 0) {
             this.noticia = result.filter((e) => e.fuente === 'ICEM')[0];
             if (this.noticia) {

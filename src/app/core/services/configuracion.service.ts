@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../models/usuario.model';
 import { Configuracion } from '../models/configuracion.model';
+import { Carrito } from '../models/carrito.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,11 +34,11 @@ export class ConfiguracionService {
     });
   }
 
-/**
- * Obtener una configuracion por nombre
- * @param nombre de la configuracion
- * @returns 
- */
+  /**
+   * Obtener una configuracion por nombre
+   * @param nombre de la configuracion
+   * @returns
+   */
   getConfiguracion(nombre: string): Observable<Configuracion> {
     let direccion = this.url + 'configuracion';
     return this.http.get<Configuracion>(direccion, {
@@ -45,5 +46,43 @@ export class ConfiguracionService {
         nombre: nombre,
       },
     });
+  }
+
+  /**
+   * Devuelve todos los productos en el carrito
+   * @param user_id del usuario autenticado
+   * @returns
+   */
+  getCarrito(user_id: number = -1): Observable<Carrito[]> {
+    let direccion = this.url + 'carrito/' + user_id;
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.get<Carrito[]>(direccion, {
+      headers: headers,
+      params: params,
+    });
+  }
+
+  /**
+   * Agregar un carrito
+   * @param formData datos de un carrito
+   * @returns
+   */
+  addCarrito(formData: FormData) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'carrito';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+   * Elimina un carrito
+   * @param id carrito a eliminar
+   * @returns
+   */
+  deleteCarrito(id: number = -1) {
+    let direccion = this.url + 'carrito/' + id.toString();
+    return this.http.delete(direccion);
   }
 }

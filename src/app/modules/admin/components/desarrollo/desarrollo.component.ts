@@ -242,6 +242,8 @@ export class DesarrolloComponent implements OnInit {
     this.loadingEditar = true;
     const data = this.formulario?.form?.getRawValue();
     const formData = this.formulario?.imagen?.formDataImage ?? new FormData();
+    console.log(formData);
+    
     formData.append('id', data.id.toString());
     formData.append('titulo', data.titulo.toString());
     formData.append('descripcion', data.descripcion.toString());

@@ -467,7 +467,9 @@ export class ProductoComponent implements OnInit {
     if (accion) {
       formData.append(
         'eliminadas',
-        this.formulario!.imagen!.imagenesEliminadas!.toString()
+        this.formulario?.imagen && this.formulario?.imagen.imagenesEliminadas
+          ? this.formulario.imagen.imagenesEliminadas.toString()
+          : ''
       );
       formData.append('anteriores', this.imagenPasada.toString());
       this.adminService

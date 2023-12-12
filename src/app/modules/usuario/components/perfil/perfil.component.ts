@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Boton } from 'src/app/core/components/boton-generico/model/boton.model';
 import { Usuario } from 'src/app/core/models/usuario.model';
 import { PerfilService } from '../../service/perfil.service';
-import { take } from 'rxjs';
+import { catchError, take } from 'rxjs';
 import { Table } from 'src/app/core/components/table-generico/model/table.model';
 import { Pedido } from 'src/app/core/models/pedido.model';
 import { Router } from '@angular/router';

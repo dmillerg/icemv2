@@ -758,4 +758,13 @@ export class AdminService {
     let direccion = this.url + 'detenerScrap';
     return this.http.get(direccion);
   }
+
+  /**
+   * da un reporte de todo lo que maneja el administrador
+   * @returns 
+   */
+   reporteAdmin() {
+    let direccion = this.url + 'reporteAdmin';
+    return this.http.get(direccion);
+  }
 }

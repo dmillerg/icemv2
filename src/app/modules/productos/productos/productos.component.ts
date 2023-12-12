@@ -42,7 +42,7 @@ export class ProductosComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: (response) => {
-          this.productos = response.map((e: Producto) =>
+          this.productos = response.filter(e=>e.activo).map((e: Producto) =>
             this.obtenerImagenes(e)
           );
           this.producto = this.productos.shift();

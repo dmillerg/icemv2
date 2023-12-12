@@ -28,26 +28,6 @@ export class NoticiaComponent implements OnInit {
   formulario?: Formulario;
   tabla!: Table;
 
-  botones: Boton[] = [
-    {
-      icono: 'bi bi-pencil',
-      class:
-        'p-2 rounded h-fit hover:border dark:border-icem-500 text-icem-500 dark:text-gray-100 flex justify-center items-center',
-      funcion: (value) => {
-        this.seleccionado(value);
-      },
-    },
-    {
-      icono: 'bi bi-trash',
-      disabled: (value)=>{
-        return value.logo !== 'ICEM'
-      },
-      class:
-        'p-2 rounded h-fit hover:shadow-md text-icem-500 dark:text-gray-100 flex justify-center items-center',
-      funcion: (value) => this.eliminar(value),
-    },
-  ];
-
   botonesDetalle: Boton[] = [
     {
       icono: 'bi bi-pencil',
@@ -71,7 +51,7 @@ export class NoticiaComponent implements OnInit {
     {
       label: 'Agregar noticia',
       icono: 'bi bi-plus',
-      funcion: () => this.agregarDesarrollo(),
+      funcion: () => this.agregarNoticia(),
     },
     {
       label: 'Actualizar',
@@ -101,10 +81,12 @@ export class NoticiaComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.generarTabla(result.map(e=>{
-            e.fecha = e.fecha==='0000-00-00 00:00:00'? '': e.fecha;
-            return e
-          }));
+          this.generarTabla(
+            result.map((e) => {
+              e.fecha = e.fecha === '0000-00-00 00:00:00' ? '' : e.fecha;
+              return e;
+            })
+          );
         },
       });
   }
@@ -130,7 +112,16 @@ export class NoticiaComponent implements OnInit {
       ],
       values: values ?? [],
       cargando: !values,
-      acciones: this.botones,
+      acciones: [
+        {
+          icono: 'bi bi-search',
+          class:
+            'p-2 rounded h-fit hover:border dark:border-icem-500 text-icem-500 dark:text-gray-100 flex justify-center items-center',
+          funcion: (value) => {
+            this.seleccionado(value);
+          },
+        },
+      ],
       accionesTexto: 'Acciones',
       textoVacio: 'No hay noticias que gestionar',
     };
@@ -187,7 +178,7 @@ export class NoticiaComponent implements OnInit {
           tipo: 'date',
           nombre: 'Fecha',
           control: 'fecha',
-          valor: item ? item.fuente : '',
+          valor: item ? item.fecha : '',
           validator: [Validators.required],
         },
         {
@@ -201,7 +192,11 @@ export class NoticiaComponent implements OnInit {
       imagen: {
         maximoImagenes: 1,
         imagenes: item
-          ? [environment.url_backend + `pictures/${item.id}?tipo=noticias`]
+          ? [
+              item.fuente === 'ICEM'
+                ? environment.url_backend + `pictures/${item.id}?tipo=noticias`
+                : item.imagen,
+            ]
           : [],
       },
     };
@@ -243,7 +238,7 @@ export class NoticiaComponent implements OnInit {
       });
   }
 
-  agregarDesarrollo() {
+  agregarNoticia() {
     this.generarFormulario();
     const detalle: Detalle = {
       titulo: 'Agregar Noticia',
@@ -271,6 +266,8 @@ export class NoticiaComponent implements OnInit {
     formData.append('id', data.id.toString());
     formData.append('titulo', data.titulo.toString());
     formData.append('descripcion', data.descripcion.toString());
+    formData.append('fuente', data.fuente.toString());
+    formData.append('fecha', data.fecha.toString());
 
     if (accion) {
       this.adminService.updateNoticia(formData, data.id).subscribe({

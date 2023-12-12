@@ -5,7 +5,10 @@
   style="min-width: 250px"
 >
   <ng-content select=".header"> </ng-content>
-  <div class="flex gap-2 flex-wrap w-full" *ngIf="formulario.imagen">
+  <div
+    class="flex gap-2 flex-wrap w-full bg-gray-200 rounded-lg overflow-hidden dark:bg-gray-600"
+    *ngIf="formulario.imagen"
+  >
     <input
       style="display: none"
       name="imagen"
@@ -21,17 +24,18 @@
       *ngIf="formulario.imagen!.maximoImagenes === 1"
     >
       <img
+        *ngIf="formulario.imagen.imagenes!.length > 0"
         class="object-cover w-full h-40 rounded-lg"
         [src]="formulario.imagen!.imagenes![0]"
         [alt]="formulario.imagen!.imagenes![0]"
       />
       <div
+        matRipple
+        (click)="formFile.click()"
         class="absolute w-full h-full opacity-0 hover:bg-hover-100 hover:opacity-100 duration-300 top-0 left-0 cursor-pointer flex justify-center items-center"
       >
         <i
-          matRipple
           class="bi bi-camera text-white absolute text-4xl cursor-pointer rounded-full p-2"
-          (click)="formFile.click()"
         ></i>
       </div>
     </div>
@@ -74,7 +78,7 @@
           for=""
           class="block mb-1"
           [ngClass]="{
-            'text-red-500': error(form, item.control).length > 0
+            'text-red-500': error(form, item.control)
           }"
         >
           <i [class]="item.icono"></i>
@@ -85,11 +89,11 @@
           type="text"
           *ngIf="item.tipo === 'text'"
           [class]="
-            error(form, item.control).length > 0
+            error(form, item.control)
               ? 'border border-red-500'
               : 'border border-1 dark:border-gray-500'
           "
-          class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+          class="disabled:opacity-75 disabled:cursor-not-allowed focus:ring-1 focus:ring-icem-300 py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
         />
@@ -97,23 +101,23 @@
           type="number"
           *ngIf="item.tipo === 'number'"
           [class]="
-            error(form, item.control).length > 0
+            error(form, item.control)
               ? 'border border-red-500'
               : 'border border-1 dark:border-gray-500'
           "
-          class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+          class="disabled:opacity-75 disabled:cursor-not-allowed focus:ring-1 focus:ring-icem-300 py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
         />
         <div class="relative" *ngIf="item.tipo === 'password'">
           <input
             [class]="
-              error(form, item.control).length > 0
+              error(form, item.control)
                 ? 'border border-red-500'
                 : 'border border-1 dark:border-gray-500'
             "
             [type]="item.tiposPassword ?? 'password'"
-            class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+            class="py-3 px-3 w-full focus:ring-1 focus:ring-icem-300 dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
             [formControlName]="item.control"
             [placeholder]="item.placeholder ?? item.nombre"
           />
@@ -137,11 +141,11 @@
           <mat-select
             [formControlName]="item.control"
             [class]="
-              error(form, item.control).length > 0
+              error(form, item.control)
                 ? 'border border-red-500'
                 : 'border border-1 dark:border-gray-500'
             "
-            class="block w-full px-4 py-3 text-base text-gray-900 rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="disabled:opacity-75 disabled:cursor-not-allowed block w-full px-4 py-3 text-base text-gray-900 rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <mat-option
               *ngFor="let opcion of item.opciones"
@@ -155,12 +159,12 @@
           <input
             [formControlName]="item.control"
             [class]="
-              error(form, item.control).length > 0
+              error(form, item.control)
                 ? 'border border-red-500'
                 : 'border border-1 dark:border-gray-500'
             "
             [placeholder]="item.placeholder ?? item.nombre"
-            class="py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
+            class="disabled:opacity-75 disabled:cursor-not-allowed  focus:ring-1 focus:ring-icem-300 py-3 px-3 w-full dark:shadow-sm rounded outline-none bg-white dark:bg-gray-700"
             [matDatepicker]="picker"
             (click)="picker.open()"
           />
@@ -168,12 +172,12 @@
         </div>
         <textarea
           [class]="
-            error(form, item.control).length > 0
+            error(form, item.control)
               ? 'border border-red-500'
               : 'border border-1 dark:border-gray-500'
           "
           *ngIf="item.tipo === 'textarea'"
-          class="py-3 px-3 w-full rounded outline-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
+          class="disabled:opacity-75 disabled:cursor-not-allowed focus:ring-1 focus:ring-icem-300 py-3 px-3 w-full rounded outline-none dark:shadow-md dark:bg-gray-700 overflow-y-auto"
           [name]="item.control"
           [formControlName]="item.control"
           [placeholder]="item.placeholder ?? item.nombre"
@@ -185,7 +189,9 @@
           [botones]="item.botones"
         ></app-boton-generico>
         <span
-          *ngIf="error(form, item.control).length > 0"
+          *ngIf="
+            error(form, item.control)
+          "
           class="text-red-500 text-xs font-thin"
         >
           {{ error(form, item.control) }}

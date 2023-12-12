@@ -13,7 +13,10 @@ import { Formulario } from 'src/app/core/components/form-generico/model/formular
 import { MatDrawer } from '@angular/material/sidenav';
 import { Boton } from 'src/app/core/components/boton-generico/model/boton.model';
 import { Store } from '@ngrx/store';
-import { addDetalle, deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import {
+  addDetalle,
+  deleteAllDetalle,
+} from 'src/app/shared/state/actions/detalle.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalGenericoComponent } from 'src/app/core/components/modal-generico/modal-generico.component';
 import { Modal } from 'src/app/core/components/modal-generico/model/modal.model';
@@ -24,6 +27,7 @@ import { DatePipe } from '@angular/common';
 import { Detalle } from 'src/app/core/components/detalle-generico/model/detalle.model';
 import { matchPasswordValidator } from 'src/app/core/validators/match-password.validator';
 import * as ApexCharts from 'apexcharts';
+import { reglasPasswordValidator } from 'src/app/core/validators/reglas-password.validator';
 
 @Component({
   selector: 'app-usuario',
@@ -104,11 +108,11 @@ export class UsuarioComponent implements OnInit {
   chartOptions: any;
   chart: any;
   dataChart: {
-      amount: number;
-      percent: number;
-      shortOrigin: string;
-      origin: string;
-      color: string;
+    amount: number;
+    percent: number;
+    shortOrigin: string;
+    origin: string;
+    color: string;
   }[] = [];
 
   constructor(
@@ -275,7 +279,11 @@ export class UsuarioComponent implements OnInit {
           control: 'confirm',
           valor: item ? item.password : '',
           icono: 'bi bi-lock',
-          validator: [Validators.required, Validators.minLength(8), matchPasswordValidator],
+          validator: [
+            Validators.required,
+            Validators.minLength(8),
+            matchPasswordValidator,
+          ],
         },
         {
           tipo: 'text',
@@ -371,7 +379,6 @@ export class UsuarioComponent implements OnInit {
               texto: `!Se ha guardado correctamente el nuevo usuario.`,
             });
             this.store.dispatch(deleteAllDetalle());
-            
           },
           error: (error) => {
             this.loading = false;
@@ -446,15 +453,21 @@ export class UsuarioComponent implements OnInit {
           tipo: 'password',
           nombre: 'Nueva contraseña',
           icono: 'bi bi-lock',
-          control: 'nueva',
-          validator: [Validators.required, Validators.minLength(8)],
+          control: 'password',
+          validator: [
+            Validators.required,
+            reglasPasswordValidator
+          ],
         },
         {
           tipo: 'password',
           nombre: 'Confirmación contraseña',
           icono: 'bi bi-lock',
           control: 'confirm',
-          validator: [Validators.required, Validators.minLength(8)],
+          validator: [
+            Validators.required,
+            matchPasswordValidator,
+          ],
         },
       ],
       columnas: [1, 1, 1],
@@ -506,42 +519,42 @@ export class UsuarioComponent implements OnInit {
 
   generateChart() {
     const p = window
-        .getComputedStyle(document.body, null)
-        .getPropertyValue('--fuse-primary');
+      .getComputedStyle(document.body, null)
+      .getPropertyValue('--fuse-primary');
     this.chartOptions = {
-        series: this.dataChart.map((e) => e.amount),
-        chart: {
-            type: 'donut',
-            width: 250,
+      series: this.dataChart.map((e) => e.amount),
+      chart: {
+        type: 'donut',
+        width: 250,
+      },
+      legend: {
+        show: false,
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        width: 2,
+      },
+      theme: {
+        mode: 'light',
+        palette: 'palette1',
+        monochrome: {
+          enabled: true,
+          color: p,
+          shadeTo: 'light',
+          shadeIntensity: 0.65,
         },
-        legend: {
-            show: false,
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-        },
-        theme: {
-            mode: 'light',
-            palette: 'palette1',
-            monochrome: {
-                enabled: true,
-                color: p,
-                shadeTo: 'light',
-                shadeIntensity: 0.65,
-            },
-        },
-        labels: this.dataChart.map((e) => e.origin),
+      },
+      labels: this.dataChart.map((e) => e.origin),
     };
     if (this.chart) {
-        this.chart.destroy();
+      this.chart.destroy();
     }
     this.chart = new ApexCharts(
-        document.querySelector('#chart-container'),
-        this.chartOptions
+      document.querySelector('#chart-container'),
+      this.chartOptions
     );
     this.chart.render();
-}
+  }
 }

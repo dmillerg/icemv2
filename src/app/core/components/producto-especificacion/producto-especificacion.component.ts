@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Producto } from '../../../modules/productos/model/producto';
 import { ProductoService } from '../../../modules/productos/services/producto.service';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -11,6 +11,10 @@ import {
 } from '@angular/forms';
 import { CollapseComponent } from '../collapse/collapse.component';
 import { Collapse } from '../collapse/model/collapse.model';
+import { Store } from '@ngrx/store';
+import { selectUsuario } from 'src/app/shared/state/selectors/usuario.selector';
+import { ConfiguracionService } from '../../services/configuracion.service';
+import { addCarrito } from 'src/app/shared/state/actions/carrito.action';
 
 interface Estrellas {
   cantidad: number;
@@ -35,11 +39,16 @@ export class ProductoEspecificacionComponent implements OnInit {
   collapseEspecificaciones!: Collapse;
   collapseUsos!: Collapse;
   collapseGarantias!: Collapse;
+  usuario$: Observable<any> = new Observable();
 
   constructor(
     private productoService: ProductoService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private store: Store,
+    private configuracionService: ConfiguracionService
+  ) {
+    this.usuario$ = store.select(selectUsuario);
+  }
 
   ngOnInit(): void {
     this.rellenarCollapses();
@@ -157,5 +166,39 @@ export class ProductoEspecificacionComponent implements OnInit {
       (!accion && cantidad > 0)
     )
       this.form.get('cantidad')?.setValue(accion ? cantidad + 1 : cantidad - 1);
+  }
+
+  agregarCarrito() {
+    let formData = new FormData();
+    formData.append('user_id', JSON.parse(localStorage.getItem('usuario')!).id);
+    formData.append('producto_id', this.producto!.id.toString());
+    formData.append('cantidad', this.form.get('cantidad')?.value.toString());
+    formData.append('precio', this.producto!.precio.toString());
+    this.configuracionService
+      .addCarrito(formData)
+      .pipe(take(1))
+      .subscribe({
+        next: (result: any) => {
+          this.producto!.disponibilidad -= this.form.get('cantidad')?.value;
+          this.store.dispatch(
+            addCarrito({
+              carritos: {
+                id: result.insertId,
+                producto_id: this.producto?.id,
+                cantidad: this.form.get('cantidad')?.value,
+                precio: this.producto!.precio.toString(),
+                user_id: JSON.parse(localStorage.getItem('usuario')!).id,
+                fecha: new Date(),
+              },
+            })
+          );
+
+          // this.loadEspecification();
+          this.configuracionService
+            .getCarrito(JSON.parse(localStorage.getItem('usuario')!).id)
+            .pipe(take(1))
+            .subscribe((result) => {});
+        },
+      });
   }
 }

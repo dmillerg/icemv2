@@ -3,13 +3,19 @@
     <div class="flex items-start gap-10 flex-wrap w-full">
       <div class="flex flex-col gap-1">
         <div
-          class="flex w-96 h-96 bg-icem-500 dark:bg-icem-300 relative rounded"
+          class="flex w-96 h-96 bg-icem-500 dark:bg-icem-300 relative rounded relative"
         >
           <img
             [src]="producto.imagen"
             [alt]="producto.titulo"
             class="absolute w-full h-full object-cover -top-6 -right-6 shadow-md rounded bg-white dark:bg-gray-700 border-none"
           />
+          <div
+            *ngIf="producto.disponibilidad === 0"
+            class="absolute -top-6 -right-6 text-white p-3 bg-red-700"
+          >
+            Agotado
+          </div>
           <span class="text-white absolute bottom-1 right-1 text-sm">
             disponibles: {{ producto.disponibilidad }}
           </span>
@@ -66,7 +72,7 @@
           {{ producto!.fecha | date : "dd/MM/yyyy" }}
         </p>
         <p class="text-gray-700 dark:text-gray-300 font-bold">
-          ${{ producto!.precio | number : "1.0-2" }}
+          ${{ producto!.precio | number : "1.2-2" }}
         </p>
         <p class="text-gray-700 dark:text-gray-300">
           {{ producto!.descripcion }}
@@ -74,20 +80,31 @@
         <form class="flex items-center gap-1 mt-4" [formGroup]="form">
           <button
             (click)="agregarQuitar(false)"
-            class="border-none rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white"
+            [disabled]="producto.disponibilidad === 0"
+            class="border-none w-8 rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <i class="bi bi-dash"></i>
           </button>
           <input
             [formControlName]="'cantidad'"
             type="text"
-            class="outline-none p-1 rounded w-8 dark:bg-gray-700"
+            [disabled]="producto.disponibilidad === 0"
+            class="outline-none border border-1 border-icem-400 p-1 rounded w-8 dark:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <button
             (click)="agregarQuitar(true)"
-            class="border-none rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white"
+            [disabled]="producto.disponibilidad === 0"
+            class="border-none w-8 rounded p-1 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <i class="bi bi-plus"></i>
+          </button>
+          <button
+            *ngIf="(usuario$ | async).length"
+            [disabled]="producto.disponibilidad === 0"
+            (click)="agregarCarrito()"
+            class="border-none rounded p-1 px-4 bg-icem-500 dark:bg-icem-300 hover:bg-icem-400 dark:hover:bg-icem-200 duration-300 text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <i class="bi bi-cart"></i>
           </button>
         </form>
         <app-collapse [collapseItem]="collapseEspecificaciones"></app-collapse>

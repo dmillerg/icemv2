@@ -6,7 +6,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { MenuItem } from '../../models/menu.model';
+import { Listado, MenuItem } from '../../models/menu.model';
 import { CatalogoService } from '../../services/catalogo.service';
 import { Subscription, take } from 'rxjs';
 import { MenuGenericoComponent } from '../menu-generico/menu-generico.component';
@@ -19,6 +19,10 @@ import { RegisterLoginModalComponent } from 'src/app/modules/auth/modal/register
 import { Modal } from '../modal-generico/model/modal.model';
 import { ModalGenericoComponent } from '../modal-generico/modal-generico.component';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { Store } from '@ngrx/store';
+import { selectCarrito } from 'src/app/shared/state/selectors/carrito.selector';
+import { ConfiguracionService } from '../../services/configuracion.service';
+import { addCarrito } from 'src/app/shared/state/actions/carrito.action';
 
 @Component({
   selector: 'app-header',
@@ -124,6 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   menu2: MenuItem[] = [];
   form: FormGroup = new FormGroup({});
+  carrito: Listado[] = [];
 
   routeSub$: Subscription = new Subscription();
 
@@ -133,13 +138,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store,
+    private configuracionService: ConfiguracionService
   ) {}
 
   ngOnInit(): void {
     this.generarMenu();
     this.obtenerRuta();
     this.obtenerCategorias();
+    this.cargarCarrito();
+    this.cargarCarritoInicial();
     this.tema = localStorage.getItem('tema');
     if (this.tema === 'dark') {
       document.documentElement.classList.add('dark');
@@ -161,6 +170,53 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub$.unsubscribe();
+  }
+
+  cargarCarritoInicial() {
+    if (localStorage.getItem('usuario')) {
+      this.configuracionService
+        .getCarrito(JSON.parse(localStorage.getItem('usuario')!).id)
+        .pipe(take(1))
+        .subscribe((result) => {
+          console.log(
+            result.map((e) => {
+              e.fecha = new Date(e.fecha!);
+              return e;
+            })
+          );
+
+          result
+            .map((e) => {
+              e.fecha = new Date(e.fecha!);
+              return e;
+            })
+            .forEach((e) => {
+              this.store.dispatch(addCarrito({ carritos: e }));
+            });
+        });
+    }
+  }
+
+  cargarCarrito() {
+    this.store.select(selectCarrito).subscribe({
+      next: (value) => {
+        console.log('HEADER Carrito', value);
+        this.menu2.forEach((e) => {
+          if (e.icono === 'bi bi-cart') {
+            e.listado = value.map((car) => {
+              return {
+                id: car.id,
+                nombre: `Producto ${car.producto_id}`,
+                descripcion: 'Descripcion del producto',
+                precio: Number(car.precio),
+                cantidad: car.cantidad,
+                fecha: car.fecha,
+              };
+            });
+          }
+        });
+      },
+    });
   }
 
   obtenerRuta() {

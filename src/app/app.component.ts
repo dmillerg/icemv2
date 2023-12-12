@@ -11,9 +11,9 @@ import { take } from 'rxjs';
 import { AuthService } from './modules/auth/services/auth.service';
 import { Configuraciones } from './core/constantes/configuracion';
 import { ChartComponent } from 'ng-apexcharts';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CatalogoService } from './core/services/catalogo.service';
-import { Dialog, DialogRef } from '@angular/cdk/dialog';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Modal } from './core/components/modal-generico/model/modal.model';
 import { ModalGenericoComponent } from './core/components/modal-generico/modal-generico.component';
 import { Usuario } from './core/models/usuario.model';
@@ -43,7 +43,8 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private catalogoService: CatalogoService,
     private dialog: MatDialog,
-    private snackService: SnackService
+    private snackService: SnackService,
+    private router: Router
   ) {
     this.chartOp();
     this.activate();
@@ -146,11 +147,7 @@ export class AppComponent implements OnInit {
   }
 
   activate() {
-    console.log('activate');
-
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log(params);
-
       let link = params['link'];
       let reset = params['reset'];
 
@@ -160,7 +157,6 @@ export class AppComponent implements OnInit {
           .pipe(take(1))
           .subscribe({
             next: (res) => {
-              console.log(res);
               this.obtenerUsuarioPorId(
                 Number(
                   link.substring(link.indexOf('Edd') + 3, link.indexOf('Dde'))
@@ -233,6 +229,7 @@ export class AppComponent implements OnInit {
             texto: 'Su cuenta se ha activado con exito',
           });
           ref.close();
+          this.router.navigate(['inicio'])
         },
       });
   }
@@ -305,6 +302,7 @@ export class AppComponent implements OnInit {
             texto: 'Contraseña cambiada correctamente',
           });
           ref.close();
+          this.router.navigate(['inicio'])
         },
         error: (error) => {
           this.snackService.error({

@@ -3,7 +3,7 @@ import { Carrito } from "src/app/core/models/carrito.model";
 
 export const addCarrito = createAction(
     '[CARRITO COMPONENT] add carrito',
-    props<{ carritos: ReadonlyArray<Carrito> }>()
+    props<{ carritos: Carrito }>()
 );
 
 export const getCarrito = createAction(
@@ -11,7 +11,7 @@ export const getCarrito = createAction(
     props<{ carritos: ReadonlyArray<Carrito> }>()
 )
 
-export const deleteCarrito = createAction(
+export const    deleteCarrito = createAction(
     '[CARRITO COMPONENT] delete one carrito',
     props<{ carrito: Carrito }>()
 )

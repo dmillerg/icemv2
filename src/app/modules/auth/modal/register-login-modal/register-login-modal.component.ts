@@ -101,7 +101,13 @@ export class RegisterLoginModalComponent {
               this.close(user);
             }, 500);
           },
-          error: () => (this.cargando = false),
+          error: (error) => {
+            if(error.error.message==='Este usuario no esta activo'){
+              setTimeout(()=>{
+                this.sendEmailActivacion(this.generarLink(error.error.id),error.error.correo, login.usuario);
+              },2000)
+            }
+            this.cargando = false},
         });
     } else {
       this.formLogin.markAllAsTouched();
@@ -155,7 +161,6 @@ export class RegisterLoginModalComponent {
       }
       result += chars[Math.floor(Math.random() * (l - 0)) + 0];
     }
-    console.log(result);
     return result;
   }
 
@@ -168,7 +173,7 @@ export class RegisterLoginModalComponent {
         'Si usted no es el que pidió la activación de la cuenta simplemente borre este correo, no se preocupe su correo no podrá ser usado sin su autorización.',
         'link',
         link,
-        `${environment.url_page}/#/inicio?link=${link}`
+        `${environment.url_page}#/inicio?link=${link}`
       )
       .pipe(take(1))
       .subscribe({
