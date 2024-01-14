@@ -1,10 +1,27 @@
 <div class="lg:px-20 md:px-8 px-8 pt-2">
+  <div class="w-full -mb-8 flex gap-4 items-center">
+    <label for="">Categorías:</label>
+    <mat-chip-listbox aria-label="Fish selection">
+      <mat-chip-option
+        [selected]="categoriaId === -1"
+        (selectionChange)="cambiarCategoria()"
+        >Todos</mat-chip-option
+      >
+      <mat-chip-option
+        *ngFor="let item of categorias"
+        [selected]="item.id === categoriaId"
+        (selectionChange)="cambiarCategoria(item)"
+        >{{ item.nombre | titlecase }}</mat-chip-option
+      >
+    </mat-chip-listbox>
+  </div>
   <app-producto-especificacion
     *ngIf="producto"
     [producto]="producto"
     [categoria]="categoria!.nombre!"
   ></app-producto-especificacion>
   <h1
+    *ngIf="productosCard.length > 0"
     class="lg:ml-48 md:ml-20 ml-8 mt-8 text-2xl text-icem-500 dark:text-white font-bold opacity-50"
   >
     Quizas también pueda interesarte

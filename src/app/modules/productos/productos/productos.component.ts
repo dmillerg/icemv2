@@ -19,6 +19,7 @@ export class ProductosComponent implements OnInit, OnDestroy {
   productosCard: Card[] = [];
   categorias: Categoria[] = [];
   categoria?: Categoria;
+  categoriaId: number = -1;
   sub$: Subscription = new Subscription();
 
   constructor(
@@ -42,10 +43,11 @@ export class ProductosComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: (response) => {
-          this.productos = response.filter(e=>e.activo).map((e: Producto) =>
-            this.obtenerImagenes(e)
-          );
+          this.productos = response
+            .filter((e) => e.activo)
+            .map((e: Producto) => this.obtenerImagenes(e));
           this.producto = this.productos.shift();
+
           this.generarProductosCard();
           this.obtenerRuta();
         },
@@ -53,36 +55,49 @@ export class ProductosComponent implements OnInit, OnDestroy {
   }
 
   generarProductosCard() {
-    this.productosCard = this.productos.map((e: Producto, i: number) => {
-      return {
-        titulo: e.titulo,
-        descripcion: e.descripcion,
-        fecha: new Date(e.fecha),
-        imagen: e.imagen,
-        precio: `${e.precio}`,
-        classTitulo: 'line-clamp-2 text-icem-500 dark:text-white',
-        classDescripcion: 'line-clamp-3',
-        botones: [
-          {
-            icono: 'bi bi-check',
-            label: 'Ver más',
-            class:
-              'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded daaniel',
-            funcion: () => {
-              this.router.navigate([`productos/${e.id}`])
+    console.log(this.categoriaId);
+
+    this.productosCard = this.productos
+      .filter((e) =>
+        this.categoriaId !== -1 ? e.categoria === this.categoriaId : true
+      )
+      .map((e: Producto, i: number) => {
+        return {
+          titulo: e.titulo,
+          descripcion: e.descripcion,
+          fecha: new Date(e.fecha),
+          imagen: e.imagen,
+          precio: `${e.precio}`,
+          classTitulo: 'line-clamp-2 text-icem-500 dark:text-white',
+          classDescripcion: 'line-clamp-3',
+          botones: [
+            {
+              icono: 'bi bi-check',
+              label: 'Ver más',
+              class:
+                'w-full bg-icem-500 hover:bg-icem-400 text-white duration-300 py-2 mt-2 rounded daaniel',
+              funcion: () => {
+                this.router.navigate([`productos/${e.id}`]);
+              },
             },
-          },
-        ],
-      };
-    });
+          ],
+        };
+      });
   }
 
-  cambiarEspecificacion(e: Producto, i: number) {
-    this.categoria = this.categorias.filter((cat) => cat.id === e.categoria)[0];
-    const prod = this.producto;
-    this.producto = e;
-    this.productos[i] = prod!;
-    this.generarProductosCard();
+  cambiarEspecificacion(i: number, e?: Producto) {
+    if (e) {
+      this.categoria = this.categorias.filter(
+        (cat) => cat.id === e.categoria
+      )[0];
+      const prod = this.producto;
+      this.producto = e;
+      this.productos[i] = prod!;
+      this.generarProductosCard();
+    } else {
+      this.producto = e;
+      this.generarProductosCard();
+    }
   }
 
   obtenerImagenes(producto: Producto) {
@@ -118,10 +133,38 @@ export class ProductosComponent implements OnInit, OnDestroy {
   }
 
   obtenerRuta() {
-    this.sub$ = this.route.params.subscribe((params) => {
+    this.sub$ = this.route.params.subscribe((params: any) => {
       const id = +params['id'];
-      const prod = this.productos.filter((e) => e.id === id)[0];
-      if (prod) this.cambiarEspecificacion(prod, this.productos.indexOf(prod));
+      const parametros = params.parametros;
+      console.log(parametros);
+
+      const prod =
+        id !== -1
+          ? this.productos.filter((e) => e.id === id)[0]
+          : parametros
+          ? this.productos.filter(
+              (e) => e.categoria === JSON.parse(parametros).categoria
+            )[0]
+          : undefined;
+      this.categoriaId = parametros ? JSON.parse(parametros).categoria : -1;
+      if (prod) {
+        this.cambiarEspecificacion(this.productos.indexOf(prod), prod);
+      }
     });
+  }
+
+  cambiarCategoria(categoria?: Categoria) {
+    if (categoria) {
+      this.router.navigate([
+        'productos/-1',
+        {
+          parametros: JSON.stringify({
+            categoria: categoria.id,
+          }),
+        },
+      ]);
+    } else {
+      this.router.navigate(['productos/-1']);
+    }
   }
 }

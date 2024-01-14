@@ -131,6 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   carrito: Listado[] = [];
 
   routeSub$: Subscription = new Subscription();
+  carritoSub$: Subscription = new Subscription();
 
   constructor(
     private catalogoService: CatalogoService,
@@ -170,6 +171,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub$.unsubscribe();
+    this.carritoSub$.unsubscribe();
   }
 
   cargarCarritoInicial() {
@@ -198,7 +200,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   cargarCarrito() {
-    this.store.select(selectCarrito).subscribe({
+    this.carritoSub$ = this.store.select(selectCarrito).subscribe({
       next: (value) => {
         console.log('HEADER Carrito', value);
         this.menu2.forEach((e) => {
@@ -206,6 +208,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
             e.listado = value.map((car) => {
               return {
                 id: car.id,
+                producto_id: car.producto_id,
+                nombre: `Producto ${car.producto_id}`,
+                descripcion: 'Descripcion del producto',
+                precio: Number(car.precio),
+                cantidad: car.cantidad,
+                fecha: car.fecha,
+              };
+            });
+          }
+        });
+        this.menusm.forEach((e) => {
+          if (e.icono === 'bi bi-cart') {
+            e.listado = value.map((car) => {
+              return {
+                id: car.id,
+                producto_id: car.producto_id,
                 nombre: `Producto ${car.producto_id}`,
                 descripcion: 'Descripcion del producto',
                 precio: Number(car.precio),
@@ -221,8 +239,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   obtenerRuta() {
     this.routeSub$ = this.route.params.subscribe((params) => {
-      console.log(JSON.parse(localStorage.getItem('usuario')!));
-
       this.generarMenu();
     });
   }
@@ -259,12 +275,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 return {
                   nombre: e.nombre,
                   icono: this.menu[1].icono,
-                  link: '',
+                  accion: () => {
+                    this.router.navigate([
+                      `productos/-1`,
+                      {
+                        parametros: JSON.stringify({
+                          categoria: e.id,
+                        }),
+                      },
+                    ]);
+                  },
                 };
               })
             : [];
           const menu = [
-            { nombre: 'Todos', icono: this.menu[1].icono, link: '' },
+            {
+              nombre: 'Todos',
+              icono: this.menu[1].icono,
+              accion: () => {
+                this.router.navigate([`productos/-1`]);
+              },
+            },
             ...submenu,
           ];
           this.menu[1].subitem = menu;
@@ -351,7 +382,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         subitem: [...menuUsuario],
       },
       { icono: this.iconoTema, accion: () => this.cambiarTema() },
-      { icono: 'bi bi-cart', ocultar: this.dataUsuario !== undefined },
+      {
+        icono: 'bi bi-cart',
+        ocultar: this.dataUsuario !== undefined,
+        listado: [],
+      },
     ];
 
     this.menusm = [
@@ -417,6 +452,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
             accion: () => this.cambiarTema(),
           },
         ],
+      },
+      {
+        icono: 'bi bi-cart',
+        sm: true,
+        ocultar: this.dataUsuario !== undefined,
+        listado: [],
       },
     ];
   }

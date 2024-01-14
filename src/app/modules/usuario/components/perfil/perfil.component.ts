@@ -17,6 +17,9 @@ import { SnackService } from 'src/app/core/components/snack/service/snack.servic
 import { DialogRef } from '@angular/cdk/dialog';
 import { matchPasswordValidator } from 'src/app/core/validators/match-password.validator';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { Store } from '@ngrx/store';
+import { selectCarrito } from 'src/app/shared/state/selectors/carrito.selector';
+import { deleteAllCarrito } from 'src/app/shared/state/actions/carrito.action';
 
 @Component({
   selector: 'app-perfil',
@@ -32,6 +35,14 @@ export class PerfilComponent {
       funcion: () => this.obtenerPedidos(),
     },
   ];
+  botonReservar: Boton[] = [
+    {
+      label: 'reservar',
+      icono: 'bi bi-bag-check-fill',
+      disabled: () => this.tableCarrito.values.length === 0,
+      funcion: () => this.reservarConfirmModal(),
+    },
+  ];
   botonesPerfil: Boton[] = [];
   usuario!: Usuario;
   tablePedido!: Table;
@@ -45,7 +56,8 @@ export class PerfilComponent {
     private router: Router,
     public dialog: MatDialog,
     private snackService: SnackService,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store
   ) {
     this.generarBoton();
     this.obtenerDatosUsuario();
@@ -107,7 +119,7 @@ export class PerfilComponent {
   generarTablaPedido(values?: Pedido[]) {
     this.tablePedido = {
       columnas: [
-        { nombre: 'Nombre', campo: 'titulo', tipo: 'texto' },
+        { nombre: 'Nombre', campo: 'producto', tipo: 'texto' },
         { nombre: 'Cantidad', campo: 'cantidad', tipo: 'numero' },
         { nombre: 'Precio', campo: 'precio', tipo: 'precio' },
         { nombre: 'Precio total', campo: 'precio_total', tipo: 'precio' },
@@ -155,35 +167,36 @@ export class PerfilComponent {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          setTimeout(() => {
-            this.generarTablaPedido(result);
-          }, 5000);
+          // console.log(result);
+
+          this.generarTablaPedido(result);
         },
       });
   }
 
   obtenerCarrito() {
     this.generarTablaCarrito();
-    this.perfilService
-      .getCarrito(this.usuario.id)
-      .pipe(take(1))
-      .subscribe({
-        next: (result) => {
-          if (result.length > 0) this.tiempo = new Date(result[0].fecha!);
-          this.generarTablaCarrito(
-            result.map((e) => {
-              return {
-                ...e,
-                precio_total: Number(e.precio) * e.cantidad!,
-                estado: 'En espera de confirmación',
-                imagen:
-                  environment.url_backend +
-                  `pictures/${e.producto_id}?tipo=productos`,
-              };
-            })
-          );
-        },
-      });
+    this.store.select(selectCarrito).subscribe({
+      next: (result) => {
+        if (result.length > 0) {
+          this.tiempo = new Date(result[0].fecha!);
+        } else {
+          this.tiempo = undefined;
+        }
+        this.generarTablaCarrito(
+          result.map((e) => {
+            return {
+              ...e,
+              precio_total: Number(e.precio) * e.cantidad!,
+              estado: 'En espera de confirmación',
+              imagen:
+                environment.url_backend +
+                `pictures/${e.producto_id}?tipo=productos`,
+            };
+          })
+        );
+      },
+    });
   }
 
   generarEditModal() {
@@ -378,5 +391,48 @@ export class PerfilComponent {
           this.cargando = false;
         },
       });
+  }
+
+  reservarConfirmModal() {
+    let ref: any;
+    const modal: Modal = {
+      icono: 'bi bi-exclamation-diamond text-red-500',
+      botones: [
+        { icono: 'bi bi-x', label: 'Cerrar', funcion: () => ref.close() },
+        {
+          icono: 'bi bi-bag-check-fill',
+          label: 'Hacer pedido',
+          funcion: () => this.reservar(ref),
+        },
+      ],
+      titulo: 'Reservar pedido',
+      // subtitulo: 'Haga su pedido para reservarle todo los productos que monto en el carrito.',
+      texto:
+        'Haga su pedido para reservarle todo los productos que monto en el carrito.',
+    };
+    ref = this.dialog.open(ModalGenericoComponent, {
+      data: modal,
+    });
+  }
+
+  reservar(ref: DialogRef) {
+    this.tableCarrito.values.forEach((item, i) => {
+      let formData = new FormData();
+      formData.append('user_id', item.user_id.toString());
+      formData.append('producto_id', item.producto_id.toString());
+      formData.append('cantidad', item.cantidad.toString());
+      formData.append('estado', 'reservado');
+      formData.append('id_carrito', item.id);
+      this.perfilService.addPedido(formData).subscribe({
+        next: () => {
+          if (i + 1 == this.tableCarrito.values.length) {
+            this.tableCarrito.values = [];
+            this.store.dispatch(deleteAllCarrito());
+            this.obtenerPedidos();
+            ref.close();
+          }
+        },
+      });
+    });
   }
 }

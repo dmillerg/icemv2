@@ -93,7 +93,9 @@
               >
                 Mi carrito
               </h1>
-              <p class="text-xs dark:text-gray-400 text-gray-600 flex items-center gap-1">
+              <p
+                class="text-xs dark:text-gray-400 text-gray-600 flex items-center gap-1"
+              >
                 Tiempo restante en el carrito
                 <app-count-timer
                   *ngIf="tiempo"
@@ -103,7 +105,7 @@
               </p>
             </div>
           </div>
-          <!-- <span class="p-3 text-white rounded-lg">10:00</span> -->
+          <app-boton-generico [botones]="botonReservar"></app-boton-generico>
         </div>
         <app-table-generico
           *ngIf="tableCarrito"

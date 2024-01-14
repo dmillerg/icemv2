@@ -7,28 +7,6 @@
 .svg-shadow {
   filter: drop-shadow(3px 3px 2px hsla(0, 0%, 0%, 0.7));
 }
-// /* width */
-// ::-webkit-scrollbar {
-//     position: absolute;
-//     width: 5px;
-//     right: 0;
-// }
-
-// /* Track */
-// ::-webkit-scrollbar-track {
-//     background: transparent;
-// }
-
-// /* Handle */
-// ::-webkit-scrollbar-thumb {
-//     background: #3b408c;
-//     border-radius: 50px;
-// }
-
-// /* Handle on hover */
-// ::-webkit-scrollbar-thumb:hover {
-//     background: #4d54b4;
-// }
 html,
 body {
   height: 100%;
@@ -39,9 +17,18 @@ body {
 }
 
 
+//scroll
+*::-webkit-scrollbar-button:vertical,
+*::-webkit-scrollbar-button {
+  display: none !important;
+}
 
-// :host ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled){
-//   background-color: var(--tahiti);
-//   height: 60px;
-// }
+*::-webkit-scrollbar-thumb {
+  background-color: #9c9c9caa !important;
+  border-radius: 30px !important;
+  border: solid 2px #f1f2f3 !important;
+}
 
+*::-webkit-scrollbar-track {
+  border-radius: 10px !important;
+}

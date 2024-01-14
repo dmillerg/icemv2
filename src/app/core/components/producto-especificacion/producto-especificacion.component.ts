@@ -160,7 +160,6 @@ export class ProductoEspecificacionComponent implements OnInit {
 
   agregarQuitar(accion: boolean) {
     const cantidad = this.form.getRawValue().cantidad;
-
     if (
       (accion && this.producto!.disponibilidad > cantidad) ||
       (!accion && cantidad > 0)
@@ -194,10 +193,11 @@ export class ProductoEspecificacionComponent implements OnInit {
           );
 
           // this.loadEspecification();
-          this.configuracionService
-            .getCarrito(JSON.parse(localStorage.getItem('usuario')!).id)
-            .pipe(take(1))
-            .subscribe((result) => {});
+          // this.configuracionService
+          //   .getCarrito(JSON.parse(localStorage.getItem('usuario')!).id)
+          //   .pipe(take(1))
+          //   .subscribe((result) => {
+          //   });
         },
       });
   }

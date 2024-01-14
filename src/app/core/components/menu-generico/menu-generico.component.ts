@@ -31,10 +31,11 @@ export class MenuGenericoComponent {
   constructor(
     private router: Router,
     private configuracioService: ConfiguracionService,
-    private store: Store,
+    private store: Store
   ) {}
 
-  emit(fun?: Function) {
+  emit(event: Event, fun?: Function) {
+    event.stopPropagation();
     if (fun) fun();
   }
 
@@ -53,7 +54,7 @@ export class MenuGenericoComponent {
         .pipe(take(1))
         .subscribe({
           next: (response) => {
-            this.store.dispatch(deleteCarrito({carrito:e}))
+            this.store.dispatch(deleteCarrito({ carrito: e }));
           },
         });
     });

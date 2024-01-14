@@ -81,12 +81,18 @@ export class NoticiaComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.generarTabla(
-            result.map((e) => {
-              e.fecha = e.fecha === '0000-00-00 00:00:00' ? '' : e.fecha;
-              return e;
-            })
-          );
+          if (Array.isArray(result)) {
+            this.generarTabla(
+              result.map((e) => {
+                e.fecha = e.fecha === '0000-00-00 00:00:00' ? '' : e.fecha;
+                e.logo =
+                  e.logo !== 'undefined'
+                    ? e.logo
+                    : 'assets/logos/icon-icem-gray.png';
+                return e;
+              })
+            );
+          }
         },
       });
   }
@@ -104,6 +110,7 @@ export class NoticiaComponent implements OnInit {
           nombre: 'Descripción',
           campo: 'descripcion',
         },
+        { tipo: 'imagen', nombre: 'Fuente', campo: 'logo' },
         {
           tipo: 'fecha',
           nombre: 'Fecha',

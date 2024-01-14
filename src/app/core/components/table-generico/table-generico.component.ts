@@ -37,9 +37,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './table-generico.component.html',
   styleUrls: ['./table-generico.component.scss'],
 })
-export class TableGenericoComponent
-  implements OnDestroy, AfterViewInit, OnChanges
-{
+export class TableGenericoComponent implements OnDestroy, OnChanges {
   @Input() table!: Table;
   @Input() seleccionableRow: boolean = false;
   @Input() maximoRowSeleccionable: number = 1;
@@ -68,15 +66,6 @@ export class TableGenericoComponent
     paginators.nextPageLabel = 'siguiente página';
     paginators.previousPageLabel = 'anterior página';
   }
-  ngAfterViewInit() {
-    this.columnasTodas = this.table.columnas.map((e) => e.campo);
-    this.columnas = [...this.columnasTodas];
-    this.addAcciones();
-    this.construirTabla();
-    this.breakpointSub = this.breakpoint$.subscribe({
-      next: () => this.breakpointChanged(),
-    });
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.construirTabla();
@@ -102,6 +91,13 @@ export class TableGenericoComponent
   }
 
   construirTabla() {
+    this.columnasTodas = this.table.columnas.map((e) => e.campo);
+    this.columnas = [...this.columnasTodas];
+    this.addAcciones();
+    if (!this.breakpointSub)
+      this.breakpointSub = this.breakpoint$.subscribe({
+        next: () => this.breakpointChanged(),
+      });
     this.dataSource = new MatTableDataSource<any>(this.table.values);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

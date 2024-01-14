@@ -9,7 +9,10 @@ import { Table } from 'src/app/core/components/table-generico/model/table.model'
 import { Categoria } from 'src/app/core/models/categoria.model';
 import { take } from 'rxjs';
 import { Boton } from 'src/app/core/components/boton-generico/model/boton.model';
-import { addDetalle, deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import {
+  addDetalle,
+  deleteAllDetalle,
+} from 'src/app/shared/state/actions/detalle.actions';
 import { Validators } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
 import { Modal } from 'src/app/core/components/modal-generico/model/modal.model';
@@ -96,7 +99,9 @@ export class CategoriaComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.generarTabla(result);
+          if (Array.isArray(result)) {
+            this.generarTabla(result);
+          }
         },
       });
   }

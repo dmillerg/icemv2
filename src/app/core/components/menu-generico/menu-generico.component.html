@@ -3,13 +3,21 @@
     <button
       class="relative flex items-center gap-2 text-white cursor-pointer text-sm hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150 duration-300"
       *ngIf="item.ocultar ?? true"
-      (click)="emit(item.accion)"
+      (click)="emit($event, item.accion)"
     >
       {{ item.nombre }}
       <i
         [class]="!item.sm && item.subitem ? 'bi bi-chevron-down' : item.icono"
         class="drop-shadow-lg"
       ></i>
+      <div
+        class="absolute -top-2 bg-red-600 w-4 h-4 -right-2 rounded-full z-5 flex justify-center items-center text-center text-xs"
+        *ngIf="
+          item.icono === 'bi bi-cart' && item.listado && item.listado.length > 0
+        "
+      >
+        {{ item.listado.length }}
+      </div>
     </button>
     <ng-container *ngIf="item.subitem">
       <div
@@ -21,7 +29,7 @@
             matRipple
             class="flex gap-2 whitespace-nowrap hover:bg-icem-500 hover:text-white px-4 py-4"
             *ngIf="!subitem.ocultar"
-            (click)="emit(subitem.accion)"
+            (click)="emit($event, subitem.accion)"
           >
             <i [class]="subitem.icono"></i>
             {{ subitem.nombre }}
@@ -39,8 +47,11 @@
         >
           Carrito
         </div>
-        <div *ngIf="item.listado.length === 0" class="w-full h-40 flex justify-center items-center text-sm flex flex-col">
-          <i class="bi bi-inbox" style="font-size: 40px;"></i>
+        <div
+          *ngIf="item.listado.length === 0"
+          class="w-full h-40 flex justify-center items-center text-sm flex flex-col"
+        >
+          <i class="bi bi-inbox" style="font-size: 40px"></i>
           No hay productos en el carrito.
         </div>
         <div
@@ -48,16 +59,25 @@
           *ngFor="let list of item.listado; let ultimo = last"
         >
           <div class="flex flex-col w-20">
-            <small class="whitespace-nowrap text-ellipsis overflow-hidden">{{ list.nombre }}</small>
+            <small class="whitespace-nowrap text-ellipsis overflow-hidden">{{
+              list.nombre
+            }}</small>
             <small class="whitespace-nowrap text-gray-400"
-            >$ {{ list.precio | number : "1.2-2" }}</small
-          >
+              >$ {{ list.precio | number : "1.2-2" }}</small
+            >
           </div>
           <small class="whitespace-nowrap w-fit">{{ list.cantidad }}</small>
           <small class="whitespace-nowrap w-fit"
             >$ {{ list.cantidad! * list.precio! | number : "1.2-2" }}</small
           >
-          <button matRipple matTooltip="Eliminar de la lista" class="rounded w-8 h-8 text-icem-500" (click)="finalizo([list!])"><i class="bi bi-trash"></i></button>
+          <button
+            matRipple
+            matTooltip="Eliminar de la lista"
+            class="rounded w-8 h-8 text-icem-500"
+            (click)="finalizo([list!])"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
         </div>
         <button
           matRipple
@@ -66,7 +86,10 @@
           class="w-full py-2 text-center disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-between px-3 dark:border-slate-700 text-sm bg-icem-500 dark:bg-icem-400 text-white dark:hover:bg-icem-300 hover:bg-icem-700"
         >
           <span> <i class="bi bi-cart3 mr-2"></i>comprar </span>
-          <div class="w-fit whitespace-nowrap text-xs" *ngIf="item.listado.length>0">
+          <div
+            class="w-fit whitespace-nowrap text-xs"
+            *ngIf="item.listado.length > 0"
+          >
             <app-count-timer
               [fechaEntrada]="item.listado[0].fecha!"
               (finalizo)="finalizo(item.listado)"

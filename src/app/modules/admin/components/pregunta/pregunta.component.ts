@@ -7,7 +7,10 @@ import { Mensaje } from '../../model/pregunta.model';
 import { take } from 'rxjs';
 import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { addDetalle, deleteAllDetalle } from 'src/app/shared/state/actions/detalle.actions';
+import {
+  addDetalle,
+  deleteAllDetalle,
+} from 'src/app/shared/state/actions/detalle.actions';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { Modal } from 'src/app/core/components/modal-generico/model/modal.model';
@@ -17,20 +20,20 @@ import { SnackService } from 'src/app/core/components/snack/service/snack.servic
 @Component({
   selector: 'app-pregunta',
   templateUrl: './pregunta.component.html',
-  styleUrls: ['./pregunta.component.scss']
+  styleUrls: ['./pregunta.component.scss'],
 })
 export class PreguntaComponent implements OnInit {
   formulario?: Formulario;
   tabla!: Table;
-  loading: boolean = false
+  loading: boolean = false;
   loadingResponder: boolean = false;
 
   botonActualizar: Boton[] = [
     {
       label: 'Actualizar',
       icono: 'bi bi-arrow-clockwise',
-      funcion: () => this.obtenerPreguntas()
-    }
+      funcion: () => this.obtenerPreguntas(),
+    },
   ];
 
   botones: Boton[] = [
@@ -63,8 +66,7 @@ export class PreguntaComponent implements OnInit {
       icono: 'bi bi-reply',
       tooltip: 'Responder',
       cargando: () => this.loadingResponder,
-      funcion: () => this.responderPregunta()
-
+      funcion: () => this.responderPregunta(),
     },
     {
       icono: 'bi bi-trash',
@@ -79,44 +81,51 @@ export class PreguntaComponent implements OnInit {
     private adminService: AdminService,
     private store: Store,
     private dialog: MatDialog,
-    private snackService: SnackService,
-  ) { }
+    private snackService: SnackService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerPreguntas();
   }
 
   obtenerPreguntas() {
-    this.generarTabla();
-    this.adminService.getMensajes().pipe(take(1)).subscribe({
-      next: (result) => {
-        this.generarTabla(result)
-      }
-    })
+    this.generarTabla([]);
+    this.adminService
+      .getMensajes()
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          if (Array.isArray(result)) {
+            this.generarTabla(result);
+          }
+        },
+      });
   }
 
   responderPregunta() {
     this.loading = true;
     const data = this.formulario?.form?.getRawValue();
-    const formData = new FormData;
-
+    const formData = new FormData();
 
     formData.append('pregunta', data.mensaje.toString());
     formData.append('respuesta', data.respuesta);
 
-    this.adminService.updateMensaje(data.id,formData).pipe(take(1)).subscribe({
-      next: () => {
-        this.loading = false;
-        this.obtenerPreguntas();
-        this.snackService.success({
-          texto: `La respuesta se ha enviado correctamente`
-        });
-        this.store.dispatch(deleteAllDetalle())
-      },
-      error: () => {
-        this.loading = false;
-      }
-    })
+    this.adminService
+      .updateMensaje(data.id, formData)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.obtenerPreguntas();
+          this.snackService.success({
+            texto: `La respuesta se ha enviado correctamente`,
+          });
+          this.store.dispatch(deleteAllDetalle());
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 
   seleccionado(item: Mensaje) {
@@ -131,18 +140,18 @@ export class PreguntaComponent implements OnInit {
             textos: [
               {
                 nombre: 'usuario',
-                valor: pregunta.alias
+                valor: pregunta.alias,
               },
               {
                 nombre: 'pregunta',
-                valor: pregunta.mensaje
-              }
+                valor: pregunta.mensaje,
+              },
             ],
             botones: [...this.botonMostrar],
             data: pregunta,
-          }
+          },
         })
-      )
+      );
     } else
       this.store.dispatch(
         addDetalle({
@@ -177,7 +186,7 @@ export class PreguntaComponent implements OnInit {
       ],
       columnas: [1],
       autofixed: true,
-    }
+    };
   }
 
   mostrarFormulario(pregunta: Mensaje) {
@@ -207,8 +216,10 @@ export class PreguntaComponent implements OnInit {
           cargando: () => this.loading,
         },
         {
-          label: 'Cancelar', icono: 'bi bi-x', funcion: () => ref.close()
-        }
+          label: 'Cancelar',
+          icono: 'bi bi-x',
+          funcion: () => ref.close(),
+        },
       ],
       icono: 'bi bi-exclamation-diamond text-red-500',
     };
@@ -219,15 +230,18 @@ export class PreguntaComponent implements OnInit {
 
   eliminarPregunta(id: number, ref: DialogRef) {
     this.loading = true;
-    this.adminService.deleteMensaje(id).pipe(take(1)).subscribe({
-      next: () => {
-        this.loading = false;
-        this.obtenerPreguntas();
-        setTimeout(() => ref.close(), 300);
-        this.store.dispatch(deleteAllDetalle())
-      },
-      error: () => (this.loading = false),
-    });
+    this.adminService
+      .deleteMensaje(id)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.obtenerPreguntas();
+          setTimeout(() => ref.close(), 300);
+          this.store.dispatch(deleteAllDetalle());
+        },
+        error: () => (this.loading = false),
+      });
   }
 
   generarTabla(values?: Mensaje[]) {
@@ -236,30 +250,29 @@ export class PreguntaComponent implements OnInit {
         {
           tipo: 'texto',
           nombre: 'Correo',
-          campo: 'correo'
+          campo: 'correo',
         },
         {
           tipo: 'texto',
           nombre: 'Pregunta',
-          campo: 'mensaje'
+          campo: 'mensaje',
         },
         {
           tipo: 'boolean',
           nombre: 'Visto',
-          campo: 'visto'
+          campo: 'visto',
         },
         {
           tipo: 'fecha',
           nombre: 'Fecha',
-          campo: 'fecha'
-        }
+          campo: 'fecha',
+        },
       ],
       values: values ?? [],
       cargando: !values,
       acciones: this.botones,
       accionesTexto: 'Acciones',
-      textoVacio: 'No hay comentarios que gestionar',
+      textoVacio: 'No hay preguntas que gestionar',
     };
   }
-
 }

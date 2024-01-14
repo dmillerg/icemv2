@@ -38,7 +38,11 @@
           class="object-fit w-20 h-20 rounded-lg overflow-hidden m-2"
           *ngIf="column.tipo === 'imagen'"
         >
-          <img [src]="row[column.campo]" alt="..." class="object-contain h-20 w-20" />
+          <img
+            [src]="row[column.campo]"
+            alt="..."
+            class="object-contain h-20 w-20"
+          />
         </div>
         <div
           class="flex justify-center items-center rounded-lg overflow-hidden m-2"

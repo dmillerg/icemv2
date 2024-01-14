@@ -11,7 +11,7 @@ export const getCarrito = createAction(
     props<{ carritos: ReadonlyArray<Carrito> }>()
 )
 
-export const    deleteCarrito = createAction(
+export const deleteCarrito = createAction(
     '[CARRITO COMPONENT] delete one carrito',
     props<{ carrito: Carrito }>()
 )

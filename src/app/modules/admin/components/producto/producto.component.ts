@@ -178,12 +178,14 @@ export class ProductoComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.categorias = result.map((e) => {
-            return {
-              codigo: e.id.toString(),
-              nombre: e.nombre,
-            };
-          });
+          if (Array.isArray(result)) {
+            this.categorias = result.map((e) => {
+              return {
+                codigo: e.id.toString(),
+                nombre: e.nombre,
+              };
+            });
+          }
         },
       });
   }

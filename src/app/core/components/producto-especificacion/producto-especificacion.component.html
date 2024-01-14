@@ -3,7 +3,7 @@
     <div class="flex items-start gap-10 flex-wrap w-full">
       <div class="flex flex-col gap-1">
         <div
-          class="flex w-96 h-96 bg-icem-500 dark:bg-icem-300 relative rounded relative"
+          class="flex w-80 md:w-96 lg:w-96 h-80 md:h-96 lg:h-96 bg-icem-500 dark:bg-icem-300 relative rounded relative"
         >
           <img
             [src]="producto.imagen"
@@ -64,14 +64,14 @@
           {{ allEstrellas }} personas han opinado acerca de el
         </h3>
       </div>
-      <div class="flex flex-col flex-1">
+      <div class="flex flex-col flex-1 min-w-80">
         <h1 class="text-4xl text-icem-500 dark:text-icem-300">
           {{ producto!.titulo }}
         </h1>
         <p class="text-gray-700 dark:text-gray-300">
           {{ producto!.fecha | date : "dd/MM/yyyy" }}
         </p>
-        <p class="text-gray-700 dark:text-gray-300 font-bold">
+        <p class="text-gray-500 dark:text-gray-500">
           ${{ producto!.precio | number : "1.2-2" }}
         </p>
         <p class="text-gray-700 dark:text-gray-300">
@@ -88,7 +88,6 @@
           <input
             [formControlName]="'cantidad'"
             type="text"
-            [disabled]="producto.disponibilidad === 0"
             class="outline-none border border-1 border-icem-400 p-1 rounded w-8 dark:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <button

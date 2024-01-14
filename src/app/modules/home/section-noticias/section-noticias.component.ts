@@ -39,10 +39,14 @@ export class SectionNoticiasComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          
           if (result.length > 0) {
             this.noticia = result.filter((e) => e.fuente === 'ICEM')[0];
             if (this.noticia) {
+              this.noticia.imagen =
+                this.noticia.fuente === 'ICEM'
+                  ? environment.url_backend +
+                    `pictures/${this.noticia.id}?tipo=noticias`
+                  : this.noticia.imagen;
               this.noticia.logo =
                 this.noticia.logo == ''
                   ? 'assets/icon-icem-gray.png'
@@ -60,5 +64,4 @@ export class SectionNoticiasComponent implements OnInit {
     this.noticia.imagen =
       environment.url_backend + `pictures/${e.id}?tipo=noticias`;
   }
- 
 }

@@ -40,19 +40,19 @@ export class PerfilService {
     });
   }
 
-  /**
-   * Obtiene todos los pedidos de los usuarios
-   * @param user_id id del usuario
-   * @returns 
-   */
-  getPedidos(user_id: number = -1): Observable<Pedido[]> {
-    let direccion = this.url + 'pedidos/' + user_id;
-    const headers = { 'content-type': 'application/json' };
-    const params = {
-      token: JSON.parse(localStorage.getItem('usuario')!).token,
-    };
-    return this.http.get<Pedido[]>(direccion, { headers: headers, params: params });
-  }
+  // /**
+  //  * Obtiene todos los pedidos de los usuarios
+  //  * @param user_id id del usuario
+  //  * @returns 
+  //  */
+  // getPedidos(user_id: number = -1): Observable<Pedido[]> {
+  //   let direccion = this.url + 'pedidos/' + user_id;
+  //   const headers = { 'content-type': 'application/json' };
+  //   const params = {
+  //     token: JSON.parse(localStorage.getItem('usuario')!).token,
+  //   };
+  //   return this.http.get<Pedido[]>(direccion, { headers: headers, params: params });
+  // }
 
   /**
    * Devuelve todos los productos en el carrito
@@ -90,5 +90,56 @@ export class PerfilService {
     formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
     let direccion = this.url + 'changepass/'
     return this.http.post<any>(direccion, formData);
+  }
+
+  /**
+   * Obtiene todos los pedidos de los usuarios
+   * @param user_id id del usuario
+   * @returns 
+   */
+  getPedidos(user_id: number = -1): Observable<Pedido[]> {
+    let direccion = this.url + 'pedidos/' + user_id;
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.get<Pedido[]>(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Agrega un pedido
+   * @param formData datos de un pedido
+   * @returns 
+   */
+  addPedido(formData: FormData) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'pedidos';
+    return this.http.post(direccion, formData);
+  }
+
+  /**
+ * Elimina un pedido
+ * @param id pedido a eliminar
+ * @returns
+ */
+  deletePedido(id: number = -1) {
+    let direccion = this.url + 'pedidos/' + id.toString();
+    const headers = { 'content-type': 'application/json' };
+    const params = {
+      token: JSON.parse(localStorage.getItem('usuario')!).token,
+    };
+    return this.http.delete(direccion, { headers: headers, params: params });
+  }
+
+  /**
+   * Cambia el estado actula del pedido
+   * @param formData Estado del pedido
+   * @param id_pedido del pedido
+   * @returns 
+   */
+  cambiarEstadoPedido(formData: FormData, id_pedido: number = -1) {
+    formData.append('token', JSON.parse(localStorage.getItem('usuario')!).token);
+    let direccion = this.url + 'cambiarestadopedidos/' + id_pedido;
+    return this.http.put(direccion, formData);
   }
 }
